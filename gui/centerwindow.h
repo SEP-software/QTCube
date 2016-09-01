@@ -1,0 +1,149 @@
+
+#ifndef CENTERWINDOW_H
+#define CENTERWINDOW_H
+#include <qmainwindow.h>
+#include <QMenuBar>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QCloseEvent>
+#include <QAction>
+#include "position.h"
+#include "slice_types.h"
+//#include "pick_groups.h"
+#include "pick_draw.h"
+#include "qsplitter.h"
+#include "datasets.h"
+#include "drawwindow.h"
+#include "maps.h"
+#include "mode.h"
+#include "slice_types.h"
+#include "util.h"
+#include <map>
+#include "draw_other.h"
+#include "windows.h"
+#include "panels.h"
+#include <QMessageBox>
+#include "window_panel.h"
+#include "panel_panel.h"
+#include "color_panel.h"
+#include "help_panel.h"
+#include "ano_panel.h"
+#include "data_panel.h"
+#include "history.h"
+#include "orient_cube.h"
+#include "pick_panel.h"
+
+
+ #include <QMainWindow>
+
+ class QAction;
+ class QActionGroup;
+ class QLabel;
+ class QMenu;
+
+ class MainWindow : public QMainWindow
+ {
+     Q_OBJECT
+
+ public:
+     MainWindow(param_func *pars,datasets *d,pick_draw *_pk,
+	  slice_types *ct,  util *p);
+ history *my_hist;
+
+
+ private slots:
+     void newFile();
+     void open();
+     void save();
+     void openPick();
+     void closePick();
+     void openData();
+     void closeData();
+    void closeHelp();
+    void openHelp();
+    void openAnno();
+    void closeAnno();
+    void openColor();
+    void closeColor();
+
+    void statusMouse();
+    void statusPosition();
+    void statusOverlay();
+    void statusPick();
+    
+    void mousePick();
+    void mouseNavigate();
+    void mouseRegion();
+    void mouseOverlay();
+    void mouseAnnotate();
+         void mouseZoom();
+   void lockViews();
+   void unlockViews();
+   void create_mouse_funcs();
+   void create_panels();
+   void create_windows();
+   void actionRespond(std::vector<QString>);
+      void secondaryRespond(std::vector<QString>);
+
+   void connect_it();
+
+     void about();
+     void aboutQt();
+
+ private:
+ void update_status_bar();
+  window_panel *my_window_panel;
+ orientation_server *serv;
+ panel_panel *my_panel_panel;
+ data_panel *my_data_panel;
+ help_panel *my_help_panel;
+ ano_panel *my_ano_panel;
+ color_panel *my_color_panel;
+ pick_panel *my_pick_panel;
+  panels *my_pan;
+  windows *my_wind;
+  position *pos;
+  maps *my_maps;
+	pick_draw *pk;
+	     param_func *pars;
+     util *pp;
+     datasets *datas;
+     QString stat_view;
+     slice_types *colort;
+     	orients *my_or;
+
+     void createActions();
+     void createMenus();
+     QMenu *mainMenu;
+     QMenu *mouseMenu;
+          QMenu *statusMenu;
+    std::map < QString, mouse_func *> funcs;
+    mouse_func *cur_func;
+     QMenu *historyMenu;
+     QMenu *panelMenu,*helpMenu,*help2Menu;
+     QMenu *mouseFuncMenu;
+     QMenu *dataMenu,*pickMenu,*annoMenu;
+     QMenu *formatMenu,*colorMenu;
+     QActionGroup *alignmentGroup;
+     QAction *newAct;
+     QAction *yesColorAct,*noColorAct;
+     QAction *yesDataAct,*noDataAct;
+          QAction *yesPickAct,*noPickAct;
+QAction *yesHelpAct,*noHelpAct;
+QAction *yesAnnoAct,*noAnnoAct;
+   QAction *mAnnoAct,*mPickAct,*mNavAct,*mRegionAct,*mOverAct,*mZoomAct;
+   QAction *sMouseAct,*sPositionAct,*sOverlayAct,*sPickAct;
+   QAction *lockAct,*unlockAct;
+     QAction *openAct;
+     QAction *saveAct;
+     QAction *exitAct;
+     QAction *aboutAct;
+     QAction *aboutQtAct;
+     QLabel *modeLabel;
+     QString mouse_lab;
+ };
+
+ #endif
+
+
+
