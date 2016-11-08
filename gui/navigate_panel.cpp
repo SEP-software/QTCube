@@ -1,6 +1,8 @@
 #include "navigate_panel.h"
 
-navigate_panel:: navigate_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+navigate_panel:: navigate_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, 
+std::shared_ptr<slice_types>c,std::shared_ptr<maps>mym){
 
 
 
@@ -8,9 +10,9 @@ navigate_panel:: navigate_panel(position *p,windows *my_w, panels *my_p, dataset
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   layMain=new QVBoxLayout;
   
-  	hypercube *h=my_dat->return_dat(0)->return_grid();
+  	std::shared_ptr<hypercube> h=my_dat->return_dat(0)->return_grid();
 	for(int i=0; i < 8; i++) {
-	   if(h->get_axis(i+1).n >1) validax[i]=true;
+	   if(h->getAxis(i+1).n >1) validax[i]=true;
 	   else validax[i]=false;
 	}
   
@@ -27,11 +29,11 @@ navigate_panel:: navigate_panel(position *p,windows *my_w, panels *my_p, dataset
   }
   
 void navigate_panel::update_menu(std::vector<QString>){
-   position *myp=my_pan->get_position();
+   std::shared_ptr<position> myp=my_pan->get_position();
    int iloc[8]; myp->get_locs(iloc);
    
    for(int i=0;i < 8; i++) {
-      axis a=myp->get_axis(i);
+      axis a=myp->getAxis(i);
       pos[i]->set_value(0,QString::number(a.o+a.d*iloc[i]));
   }
 
@@ -94,9 +96,9 @@ QWidget * navigate_panel::build_row_3(){
       QWidget *mine=new QWidget();
       lay3=new QHBoxLayout();
       
-     hypercube *h=my_dat->return_dat(0)->return_grid();
+     std::shared_ptr<hypercube> h=my_dat->return_dat(0)->return_grid();
       for(int i=0; i< 8; i++){
-        axis a=h->get_axis(i+1);
+        axis a=h->getAxis(i+1);
         pos.push_back(new basicLineEditBox(tr("Axis ")+QString::number(i+1),10,
           QString::number(a.o+a.d*a.n/2.),"Current position"));
      }
@@ -153,7 +155,7 @@ void navigate_panel::delete_row_3(){
          std::vector<QString> coms;
   coms.push_back("navigate"); coms.push_back("direction"); coms.push_back("X");
          QString a= increment->my_edits[0]->displayText();
-    bool v; int x= a.toInt(&v); if(!v) a="1"; coms.push_back(a);
+    bool v;  if(!v) a="1"; coms.push_back(a);
     emit actionDetected(coms);
      
         }
@@ -172,7 +174,7 @@ void navigate_panel::delete_row_3(){
          std::vector<QString> coms;
   coms.push_back("navigate"); coms.push_back("direction"); coms.push_back("Y");
          QString a= increment->my_edits[0]->displayText();
-    bool v; int x= a.toInt(&v); if(!v) a="1"; coms.push_back(a);
+    bool v;  if(!v) a="1"; coms.push_back(a);
     emit actionDetected(coms);
      
     }
@@ -181,7 +183,7 @@ void navigate_panel::delete_row_3(){
          std::vector<QString> coms;
   coms.push_back("navigate"); coms.push_back("direction"); coms.push_back("y");
          QString a= increment->my_edits[0]->displayText();
-    bool v; int x= a.toInt(&v); if(!v) a="1"; coms.push_back(a);
+    bool v; if(!v) a="1"; coms.push_back(a);
     emit actionDetected(coms);
      
     }
@@ -190,7 +192,7 @@ void navigate_panel::delete_row_3(){
          std::vector<QString> coms;
   coms.push_back("navigate"); coms.push_back("direction"); coms.push_back("Z");
          QString a= increment->my_edits[0]->displayText();
-    bool v; int x= a.toInt(&v); if(!v) a="1"; coms.push_back(a);
+    bool v;  if(!v) a="1"; coms.push_back(a);
     emit actionDetected(coms);
      
     }
@@ -198,7 +200,7 @@ void navigate_panel::delete_row_3(){
          std::vector<QString> coms;
   coms.push_back("navigate"); coms.push_back("direction"); coms.push_back("z");
            QString a= increment->my_edits[0]->displayText();
-    bool v; int x= a.toInt(&v); if(!v) a="1"; coms.push_back(a);
+    bool v;  if(!v) a="1"; coms.push_back(a);
     emit actionDetected(coms);
       }
       void navigate_panel::go_clicked(){

@@ -1,24 +1,26 @@
 #include "buffer.h"
 #include <stdlib.h>
 
-void buffer::set_basics(util *p,hypercube *h,io_func *i,int in){
-  par=p;
+void buffer::set_basics(std::shared_ptr<paramObj>p,std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in){
+  _par=p;
+  std::shared_ptr<util> x(new util(p));
+  _util=x;
   hyper_buf=h;
   io=i;
   hyper_io=io->return_hyper();
-  std::vector<axis> aios =hyper_io->return_axes(8);
-  std::vector<axis> abufs =hyper_buf->return_axes(8);
+  std::vector<axis> aios =hyper_io->getAxes();
+  std::vector<axis> abufs =hyper_buf->getAxes();
+  for(int i=aios.size(); i < 8; i++) aios.push_back(axis(1));
+  for(int i=abufs.size(); i < 8; i++) abufs.push_back(axis(1));
 
-   
   
-  if(hyper_io->same_size(hyper_buf)) same=true;
- else{
-   
-    same=false;
- }
-     aios =hyper_io->return_axes(8);
-     abufs =hyper_buf->return_axes(8);
-
+  if(hyper_io->sameSize(hyper_buf)) same=true;
+  else same=false;
+  
+     aios =hyper_io->getAxes();
+     abufs =hyper_buf->getAxes();
+     for(int i=aios.size(); i < 8; i++) aios.push_back(axis(1));
+     for(int i=abufs.size(); i < 8; i++) abufs.push_back(axis(1));
   
     ii=new int*[8];
 
@@ -51,7 +53,7 @@ void buffer::build_axis_map(axis aio, axis abuf, int iax){
   }
 
 }
-bool buffer::hold_slice(orient_cube *cube, int ax1, int ax2,bool *data_contains){
+bool buffer::hold_slice(std::shared_ptr<orient_cube>cube, int ax1, int ax2,bool *data_contains){
 
   if(io->changed) return false;
 
@@ -77,12 +79,15 @@ void buffer::clean_up(){
   }
   set_null();
 }
-void buffer::calc_read_loop(int *nwview, int *fwview,int *nwio, int *fwio, int *nloop,int *ndim){
+void buffer::calc_read_loop(std::vector<int> &nwview, std::vector<int>&fwview,
+std::vector<int>&nwio, std::vector<int>&fwio, std::vector<int>&nloop,int & ndim){
 long long big=1;
 
   int nloc[8],floc[8];
-   aios=hyper_io->return_axes(8);
-   abufs=hyper_buf->return_axes(8);
+   aios=hyper_io->getAxes();
+   abufs=hyper_buf->getAxes();
+     for(int i=aios.size(); i < 8; i++) aios.push_back(axis(1));
+  for(int i=abufs.size(); i < 8; i++) abufs.push_back(axis(1));
   //Convert to read parameters to the disk file?? range
   for(int i=0; i< 8;i++){
     if(aios[i].n==1){ //I don't contaio this axis
@@ -128,7 +133,7 @@ long long big=1;
       nwio[i]=nloc[i]; fwio[i]=floc[i];
       nloop[i]=1;
     }
-    *ndim=8;
+    ndim=8;
   }
   else{
     for(int i=0; i < iax; i++){
@@ -139,16 +144,18 @@ long long big=1;
       nwio[i]=1; fwio[i]=0;
       nloop[i]=nloc[i];
     }
-    *ndim=iax;
+    ndim=iax;
   }
 
  }
-int buffer::resize_buffer(int *njunk,int *fjunk,int *nwio,int *fwio,int ndim, long long off,
+int buffer::resize_buffer(std::vector<int> &njunk,std::vector<int> &fjunk,
+ std::vector<int> &nwio,std::vector<int> &fwio,
+int ndim, long long off,
     unsigned char *bufin,unsigned char *bufout,int ssz){
     
     if(ndim==0){;}
     int nput=0;
-    if(njunk==0 && fjunk==0) {;}
+    if(njunk[0]==0 && fjunk[0]==0) {;}
   if(same){
 
      long long n123_view=1;
@@ -159,11 +166,10 @@ int buffer::resize_buffer(int *njunk,int *fjunk,int *nwio,int *fwio,int ndim, lo
     memcpy(bufout+off*ssz,bufin,ssz*n123_view);
   }
   else{
-    int nwview[8],fwview[9];
+    std::vector<int> nwview(8,1),fwview(9,0),nuse(8,1);
     calc_resize(fwio,nwio,fwview,nwview);
 
 
-    int nuse[8];
     for(int i=0; i < 8; i++) nuse[i]=nwview[i];
     long long iin,iout;
 
@@ -223,7 +229,7 @@ long long *buffer::grid_to_index(int n, long long *ind){
  
  long long *out=new long long [n];
  if(resamp_1 && 3==3){
- int nin=hyper_buf->get_axis(1).n;
+ int nin=hyper_buf->getAxis(1).n;
  int nout=skip[1];
  for(int i=0; i < n; i++){
  
@@ -246,7 +252,7 @@ long long *buffer::grid_to_index(int n, long long *ind){
  long long kip[8];
  kip[0]=1;
  for(int i=0; i <7; i++) {
-   kip[i+1]=kip[i]*hyper_buf->get_axis(i).n;
+   kip[i+1]=kip[i]*hyper_buf->getAxis(i).n;
    }
    
    for(int i=0; i < n; i++){
@@ -272,7 +278,7 @@ long long *buffer::grid_to_index(int n, long long *ind){
 }
 
 
-long long *buffer::form_index_map(orient_cube *pos, int iax1,int iax2, 
+long long *buffer::form_index_map(std::shared_ptr<orient_cube>pos, int iax1,int iax2, 
  int f1, int e1, int f2, int e2){
 
 
@@ -291,7 +297,7 @@ long long *bb=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
  
  long long *out=new long long [n];
  if(resamp_1 && 3==3){
- int nin=pos->get_axis(0).n;
+ int nin=pos->getAxis(0).n;
  int nout=skip[1];
  for(int i=0; i < n; i++){
  
@@ -314,7 +320,7 @@ long long *bb=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
  long long kip[8];
  kip[0]=1;
  for(int i=0; i <7; i++) {
-   kip[i+1]=kip[i]*pos->get_axis(i).n;
+   kip[i+1]=kip[i]*pos->getAxis(i).n;
    }
    
    for(int i=0; i < n; i++){
@@ -337,7 +343,7 @@ long long *bb=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
  return out;
 }
 /*
-long long *buffer::form_index_map(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+long long *buffer::form_index_map(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
     int f2, int e2){
  
   long long j1,j2,jax1=0,jax2=0;
@@ -562,7 +568,7 @@ long long *buffer::form_index_map(orient_cube *pos, int iax1, int f1, int e1, in
     
  }
  */
-void buffer::calc_get_pars(orient_cube *pos, int iax1, int iax2, long long *j1, long long *j2,
+void buffer::calc_get_pars(std::shared_ptr<orient_cube>pos, int iax1, int iax2, long long *j1, long long *j2,
   long long *first){
  
 
@@ -591,13 +597,13 @@ void buffer::calc_get_pars(orient_cube *pos, int iax1, int iax2, long long *j1, 
  void buffer::set_hold(bool *h){
    for(int i=0; i < 8; i++) hold[i]=h[i];
  }
- void buffer::window_to_local(int *nwview, int *fwview){
+ void buffer::window_to_local(std::vector<int>nwview, std::vector<int>fwview){
 
    n123_view=1;
    n123_buf=1;
    long long j=1;
    for(int i=0; i < 8; i++){
-     int nwio=hyper_io->get_axis(i+1).n;
+     int nwio=hyper_io->getAxis(i+1).n;
      n123_view=n123_view*(long long)nwview[i];
      n123_buf=n123_buf*(long long)nwio;
      skip[i]=j;
@@ -613,7 +619,7 @@ void buffer::calc_get_pars(orient_cube *pos, int iax1, int iax2, long long *j1, 
       }
     }
    }
- long long buffer::point_to_local(position *pos){
+ long long buffer::point_to_local(std::shared_ptr<position>pos){
    long long iloc=0;
    
    if(same){
@@ -631,7 +637,7 @@ void buffer::calc_get_pars(orient_cube *pos, int iax1, int iax2, long long *j1, 
  bool buffer::hold_point(float *pos_loc, bool *use_axis){
    for(int i=0; i <8; i++){
       
-     if(!hold[i] && pos_loc[i] !=loc[i] && use_axis[i] && hyper_buf->get_axis(i+1).n>1){
+     if(!hold[i] && pos_loc[i] !=loc[i] && use_axis[i] && hyper_buf->getAxis(i+1).n>1){
      
 //       std::cout << "FAILING "<<i<<" hold="<<hold[i]<<" "<<pos_loc[i]<<"!="<<loc[i]<<" "<<use_axis[i]<<std::endl;
       // std::cout << "FAILING "<<hold[i]<<" "<<pos->get_loc(i)<<" "<<loc[i]<<" " << use_axis[i]<<endl;
@@ -645,7 +651,8 @@ void buffer::calc_get_pars(orient_cube *pos, int iax1, int iax2, long long *j1, 
    memcpy((void*)tmp,(const void*)histo,256*sizeof(float));
    return tmp;
  }
-void buffer::calc_resize(int *fio, int *nio, int *fbuf, int *nbuf){
+void buffer::calc_resize(std::vector<int>& fio, std::vector<int> &nio, std::vector<int> &fbuf, 
+ std::vector<int> &nbuf){
 
 
 

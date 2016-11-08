@@ -9,22 +9,22 @@ class  move_semblance: public io_func{
 
   public:
    move_semblance(){};
-   void set_moveout_basics(hypercube *grid, dataset *dat,int it, int ioff, int imes,
-     util *pars,pick_draw *pck,QString col1, QString col2);
+   void set_moveout_basics(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat,int it, int ioff, int imes,
+     std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pck,QString col1, QString col2);
 
 
 
-   virtual void read_block_float(int *nw, int *fw, float *buf);
-   virtual void read_block_byte(int *nw, int *fw, unsigned char *buf);
-   virtual void semblance_it(int *f,float *nmo){if(f==0 && nmo==0);}
-     dataset *data;
+   virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
+   virtual void read_block_byte(std::vector<int>&nw, std::vector<int>&fw, unsigned char *buf);
+   virtual void semblance_it(std::vector<int>&f,float *nmo){if(f[0]==0 && nmo==0){;}}
+     std::shared_ptr<dataset>data;
      int i_off,i_mes,i_t;
      float os[8],ds[8];
-     util *par;
-     orient_cube *dumb;
+     std::shared_ptr<util>par;
+     std::shared_ptr<orient_cube>dumb;
      float *num,*den,*nnz;
-     hypercube *grid;
-     pick_draw *pks;
+     std::shared_ptr<hypercube>grid;
+     std::shared_ptr<pick_draw>pks;
      QString col1,col2;
 
 

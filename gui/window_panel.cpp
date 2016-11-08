@@ -1,5 +1,6 @@
 #include "window_panel.h"
-window_panel::window_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+window_panel::window_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, std::shared_ptr<panels> my_p, 
+  std::shared_ptr<datasets> my_d, std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types>c,std::shared_ptr<maps> mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
    for(int i=0; i < my_w->nwind(); i++){
       my_tabs[QString::number(i+1)]=new sub_window_panel(p,my_w,my_p,my_d,pk,c,mym,QString::number(i));
@@ -30,7 +31,9 @@ void window_panel::update_menu(std::vector<QString> coms){
  }
  
 }
-sub_window_panel:: sub_window_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *my_m,QString n){
+sub_window_panel:: sub_window_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+std::shared_ptr<panels> my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk,
+ std::shared_ptr<slice_types>c,std::shared_ptr<maps> my_m,QString n){
   set_basics(p,my_w,my_p,my_d,pk,c,my_m);
   myw=n;
     

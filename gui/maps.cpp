@@ -1,24 +1,28 @@
 #include "maps.h"
-#include "sregf.h"
 #include <QFileInfo>
-map_1::map_1(QString nm, hypercube *h,float over){
+#include "hypercube_float.h"
+map_1::map_1(std::shared_ptr<genericIO> io,QString nm, const std::shared_ptr<hypercube> h,float over){
   oversamp=over;
+  _io=io;
+  
   QString n=QFileInfo(nm).baseName();
   name=n;
   if(name.length()>20){
     name=name.remove(0,name.length()-20);
   }
- sregf fl=sregf(nm.toAscii().constData());
+  std::string nmS=std::string(nm.toAscii().constData());
+ std::shared_ptr<genericRegFile> rfile=io->getRegFile(nmS,usageIn);
+ 
  int ns[8]; 
  long long sz=1;
  for(int i=0; i < 8; i++) {
-   ns[i]=h->get_axis(i+1).n;
+   ns[i]=h->getAxis(i+1).n;
    sz=sz*(long long)ns[i];
 }
-     assert(sz==fl.get_n123()) ;
-     hypercube_float buf=hypercube_float(&fl);
-     ind=new int[sz];
-     fl.read_all(nm.toAscii().constData(),&buf);
+     assert(sz==rfile->getHyper()->getN123()) ;
+     hypercube_float buf=hypercube_float(h);
+     ind.resize(sz);
+     rfile->readFloatStream(sz,&buf.vals[0]);
      long long i=0;
      for(long long i2=0; i2 < sz/(long long)ns[0]; i2++){
        for(int i1=0 ;   i1 < ns[0]; i1++,i++){
@@ -30,10 +34,10 @@ map_1::map_1(QString nm, hypercube *h,float over){
 }
 
 
-map_1 *maps::return_map(int inum){
+std::shared_ptr<map_1> maps::return_map(int inum){
    return my_maps[inum];
 }
-map_1 *maps::return_map(QString nm){
+std::shared_ptr<map_1> maps::return_map(QString nm){
   for(int i=0; i < (int) my_maps.size();i++){
     if(nm==my_maps[i]->return_name()) 
       return my_maps[i];

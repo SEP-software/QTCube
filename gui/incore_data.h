@@ -9,7 +9,7 @@ class incore_data:public dataset{
      incore_data(){;}
       ~incore_data(){ };
   
-     hypercube *datas;
+     std::shared_ptr<hypercube >datas;
      int mmap_it;
 
 };
@@ -17,7 +17,8 @@ class incore_data:public dataset{
 class incore_data_float: public incore_data{
   public:
   incore_data_float(){};
-  incore_data_float(std::string title,QString nm,hypercube *g,io_func *i, param_func *p, int in,int mmap,int im=1);
+  incore_data_float(std::string title,QString nm,std::shared_ptr<hypercube>g,
+  std::shared_ptr<io_func> i, std::shared_ptr<paramObj> p, int in,int mmap,int im=1);
    ~incore_data_float(){
       
       clean_bufs();
@@ -28,11 +29,12 @@ class incore_data_float: public incore_data{
 class incore_data_byte: public incore_data{
  public:
   incore_data_byte(){};
-  incore_data_byte(std::string title,QString nm,hypercube *g,io_func *i, param_func *p, int in,int im=1);
+  incore_data_byte(std::string title,QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, 
+  std::shared_ptr<paramObj>p, int in,int im=1);
    ~incore_data_byte(){
       clean_bufs();
    }
-  buffer *create_buffer(orient_cube *pos, int iax1, int iax2);
+  std::shared_ptr<buffer> create_buffer(std::shared_ptr<orient_cube >pos, int iax1, int iax2);
 };
 
 #endif

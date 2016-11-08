@@ -14,7 +14,7 @@ class box{
    box(){};
    box(int b_x,int b_y,int e_x,int e_y){bx=b_x; by=b_y; ey=e_y; ex=e_x;}
    bool boxes_overlap(box *other);
-   box(int ix,int iy,QString txt, float rad, QFontMetrics *fm);
+   box(int ix,int iy,QString txt, float rad, std::shared_ptr<QFontMetrics> fm);
    int bx,ex,by,ey;
    int shiftx,shifty;
 
@@ -29,9 +29,9 @@ class contour: public slice
  
  	void Paintcontours(int n2, int n1, QPainter *painter, float *b,float minv, float maxv);
 
-  virtual void draw_slice(QPainter *painter,dataset *dat,QPen *pen,
-  orient_cube *pos,  bool ov,bool draw_grid);
-  slice *clone();
+  virtual void draw_slice(QPainter *painter,std::shared_ptr<dataset>dat,QPen *pen,
+  std::shared_ptr<orient_cube>pos,  bool ov,bool draw_grid);
+  std::shared_ptr<slice>clone();
   int cconnect (float *z, int n1, int n2,float  c, int *ix, int *iy,bool *south_mark,
   bool *west_mark,QPolygon *pts);
   int contour_val ( QPainter *painter,float *z, bool *west_mark, bool *south_mark, int n1, int n2,float c);

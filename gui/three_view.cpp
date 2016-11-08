@@ -31,7 +31,7 @@ void three_view::resize_view_end(int ix,int iy){
   }
 }
 
-std::vector<QString> three_view::left_mouse_move(float x,float y, orient_cube *pos, mouse_func *func){
+std::vector<QString> three_view::left_mouse_move(float x,float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func){
   if(corner_sel==1){
 
     if(  TIME.elapsed() >50){
@@ -55,7 +55,7 @@ std::vector<QString> three_view::left_mouse_move(float x,float y, orient_cube *p
   }
 
 }
-std::vector<QString> three_view::left_mouse_release(float x,float y, orient_cube *pos, mouse_func *func){
+std::vector<QString> three_view::left_mouse_release(float x,float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func){
  
  
  if(corner_sel==1){
@@ -74,7 +74,7 @@ std::vector<QString> three_view::left_mouse_release(float x,float y, orient_cube
 }
 
 
-std::vector<QString> three_view::left_mouse_down(float x, float y, orient_cube *pos,mouse_func *func){
+std::vector<QString> three_view::left_mouse_down(float x, float y, std::shared_ptr<orient_cube>pos,std::shared_ptr<mouse_func>func){
    int ix,iy;
    int cx,cy;
      com[1]="none";

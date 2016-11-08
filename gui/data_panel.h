@@ -22,7 +22,9 @@ private:
 class data_panel: public qcubeTabBasic{
   Q_OBJECT
   public: 
-    data_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    data_panel(std::shared_ptr<position> p,std::shared_ptr<windows> my_w, std::shared_ptr<panels>my_p, 
+    std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, std::shared_ptr<slice_types> c,
+    std::shared_ptr<maps> mym);
     signals:
     void actionDetected(std::vector<QString> text);
     public:
@@ -36,7 +38,9 @@ class data_panel: public qcubeTabBasic{
 class add_dataset: public qcubeTabBasic{
   Q_OBJECT
   public: 
-    add_dataset(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    add_dataset(std::shared_ptr<position> p,
+    std::shared_ptr<windows> my_w, std::shared_ptr<panels> my_p, std::shared_ptr<datasets>my_d,
+     std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types>c,std::shared_ptr<maps> mym);
 
 
  signals:
@@ -79,7 +83,9 @@ class add_dataset: public qcubeTabBasic{
 class data_sub_panel: public qcubeTabBasic{
   Q_OBJECT
   public: 
-    data_sub_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym,int idat);
+    data_sub_panel(std::shared_ptr<position> p,std::shared_ptr<windows>my_w, 
+    std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk,
+     std::shared_ptr<slice_types> c,std::shared_ptr<maps> mym,int idat);
   
      void update_menu(std::vector<QString>);
   signals:
@@ -97,13 +103,7 @@ class data_sub_panel: public qcubeTabBasic{
     
 
     
-#ifdef CHEVRON
-    flatten_types *flat;
-    QGroupBox *flatBox;
-    QVBoxLayout *flatLay;
-    basicVRadioBox *flatChoose;
-    basicLineEditBox *flatCurrent;
-#endif
+
     int idat;
     clip_bar *clip;
     basicComboBox *begin,*end;

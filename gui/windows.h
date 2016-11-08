@@ -7,12 +7,12 @@
 class windows:public QObject{
   Q_OBJECT
   public:
-    windows(panels  *m){ my_pan=m; active_num=0;}
+    windows(std::shared_ptr<panels >m){ my_pan=m; active_num=0;}
          signals:
     void actionDetected(std::vector<QString> text);
     public:
-    void add_window(DrawWindow *um);
-    void delete_window(DrawWindow *wind);
+    void add_window(std::shared_ptr<DrawWindow>um);
+    void delete_window(std::shared_ptr<DrawWindow>wind);
     void update_displays(bool tr=false);
     int size(){return (int)my_winds.size();}
     void set_active_panel(int iw, int ip){ my_winds[iw]->set_active_panel(ip);}
@@ -21,19 +21,19 @@ class windows:public QObject{
 
     ~windows(){delete_windows();}
     int nwind(){ return my_winds.size();}
-    DrawWindow *return_window(int i){return my_winds[i];}
+    std::shared_ptr<DrawWindow> return_window(int i){return my_winds[i];}
         void connect_all();
     void connect_it(int i);
     void disconnect_it(int i);
-    void update_grid(DrawWindow *active,int ioldx,int ioldy, int inewx, int inewy);
+    void update_grid(std::shared_ptr<DrawWindow>active,int ioldx,int ioldy, int inewx, int inewy);
        void set_active(int ia){ 
        active_num=ia;}
     int get_active_num(){ return active_num;}
-   std::vector<DrawWindow*> my_winds;
+   std::vector<std::shared_ptr<DrawWindow>> my_winds;
 
   private:
    void delete_windows();
-   panels *my_pan;
+   std::shared_ptr<panels> my_pan;
    int active_num;
      private slots:
     void actionRespond(std::vector< QString> text);

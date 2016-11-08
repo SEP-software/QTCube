@@ -1,4 +1,4 @@
-
+ #pragma once 
 #ifndef CENTERWINDOW_H
 #define CENTERWINDOW_H
 #include <qmainwindow.h>
@@ -8,6 +8,7 @@
 #include <QCloseEvent>
 #include <QAction>
 #include "position.h"
+#include <genericIO.h>
 #include "slice_types.h"
 //#include "pick_groups.h"
 #include "pick_draw.h"
@@ -46,9 +47,9 @@
      Q_OBJECT
 
  public:
-     MainWindow(param_func *pars,datasets *d,pick_draw *_pk,
-	  slice_types *ct,  util *p);
- history *my_hist;
+     MainWindow(std::shared_ptr<genericIO>io ,std::shared_ptr<datasets>d,std::shared_ptr<pick_draw> _pk,
+	  std::shared_ptr<slice_types> ct);
+ std::shared_ptr<history> my_hist;
 
 
  private slots:
@@ -92,33 +93,34 @@
 
  private:
  void update_status_bar();
-  window_panel *my_window_panel;
- orientation_server *serv;
- panel_panel *my_panel_panel;
- data_panel *my_data_panel;
- help_panel *my_help_panel;
- ano_panel *my_ano_panel;
- color_panel *my_color_panel;
- pick_panel *my_pick_panel;
-  panels *my_pan;
-  windows *my_wind;
-  position *pos;
-  maps *my_maps;
-	pick_draw *pk;
-	     param_func *pars;
-     util *pp;
-     datasets *datas;
+  std::shared_ptr<window_panel>my_window_panel;
+ std::shared_ptr<orientation_server>serv;
+ std::shared_ptr<panel_panel>my_panel_panel;
+ std::shared_ptr<data_panel>my_data_panel;
+ std::shared_ptr<help_panel>my_help_panel;
+ std::shared_ptr<ano_panel>my_ano_panel;
+ std::shared_ptr<color_panel>my_color_panel;
+ std::shared_ptr<pick_panel>my_pick_panel;
+ std::shared_ptr<genericIO> _io;
+  std::shared_ptr<panels>my_pan;
+  std::shared_ptr<windows>my_wind;
+  std::shared_ptr<position>pos;
+  std::shared_ptr<maps>my_maps;
+	std::shared_ptr<pick_draw>pk;
+	     std::shared_ptr<paramObj>pars;
+     std::shared_ptr<util> pp;
+     std::shared_ptr<datasets>datas;
      QString stat_view;
-     slice_types *colort;
-     	orients *my_or;
+     std::shared_ptr<slice_types>colort;
+     	std::shared_ptr<orients>my_or;
 
      void createActions();
      void createMenus();
      QMenu *mainMenu;
      QMenu *mouseMenu;
           QMenu *statusMenu;
-    std::map < QString, mouse_func *> funcs;
-    mouse_func *cur_func;
+    std::map < QString, std::shared_ptr<mouse_func>> funcs;
+    std::shared_ptr<mouse_func>cur_func;
      QMenu *historyMenu;
      QMenu *panelMenu,*helpMenu,*help2Menu;
      QMenu *mouseFuncMenu;
@@ -128,9 +130,9 @@
      QAction *newAct;
      QAction *yesColorAct,*noColorAct;
      QAction *yesDataAct,*noDataAct;
-          QAction *yesPickAct,*noPickAct;
-QAction *yesHelpAct,*noHelpAct;
-QAction *yesAnnoAct,*noAnnoAct;
+   QAction *yesPickAct,*noPickAct;
+   QAction *yesHelpAct,*noHelpAct;
+   QAction *yesAnnoAct,*noAnnoAct;
    QAction *mAnnoAct,*mPickAct,*mNavAct,*mRegionAct,*mOverAct,*mZoomAct;
    QAction *sMouseAct,*sPositionAct,*sOverlayAct,*sPickAct;
    QAction *lockAct,*unlockAct;

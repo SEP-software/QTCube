@@ -8,8 +8,8 @@ class nmoed: public moved_out{
 
   public:
      nmoed(){};
-     nmoed(hypercube *grid, dataset *dat, int it,int ioff, int imes,
-       util *pars, pick_draw *pk,QString col1, QString col2);
+     nmoed(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
+       std::shared_ptr<paramObj>pars, std::shared_ptr<pick_draw>pk,QString col1, QString col2);
      virtual void move_it(int *f,float *nmo);
      float smute;
      bool done;

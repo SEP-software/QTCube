@@ -1,6 +1,6 @@
 #include "color_panel.h"
 
-color_panel:: color_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+color_panel:: color_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, std::shared_ptr<slice_types>c,std::shared_ptr<maps>mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   
     
@@ -21,16 +21,19 @@ color_panel:: color_panel(position *p,windows *my_w, panels *my_p, datasets *my_
      colorBox=new QGroupBox();
      colorBox->setLayout(barLay);
      
-    cbar=new color_bar2((user_color*)my_slices->slices["user"]);
+     std::shared_ptr<user_color> us=std::static_pointer_cast<user_color>(my_slices->slices["user"]);
+     std::shared_ptr<color_bar2> cb2(new color_bar2(us));
+     
+    cbar=cb2;
        cbar->setMinimumSize(300,240);
 
-    mainLay->addWidget(cbar);
+    mainLay->addWidget(cbar.get());
     mainLay->addWidget(colorBox);
     setLayout(mainLay);
 
     mainLay->addStretch(1);
     setLayout(mainLay);
-   connect(cbar, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(cbar.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 
 }
@@ -43,7 +46,7 @@ void color_panel::actionRespond(std::vector<QString> coms){
   emit actionDetected(coms);
 
 }
-color_bar2::color_bar2(user_color *col){
+color_bar2::color_bar2(  std::shared_ptr<user_color>col){
 	pm=QPixmap(100,100);
 	color="red";
 	maps["red"]=new float[33];
@@ -345,7 +348,7 @@ void color_bar2::draw_bar(){
     int ii=0;
     for(int i=0; i < 256; i++,ii++){uc[ii]=(unsigned int) i;
    }
-  QImage *img=ctable->makeImage(uc,256,1);
+  QImage *img=ctable->makeImage(uc,256,1,W,nh_bar);
   QImage newt=img->scaled(W,nh_bar);
   QPixmap t2=QPixmap::fromImage(newt,Qt::OrderedAlphaDither);
   //t2.convertFromImage(newt, Qt::OrderedAlphaDither);

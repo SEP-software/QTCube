@@ -3,15 +3,16 @@
 #include "byte_buffer.h"
 #include "interval_pick.h"
 
-part_semb_data_byte::part_semb_data_byte(std::string title,QString nm,hypercube *g,io_func *i,
-  int i_t,int i_off, int i_mes, pick_draw *_pk, QString c1, QString c2,param_func *p, int in,int imaa){
+part_semb_data_byte::part_semb_data_byte(std::string title,QString nm,std::shared_ptr<hypercube >g,std::shared_ptr<io_func>i,
+  int i_t,int i_off, int i_mes, std::shared_ptr<pick_draw>_pk, QString c1, QString c2,std::shared_ptr<paramObj>p, int in,int imaa){
   set_basics(title,nm,g,i,p,in,imaa);
   datas=io->return_hyper();
   it=i_t; im=i_mes;ioff=i_off;
   pks=_pk; col1=c1; col2=c2;
-    dumb=new orient_cube(grid); 
+  std::shared_ptr<orient_cube> oo(new orient_cube(grid));
+    dumb=oo;
    for(int i=0; i < 8; i++) {
-    axis a=grid->get_axis(i+1);
+    axis a=grid->getAxis(i+1);
     ds[i]=a.d;
   }
   

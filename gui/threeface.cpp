@@ -4,7 +4,7 @@
 
 
 
-three_face::three_face(QString view,QFontMetrics *f_m,pick_draw *_pks,draw_other *dr,float *prop){ 
+three_face::three_face(QString view,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks,std::shared_ptr<draw_other>dr,std::vector<float> prop){ 
  ; pct_top=.4; pct_front=.6;fm=f_m;
 
    set_basics(_pks,dr);
@@ -15,7 +15,7 @@ three_face::three_face(QString view,QFontMetrics *f_m,pick_draw *_pks,draw_other
 com.push_back("");com.push_back("");
 
 } 
-void three_face::viewit(QPainter *painter,QPen *pen, slice *fact,   dataset *dat,orient_cube *pos,int b_x, int e_x, int b_y, int e_y,draw_what *draws,bool overlay){
+void three_face::viewit(QPainter *painter,QPen *pen, std::shared_ptr<slice>fact,   std::shared_ptr<dataset>dat,std::shared_ptr<orient_cube>pos,int b_x, int e_x, int b_y, int e_y,std::shared_ptr<draw_what>draws,bool overlay){
   
     this->set_size(b_x,e_x,b_y,e_y);
     trspace=true;

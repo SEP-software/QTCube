@@ -4,7 +4,7 @@
 
 
 
-multi_face::multi_face(QString view,QFontMetrics *f_m,pick_draw *_pks,draw_other *dr,
+multi_face::multi_face(QString view,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw> _pks,std::shared_ptr<draw_other> dr,
 int g1, int g2, int j ){ 
  ;fm=f_m;
   grid1=g1;
@@ -17,8 +17,8 @@ int g1, int g2, int j ){
 com.push_back("");
 } 
 
-void multi_face::viewit(QPainter *painter,QPen *pen, slice *fact, 
-  dataset *dat,orient_cube *pos,int b_x, int e_x, int b_y, int e_y,draw_what *draws,
+void multi_face::viewit(QPainter *painter,QPen *pen, std::shared_ptr<slice>fact, 
+  std::shared_ptr<dataset>dat,std::shared_ptr<orient_cube> pos,int b_x, int e_x, int b_y, int e_y,std::shared_ptr<draw_what>draws,
   bool overlay){
   
     this->set_size(b_x,e_x,b_y,e_y);
@@ -31,10 +31,10 @@ void multi_face::viewit(QPainter *painter,QPen *pen, slice *fact,
       
         if(draws->draw_title && title_bot) bound_b+=(int)(fm->height()*1.5);
     bsmall=1;
-        int cx,cy;
+      
 
       int i3_cur=pos->get_loc(pos->get_order(2));
-      axis a3=pos->get_axis(pos->get_order(2));
+      axis a3=pos->getAxis(pos->get_order(2));
       int i3_cent=(int)((grid1*grid2)/2.);
       int fdraw=-i3_cent*j3;
       int deltax=((ex-bound_r)-(bx+bound_l))/grid1;

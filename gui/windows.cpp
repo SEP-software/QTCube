@@ -1,32 +1,30 @@
 #include "windows.h"
 
-void windows::add_window(DrawWindow *um){
+void windows::add_window(std::shared_ptr<DrawWindow>um){
   my_winds.push_back(um);
   connect_it(my_winds.size()-1);
   active_num=0;
 }
 
-void windows::delete_window(DrawWindow *wind){
-  for(int i=0; i < my_winds.size(); i++){
+void windows::delete_window(std::shared_ptr<DrawWindow>wind){
+  for(int i=0; i <(int) my_winds.size(); i++){
     if(my_winds[i]==wind){
-      delete my_winds[i];
       my_winds.erase(my_winds.begin()+i);
       return;
     }
   }
 }
 void windows::delete_windows(){
-  for(int i=0; i < my_winds.size(); i++){
+  for(int i=0; i < (int)  my_winds.size(); i++){
   
-      delete my_winds[i];
 
   }
-
+  my_winds.clear();
 
 }
 void windows::annotate_respond(std::vector<QString> coms){
 
- DrawWindow *active=my_winds[coms[0].toInt()];
+ std::shared_ptr<DrawWindow> active=my_winds[coms[0].toInt()];
   if(coms[2].contains("shape")){
     active->set_ano_shape(coms[3]);
   }
@@ -92,7 +90,7 @@ void windows::annotate_respond(std::vector<QString> coms){
 
 void windows::windows_respond(std::vector<QString> coms){
 
-  DrawWindow *active=my_winds[coms[0].toInt()];
+  std::shared_ptr<DrawWindow>active=my_winds[coms[0].toInt()];
   if(coms[2].contains("save_big")){
     active->pdf_save("big",coms[3]);
   }
@@ -119,13 +117,13 @@ void windows::windows_respond(std::vector<QString> coms){
   }
 
 }
-void windows::update_grid(DrawWindow *active,int noldx,int noldy, int nnewx, int nnewy){
+void windows::update_grid(std::shared_ptr<DrawWindow>active,int noldx,int noldy, int nnewx, int nnewy){
    std::vector<QString> coms;
    coms.push_back("-1");coms.push_back("panels"); coms.push_back("delete");
     coms.push_back("xx"); 
   if(noldx*noldy>nnewx*nnewy){
     for(int i=0;i < noldx*noldy-nnewx*nnewy;i++){
-      panel *pan=active->remove_last_panel();
+      std::shared_ptr<panel>pan=active->remove_last_panel();
       int ival=pan->get_iview();
       my_pan->delete_panel(ival);
       coms[3]=QString::number(ival);
@@ -137,7 +135,7 @@ void windows::update_grid(DrawWindow *active,int noldx,int noldy, int nnewx, int
     coms[2]="add";
     for(int i=0;i < -noldx*noldy+nnewx*nnewy;i++){
     int in=my_pan->get_next_panel_num();
-    panel *x=active->return_panel(0)->clone(in);
+    std::shared_ptr<panel> x=active->return_panel(0)->clone(in);
     my_pan->add_panel(x);
     my_pan->set_window(in,active->get_inum());
     active->add_panel(x);
@@ -172,12 +170,12 @@ void windows::update_displays(bool force){
 }
 void windows::connect_it(int i){
 
-connect(my_winds[i], SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+connect(my_winds[i].get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 }
 void windows::disconnect_it(int i){
 
-  disconnect(my_winds[i], SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+  disconnect(my_winds[i].get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 }
 

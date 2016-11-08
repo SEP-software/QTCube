@@ -7,7 +7,9 @@
 class panel_panel: public qcubeTabBasic{
   Q_OBJECT
   public: 
-    panel_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    panel_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+    std::shared_ptr<panels> my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, 
+    std::shared_ptr<slice_types>c,std::shared_ptr<maps>mym);
     
     void update_menu(std::vector<QString>);
     void set_current_index(int ind);
@@ -23,7 +25,9 @@ class panel_panel: public qcubeTabBasic{
 class sub_panel_panel: public qcubeTabBasic{
   Q_OBJECT
   public: 
-    sub_panel_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym,QString v);
+    sub_panel_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+     std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, 
+     std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types>c,std::shared_ptr<maps> mym,QString v);
     
     
           void update_menu(std::vector<QString>);

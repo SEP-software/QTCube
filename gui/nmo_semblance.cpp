@@ -2,14 +2,14 @@
 #include <math.h>
 #include "interval_pick.h"
 
-nmo_semblance::nmo_semblance(hypercube *grid, dataset *dat, int it,int ioff, int imes,
-       util *pars,pick_draw *pk1, QString col1, QString col2){
+nmo_semblance::nmo_semblance(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
+       std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pk1, QString col1, QString col2){
  
  this->set_moveout_basics(grid,dat,it,ioff,imes,pars,pk1,col1,col2); 
- no_sem=par->get_int("no_sem",0);
-  nsmooth=par->get_int("nsmooth",8);
+ no_sem=pars->getInt("no_sem",0);
+  nsmooth=pars->getInt("nsmooth",8);
 
- smute=par->get_float("smute",1.5);
+ smute=pars->getFloat("smute",1.5);
        
 }
 
@@ -19,9 +19,9 @@ void nmo_semblance::semblance_it(int *f, float *semb){
  float offset,v,offovs,temp,tnmute;
  float tn,ti,frac;
  
- axis taxis=grid->get_axis(i_t+1);
- axis oaxis=grid->get_axis(i_off+1);
- axis maxis=grid->get_axis(i_mes+1);
+ axis taxis=grid->getAxis(i_t+1);
+ axis oaxis=grid->getAxis(i_off+1);
+ axis maxis=grid->getAxis(i_mes+1);
  int   nt=taxis.n, nv=maxis.n, nh=oaxis.n;
  float dt=taxis.d, dv=maxis.d, dh=oaxis.d;
  float ot=taxis.o, ov=maxis.o, oh=oaxis.o;

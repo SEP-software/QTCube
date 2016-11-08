@@ -2,9 +2,8 @@
 #include "auto_viteribi.h"
 #include "auto_brown.h"
 #include "lloyd_1d.h"
-#include "seplib.h"
 
-autopick::autopick(pick_draw *_pks){
+autopick::autopick(std::shared_ptr<pick_draw>_pks){
   ncor=20;
   nsearch=20;
   correlate=true;
@@ -21,19 +20,20 @@ autopick::autopick(pick_draw *_pks){
   plane="left";
 }
 void autopick::create_viteribi(){
- if(auto_2d==0) delete auto_2d;
- auto_2d=new auto_viteribi(pen_o,pen_e,nail);
+ if(auto_2d)  auto_2d.reset();
+ std::shared_ptr<auto_viteribi> x(new auto_viteribi(pen_o,pen_e,nail));
+ auto_2d=x;
 }
 void autopick::create_brown(){
-  if(auto_2d==0) delete auto_2d;
-  auto_2d=new auto_brown(pen_o,pen_e,nail);
-
+  if(auto_2d) auto_2d.reset();
+  std::shared_ptr<auto_brown> x( new auto_brown(pen_o,pen_e,nail));
+  auto_2d=x;
 }
 void autopick::init_method(){
   if(method.contains("iter")) create_viteribi();
   if(method.contains("Brown")) create_brown();
 }
-int autopick::extend_picks(view *myv, orient_cube *pos){
+int autopick::extend_picks(std::shared_ptr<view>myv, std::shared_ptr<orient_cube>pos){
   cur_auto+=1;
   init_method();
   int iax1,iax2,iax3;
@@ -78,16 +78,15 @@ int autopick::extend_picks(view *myv, orient_cube *pos){
     
     QString col=pks->get_active_col();
     
-    pairs_new *myp=pks->get_pts_sort_le(pos,iax1,iax2,accept,isort,col);
+    std::shared_ptr<pairs_new> myp(pks->get_pts_sort_le(pos,iax1,iax2,accept,isort,col));
     
     
     pick_line(myv,fpos,pos,iax1,iax2,isort,isingle,myp,iax3);
-    delete myp;
   }
   cur_auto+=1;
   return 0;
 }
-int  autopick::pick_2d(view *myv,orient_cube *pos){
+int  autopick::pick_2d(std::shared_ptr<view>myv,std::shared_ptr<orient_cube>pos){
 
   init_method();
 
@@ -105,11 +104,10 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
       float fpos[8];
       for(int i=0; i< 8; i++) { fpos[i]=pos->get_pos(i);}
 
-      pairs_new *myp=pks->get_pts_sort_le(pos,myv->slices[islc]->get_iax1(),
+      std::shared_ptr<pairs_new> myp=pks->get_pts_sort_le(pos,myv->slices[islc]->get_iax1(),
         myv->slices[islc]->get_iax2(),accept,isort,col);
       
       pick_line(myv,fpos,pos,iax1,iax2,isort,isingle,myp,-1);
-      delete myp;
     }
   }
   cur_auto+=1;
@@ -122,7 +120,9 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
 
   pks->delete_pick_vals(cur_auto,col);
  }
- void autopick::pick_line(view *myv, float *fpos, orient_cube *pos,int iax1, int iax2, int isort,int isingle,pairs_new *myp, int iax3){
+ void autopick::pick_line(std::shared_ptr<view>myv, float *fpos, 
+ std::shared_ptr<orient_cube>pos,int iax1, int iax2, int isort,int isingle,
+ std::shared_ptr<pairs_new>myp, int iax3){
     QString col=pks->get_active_col();
    if(fpos==0 && iax3==0){;};
         if(myp->size()>1){
@@ -140,13 +140,13 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
       }
        
          int f=loc_p[0],n=loc_p[loc_p.size()-1]-f+1;
-         float_1d *line=new float_1d(n);
-         myp->build_int_line(f,n,line->vals);
-         float_2d *sim;
+         std::shared_ptr<float_1d> line(new float_1d(n));
+         myp->build_int_line(f,n,&line->vals[0]);
+         std::shared_ptr<float_2d> sim;
 
          if(correlate) {
 
-           float_2d *ar=extract_dat(pos, myv->cur_dat,isingle, isort,line,
+           std::shared_ptr<float_2d> ar=extract_dat(pos, myv->cur_dat,isingle, isort,line,
            nsearch+ncor,f);
 
            std::vector<int> close;
@@ -156,7 +156,6 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
 
            sim=correlate_it(ar,ncor,close);
 
-           delete ar;
          }
          else{
          sim=extract_dat(pos,myv->cur_dat,isingle,isort,line,nsearch,f);
@@ -170,7 +169,6 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
       }
       std::vector<path> mypath=auto_2d->return_path(locs,sim);
       locs.clear();
-      delete sim;
 
 
  
@@ -205,27 +203,26 @@ int  autopick::pick_2d(view *myv,orient_cube *pos){
       //  }
       }
 
-      delete line; 
     
     }
  
 
 }
-int  autopick::flat_view(view *myv,orient_cube *pos){
+int  autopick::flat_view(std::shared_ptr<view>myv,std::shared_ptr<orient_cube>pos){
   cur_auto+=1;
-  if(myv==0 || pos==0){;};
+  if(!myv||!pos){;};
 
   return 0;
 }
 
 
 
-float_2d *autopick::correlate_it(float_2d *ar, int ncor, std::vector<int> close){
+std::shared_ptr<float_2d>autopick::correlate_it(std::shared_ptr<float_2d>ar, int ncor, std::vector<int> close){
 
   axis ax[2],ain1,ain2;;
-  ain1=ar->get_axis(1); ax[1]=ain2=ar->get_axis(2);
+  ain1=ar->getAxis(1); ax[1]=ain2=ar->getAxis(2);
   ax[0]=ain1; ax[0].n=ax[0].n-2*ncor;
-  float_2d *out=new float_2d(ax[0],ax[1]);
+  std::shared_ptr<float_2d>out(new float_2d(ax[0],ax[1]));
   
   //int center=ax[0].n/2;
   float master[ain1.n];
@@ -263,11 +260,11 @@ float_2d *autopick::correlate_it(float_2d *ar, int ncor, std::vector<int> close)
 }
 
 
-float_2d *autopick::extract_dat(orient_cube *pos,dataset *cur_dat,int isingle, 
-int isort,float_1d *line, int ns,int f2){
+std::shared_ptr<float_2d>autopick::extract_dat(std::shared_ptr<orient_cube>pos,
+std::shared_ptr<dataset>cur_dat,int isingle, 
+int isort,std::shared_ptr<float_1d>line, int ns,int f2){
   int n1=1,n2=1;
  unsigned char *buf;
- float_2d *dat;
 
     n1=cur_dat->get_grid_axis(isingle+1).n;
     n2=cur_dat->get_grid_axis(isort+1).n;  
@@ -279,8 +276,8 @@ int isort,float_1d *line, int ns,int f2){
     buf=cur_dat->get_char_data(pos,isingle,0,n1,isort,0,n2);
     axis axes[2];
     axes[0]=axis(ns*2+1);
-    axes[1]=axis(line->get_axis(1).n);
-    dat=new float_2d(axes[0],axes[1]);
+    axes[1]=axis(line->getAxis(1).n);
+     std::shared_ptr<float_2d> dat(new float_2d(axes[0],axes[1]));
     int i;
     float f;
     int ishift;

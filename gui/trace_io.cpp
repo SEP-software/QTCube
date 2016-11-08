@@ -1,6 +1,6 @@
 #include "trace_io.h"
 
-void trace_io::set_trace_basics( QString fl, hypercube *d, int reel_h,int head, bool sw, util *p,int i){
+void trace_io::set_trace_basics( QString fl, std::shared_ptr<hypercube>d, int reel_h,int head, bool sw, std::shared_ptr<util>p,int i){
 
   set_basics(p,d);
   strcpy(file,fl.toAscii().constData());
@@ -12,8 +12,8 @@ void trace_io::set_trace_basics( QString fl, hypercube *d, int reel_h,int head, 
   swap=sw;
   inum=i;
   long long n=1;
-  for(int i=1; i < d->get_ndim(); i++)  {
-  	n=n*(long long)d->get_axis(i+1).n;
+  for(int i=1; i < d->getNdim(); i++)  {
+  	n=n*(long long)d->getAxis(i+1).n;
     }
   header_buf=new char[header*n];
   
@@ -25,7 +25,8 @@ void trace_io::read_block(int *nw, int *fw, unsigned char *buf, int nbytes){
   
   bool slice=false;
   char *tbuf;
-  std::vector<axis> axes=hyper->return_axes(8);
+  std::vector<axis> axes=hyper->getAxes();
+  for(int i=axes.size(); i< 8; i++) axes.push_back(axis(1));
   bool first=false;
   long long  block[8];
   block[0]=nbytes;

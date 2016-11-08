@@ -1,12 +1,12 @@
 #include "nmoed.h"
 #include <math.h>
-#include "seplib.h"
 #include "interval_pick.h"
-nmoed::nmoed(hypercube *grid, dataset *dat, int it,int ioff, int imes, util *pars, 
- pick_draw *_pk, QString col1, QString col2){
-  
-  set_moveout_basics(grid,dat,it,ioff,imes,pars,_pk,col1,col2);
-  smute=par->get_float("smute",1.5);
+nmoed::nmoed(std::shared_ptr<hypercube >grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes, std::shared_ptr<paramObj>pars, 
+ std::shared_ptr<pick_draw>_pk, QString col1, QString col2){
+    std::shared_ptr<util> pp(new util(pars));
+  par=pp;
+  set_moveout_basics(grid,dat,it,ioff,imes,par,_pk,col1,col2);
+  smute=pars->getFloat("smute",1.5);
   
 }
 
@@ -16,9 +16,9 @@ void nmoed::move_it(int *f,float *nmo){
  float offset,offovs,tnmute;
  float tn,ti;
 
- axis taxis=grid->get_axis(i_t+1);
- axis oaxis=grid->get_axis(i_off+1);
- axis maxis=grid->get_axis(i_mes+1);
+ axis taxis=grid->getAxis(i_t+1);
+ axis oaxis=grid->getAxis(i_off+1);
+ axis maxis=grid->getAxis(i_mes+1);
  int   nt=taxis.n,  nh=oaxis.n;
  float dt=taxis.d, dh=oaxis.d,dv=maxis.d;
  float ot=taxis.o, oh=oaxis.o,ov=maxis.o;
@@ -41,7 +41,7 @@ iloc[i_t]=-1;
 iloc[1]=-1;
 
 
- pairs_new *myp=pks->get_pts_sort(dumb,iloc,i_t,i_mes,  col1);
+ std::shared_ptr<pairs_new> myp=pks->get_pts_sort(dumb,iloc,i_t,i_mes,  col1);
 
  if(myp->size()==0) myp->add_point(maxis.n/2,1);
  float *vel=new float[nt];

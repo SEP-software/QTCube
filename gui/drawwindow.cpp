@@ -27,12 +27,11 @@
 #include "cube_cut.h"
 #include "cube.h"
 #include "qprinter.h"
-#include "sregf.h"
 
-DrawWindow::DrawWindow(int ng1, int ng2, std::vector<panel*> *pan,int in){
+DrawWindow::DrawWindow(int ng1, int ng2, std::vector<std::shared_ptr<panel>> pan,int in){
   ngrid1=ng1; ngrid2=ng2; //Grid size of panels to display
   inum=in;
-  for(int i=0; i < pan->size(); i++){ panels.push_back(pan->at(i));}
+  for(int i=0; i < (int)pan.size(); i++){ panels.push_back(pan[i]);}
   //Setup basic display for panels
   QPalette palette;
   palette.setColor(this->backgroundRole(), QColor(0,0,0));
@@ -59,7 +58,7 @@ DrawWindow::DrawWindow(int ng1, int ng2, std::vector<panel*> *pan,int in){
   set_active_panel(0);
 
 }
-void DrawWindow::add_panel(panel *p){
+void DrawWindow::add_panel(std::shared_ptr<panel>p){
       panels.push_back(p);
 
        }

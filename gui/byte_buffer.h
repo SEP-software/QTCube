@@ -5,21 +5,22 @@ class byte_buffer: public buffer{
   public:
     byte_buffer(){};
     
-    byte_buffer(util *p, hypercube *h,io_func *i,int in,int *nw, int *fw);
+    byte_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,
+      std::vector<int>&nw, std::vector<int>&fw);
    
     
     virtual ~byte_buffer(){ delete [] cbuf;};
   unsigned char *get_char_data(int n, long long *ind);
   float *get_float_data(int n, long long *ind);
 
-  unsigned char  *get_char_data(orient_cube *pos, int n, long long *mp);
-  unsigned char *get_char_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+  unsigned char  *get_char_data(std::shared_ptr<orient_cube>pos, int n, long long *mp);
+  unsigned char *get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2);
-  float *get_float_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+  float *get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2);
-  void read_buffer(int *nwin, int *fwin, int *nwout, int *fwout,int ndim, int *nloop);
+  void read_buffer(std::vector<int>&nwin, std::vector<int>&fwin, std::vector<int>&nwout, std::vector<int>&fwout,int ndim, std::vector<int>&nloop);
   virtual void calc_histo();
-  virtual float get_value(orient_cube *pos);
+  virtual float get_value(std::shared_ptr<orient_cube>pos);
 
 
  

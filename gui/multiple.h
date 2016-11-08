@@ -16,19 +16,19 @@ public:
   int in_slice(int ix, int iy);
   
   //required view constructors
-  std::vector<QString> keyReleaseEvent( QKeyEvent *e,orient_cube *pos ){
+  std::vector<QString> keyReleaseEvent( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
     return key_release_multiple(e,pos);
   }
-  std::vector<QString> keyPressEvent(QKeyEvent *e, orient_cube *pos){
+  std::vector<QString> keyPressEvent(QKeyEvent *e, std::shared_ptr<orient_cube>pos){
     return key_press_multiple(e,pos);
   }
   
-  std::vector<QString> key_release_multiple(QKeyEvent *e, orient_cube *pos);
-  std::vector<QString> key_press_multiple(QKeyEvent *e, orient_cube *pos);
+  std::vector<QString> key_release_multiple(QKeyEvent *e, std::shared_ptr<orient_cube>pos);
+  std::vector<QString> key_press_multiple(QKeyEvent *e, std::shared_ptr<orient_cube>pos);
   ~multiple(){
     delete_slices();
   }
-  void draw_picks(QPainter *painter, orient_cube *pos);
+  void draw_picks(QPainter *painter, std::shared_ptr<orient_cube>pos);
 
  
   int slice_down;

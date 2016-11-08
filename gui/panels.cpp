@@ -2,16 +2,17 @@
 #include "wiggle.h"
 #include "contour.h"
 #include "autopick.h"
-panels::panels(pick_draw *p,maps *mym,orients *oo){
+panels::panels(std::shared_ptr<genericIO> io,std::shared_ptr<pick_draw>p,std::shared_ptr<maps>mym,std::shared_ptr<orients>oo){
 pan_num=0;locked=false; pk=p; my_maps=mym;
-my_or=oo;
-
+   my_or=oo;
+  _io=io;
   movie_timer = new QTimer( this);
     connect( movie_timer, SIGNAL(timeout()), this,  SLOT(update_movie()) ); 
    movie_delay=10;
-  autop=new autopick(pk);
+   std::shared_ptr<autopick> ap(new autopick(pk));
+  autop=ap;
 }
-void panels::add_panel(panel *um){
+void panels::add_panel(std::shared_ptr<panel> um){
   my_pan[um->get_iview()]=um;
   connect_it(um->get_iview());
 
@@ -22,17 +23,17 @@ void panels::set_active(int iact){
 
   my_or->set_active(my_pan[active_num]->get_orient_inst());
 }
-void panels::sync_panel(panel *um){
-
-  orient_cube *pos=um->get_orient();
-  for(std::map<int,panel*>::iterator i=my_pan.begin(); i!=my_pan.end(); i++){
+void panels::sync_panel(std::shared_ptr<panel>um){
+  
+  std::shared_ptr<orient_cube> pos=um->get_orient();
+  for(std::map<int,std::shared_ptr<panel>>::iterator i=my_pan.begin(); i!=my_pan.end(); i++){
     i->second->sync_pos(pos);
  }
 
 }
-void panels::update_mouse(mouse_func *f){
+void panels::update_mouse(std::shared_ptr<mouse_func> f){
 
-  for(std::map<int,panel*>::iterator i=my_pan.begin(); i!=my_pan.end(); i++){
+  for(std::map<int,std::shared_ptr<panel> >::iterator i=my_pan.begin(); i!=my_pan.end(); i++){
     i->second->set_mouse_func(f);
   }
 }
@@ -44,9 +45,9 @@ void panels::set_range(int iv, int *ibeg, int *iend){
    else {*ibeg=iv; *iend=iv;}
 }
 void panels::perform_orient(std::vector<QString> command){
-  panel *active=my_pan[command[0].toInt()];
+  std::shared_ptr<panel>active=my_pan[command[0].toInt()];
   set_active(command[0].toInt());
-  orient_cube *pos=active->return_orient();
+  std::shared_ptr<orient_cube> pos=active->return_orient();
   int ibeg,iend;
   set_range(command[0].toInt(),&ibeg,&iend);
   if(command[2].contains("flip1")>0){
@@ -71,7 +72,7 @@ void panels::perform_orient(std::vector<QString> command){
   }
   else if(command[2].contains("center")>0){
      for(int i=0; i < 8; i++){
-       axis a=pos->get_axis(i);
+       axis a=pos->getAxis(i);
        pos->set_loc(i,(int)(a.n/2));
      }
      sync_panel(active);
@@ -182,9 +183,9 @@ void panels::perform_orient(std::vector<QString> command){
  
 }
 void panels::perform_display(std::vector<QString> command){
-  panel *active=my_pan[command[0].toInt()];
+  std::shared_ptr<panel>active=my_pan[command[0].toInt()];
   set_active(command[0].toInt());
-  orient_cube *pos=active->return_orient();
+  std::shared_ptr<orient_cube> pos=active->return_orient();
   int ibeg,iend;
   set_range(command[0].toInt(),&ibeg,&iend);
   if(command[2].contains("font")>0){
@@ -259,11 +260,11 @@ void panels::stop_movie(){
 	movie_timer->stop();
 }
 void panels::perform_navigate(std::vector<QString> command){
-  panel *active=my_pan[command[0].toInt()];
+  std::shared_ptr<panel>active=my_pan[command[0].toInt()];
 
   set_active(command[0].toInt());
 
-  orient_cube *pos=active->return_orient();
+  std::shared_ptr<orient_cube> pos=active->return_orient();
   int ibeg,iend;
   set_range(command[0].toInt(),&ibeg,&iend);
   if(command[2].contains("direction")>0){
@@ -286,7 +287,7 @@ void panels::perform_navigate(std::vector<QString> command){
     int iloc[8];
     float *poz=util::float_array_from_string(command[3]);
     for(int i=0; i < 8; i++){
-       axis a=pos->get_axis(i);
+       axis a=pos->getAxis(i);
        iloc[i]=std::min(a.n-1,std::max(0,(int)((poz[i]-a.o)/a.d+.5)));
     }
     pos->set_locs(iloc);
@@ -333,16 +334,16 @@ void panels::perform_navigate(std::vector<QString> command){
 }
 void panels::perform_view(std::vector<QString> command){
   set_active(command[0].toInt());
- panel *active=my_pan[command[0].toInt()];
-  orient_cube *pos=active->return_orient();
+ std::shared_ptr<panel>active=my_pan[command[0].toInt()];
+  std::shared_ptr<orient_cube>pos=active->return_orient();
   int ibeg,iend;
-      wiggle *wigit;
-    contour *cont;
+    std::shared_ptr<wiggle >wigit;
+    std::shared_ptr<contour >cont;
   set_range(command[0].toInt(),&ibeg,&iend);
   
   if(command[2].contains("map1")){
     if(command[3].contains("load")){
-       map_1 *x=new map_1(command[5],active->return_dat()->return_grid(),command[4].toFloat());
+       std::shared_ptr<map_1>x(new map_1(_io,command[5],active->return_dat()->return_grid(),command[4].toFloat()));
        my_maps->add_map(x);
        active->change_map(my_maps->size()-1);
         update_it(command[0].toInt());
@@ -425,43 +426,44 @@ void panels::perform_view(std::vector<QString> command){
     update_it(command[0].toInt());
   }
   else if(command[2].contains("wiggle_color")>0){
-    wigit=(wiggle*) active->get_colortables()->return_color_table("wiggle");
+    std::shared_ptr<slice> x=active->get_colortables()->return_color_table(std::string("wiggle"));
+    wigit=std::static_pointer_cast<wiggle>(x);
      wigit->set_wiggle_color(command[3]);
          update_it(command[0].toInt());
 
   }
   else if(command[2].contains("wiggle_pos")>0){
-    wigit=(wiggle*) active->get_colortables()->return_color_table("wiggle");
+    wigit=std::static_pointer_cast<wiggle>( active->get_colortables()->return_color_table(std::string("wiggle")));
     wigit->set_pos_color(command[3]);
         update_it(command[0].toInt());
 
   }
   else if(command[2].contains("wiggle_neg")>0){
-    wigit=(wiggle*) active->get_colortables()->return_color_table("wiggle");
+    wigit=std::static_pointer_cast<wiggle>( active->get_colortables()->return_color_table(std::string("wiggle")));
    wigit->set_neg_color(command[3]);
        update_it(command[0].toInt());
 
  }
  else if (command[2].contains("contour_color")>0){
-	cont=(contour*) active->get_colortables()->return_color_table("contour");
+	cont=std::static_pointer_cast<contour>( active->get_colortables()->return_color_table(std::string("contour")));
 	cont->set_contour_color(command[3]);
 	    update_it(command[0].toInt());
 
   }
   else if (command[2].contains("contour_number")>0){
-  	cont=(contour*) active->get_colortables()->return_color_table("contour");
+  	cont=std::static_pointer_cast<contour>(  active->get_colortables()->return_color_table(std::string("contour")));
     cont->set_number_lines(command[3].toInt());
         update_it(command[0].toInt());
 
   }
   else if (command[2].contains("contour_dc")>0){
-  	cont=(contour*) active->get_colortables()->return_color_table("contour");
+  	cont=std::static_pointer_cast<contour>( active->get_colortables()->return_color_table(std::string("contour")));
     cont->set_dc(command[3].toFloat());
         update_it(command[0].toInt());
 
   }
   else if (command[2].contains("contour_c0")>0){
-  	cont=(contour*) active->get_colortables()->return_color_table("contour");
+  	cont=std::static_pointer_cast<contour>(  active->get_colortables()->return_color_table(std::string("contour")));
     cont->set_c0(command[3].toFloat());
         update_it(command[0].toInt());
 
@@ -484,10 +486,10 @@ void panels::perform_view(std::vector<QString> command){
 }
 void panels::perform_auto(std::vector<QString> command){
   set_active(command[0].toInt());
-  panel *active;
+  std::shared_ptr<panel> active;
   int ipa=command[0].toInt();
   if(ipa>=0) active=my_pan[command[0].toInt()];
-  orient_cube *pos=active->return_orient();
+  std::shared_ptr<orient_cube>pos=active->return_orient();
     if(command[2].contains("method")>0){
 
     autop->set_method(command[3]);
@@ -522,7 +524,6 @@ void panels::perform_auto(std::vector<QString> command){
    
 
   else if(command[2].contains("type")>0){
-    bool doit=autop->get_correlate();
     if(command[3].contains("amplitude")) autop->set_amplitude();
     else autop->set_correlate();
   }
@@ -538,12 +539,12 @@ void panels::perform_auto(std::vector<QString> command){
 
 }
 void panels::perform_pick(std::vector<QString> command){
-  panel *active=0;
+  std::shared_ptr<panel> active=0;
   int ipa=command[0].toInt();
-   orient_cube *pos=0;
+   std::shared_ptr<orient_cube> pos=0;
   if(ipa>=0) {
     active=my_pan[command[0].toInt()];
-   pos=active->return_orient();
+    pos=active->return_orient();
      set_active(command[0].toInt());
 
     }
@@ -647,7 +648,7 @@ void panels::update_what(int iv, QString what){
 }
 void panels::update_all(){
 
-    for(std::map<int,panel*>::iterator i=my_pan.begin(); i!=my_pan.end(); i++)
+    for(std::map<int,std::shared_ptr<panel>>::iterator i=my_pan.begin(); i!=my_pan.end(); i++)
       i->second->set_update_it(true);
 
 }
@@ -668,11 +669,11 @@ void panels::connect_all(){
 */
 void panels::connect_it(int i){
 
-connect(my_pan[i], SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+connect(my_pan[i].get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 }
 void panels::disconnect_it(int i){
 
-  disconnect(my_pan[i], SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+  disconnect(my_pan[i].get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 }

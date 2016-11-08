@@ -5,6 +5,7 @@
 #include <vector>
 #include <QString>
 #include "position.h"
+#include<memory>
 
 class pick_new{
 
@@ -16,8 +17,8 @@ class pick_new{
   void print();
   ~pick_new(){pick_delete();}
   void pick_delete();
-  pick_new *clone(){
-    pick_new *y=new pick_new(iloc,pos,type,col,extra,txt);
+  std::shared_ptr<pick_new> clone(){
+    std::shared_ptr <pick_new> y( new pick_new(iloc,pos,type,col,extra,txt));
     return y;
   
   }
@@ -32,32 +33,32 @@ class pick_new{
 class picks_vec{
   public:
     picks_vec(){}
-    void add_pick(pick_new *p){ picks.push_back(p);}
-    pick_new *return_pick(int i){ return picks[i];}
+    void add_pick(std::shared_ptr<pick_new>p){ picks.push_back(p);}
+    std::shared_ptr<pick_new> return_pick(int i){ return picks[i];}
     int return_size(){return picks.size();}
-    std::vector<pick_new*> picks;
+    std::vector<std::shared_ptr<pick_new>> picks;
     
 
 };
 class picks_new{
   public:
-  picks_new(){myp=0;  setit=-1; }
-  pick_new *get_pick(long long p, QString col);
-  picks_new(position *pos);
-  pick_new *add_pick(int *iloc,long long p,int te, QString col,int ex,QString t);
+  picks_new(){  setit=-1; }
+  std::shared_ptr<pick_new >get_pick(long long p, QString col);
+  picks_new(std::shared_ptr<position >pos);
+  std::shared_ptr<pick_new>add_pick(int *iloc,long long p,int te, QString col,int ex,QString t);
   void del_pick(long long p, QString col);
-  picks_vec *get_parse_picks(QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
-  void get_parse_picks(picks_vec *picks, QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
+  std::shared_ptr<picks_vec >get_parse_picks(QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
+  void get_parse_picks(std::shared_ptr<picks_vec>picks, QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
   void delete_pick_type(int typ);
-  pick_new *return_pick(int i){ return bucket[i];}
+  std::shared_ptr<pick_new>return_pick(int i){ return bucket[i];}
   int return_size(){return bucket.size();}
   void delete_picks();  
   void print(int i);
   ~picks_new(){ delete_picks();}
   private:
-     position *myp;
+     std::shared_ptr<position>myp;
      int setit;
-     std::vector<pick_new*> bucket;
+     std::vector<std::shared_ptr<pick_new>> bucket;
 
 };
 

@@ -18,7 +18,6 @@
 #include<orient_cube.h>
 #include <qtimer.h>
 #include "slice.h"
-#include<param_func.h>
 #include "view.h"
 #include "slice_types.h"
 #include "mode.h"
@@ -35,10 +34,11 @@ class panel: public QWidget{
     Q_OBJECT
 
   public:
-     panel(int inum, param_func *pars, position *pos, 
-        pick_draw *_pks, datasets *ds, int idat, 
-        slice_types *ct, mouse_func *f,orientation_server *s, orients *oo,maps *mp);
-     panel *clone(int inum);
+     panel(int inum, std::shared_ptr<paramObj>pars, std::shared_ptr<position> pos, 
+        std::shared_ptr<pick_draw>_pks, std::shared_ptr<datasets>ds, int idat, 
+        std::shared_ptr<slice_types>ct, std::shared_ptr<mouse_func>f,
+        std::shared_ptr<orientation_server>s, std::shared_ptr<orients>oo,std::shared_ptr<maps> mp);
+     std::shared_ptr<panel>clone(int inum);
   signals:
         void actionDetected(std::vector< QString> text);
     
@@ -77,19 +77,22 @@ class panel: public QWidget{
 
      
      //Mouse
-     void set_mouse_func(mouse_func *f){func=f;} //Set the mouse function for the panel
+     void set_mouse_func(std::shared_ptr<mouse_func> f){func=f;} //Set the mouse function for the panel
     
     //Color
     void set_colortable(QString newcol);
 	void set_background_color(QString newc);
 	void set_pen_color(QString newc);
-	slice_types *get_colortables(){ return colort;}
+	std::shared_ptr<slice_types>get_colortables(){ return colort;}
 	QString get_ctable(){return wind_ctable;}
     QString get_background(){return wind_bg;}
     QString get_pen_c(){return wind_ov;}
      
      //Views
-     view *view_by_name(QString name);
+     std::shared_ptr<view> view_by_name(const std::string name){
+        return view_by_name(QString(name.c_str()));
+     }
+     std::shared_ptr<view> view_by_name(const QString nm);
 	 QString iter_views(int it);
 	 QString get_view_name(){return view_name;}
 	 void initial_view();
@@ -125,8 +128,8 @@ class panel: public QWidget{
      void keyReleaseEvent( QKeyEvent *e );
      
      //Orient functions
-     orient_cube *return_orient(){return pos;}
-     void sync_pos(orient_cube *p){ pos->sync_pos(p);}
+     std::shared_ptr<orient_cube>return_orient(){return pos;}
+     void sync_pos(std::shared_ptr<orient_cube>p){ pos->sync_pos(p);}
 
      //Mouse events
      void mousePressEvent(QMouseEvent *);
@@ -148,13 +151,13 @@ class panel: public QWidget{
         }
 
      //Orient 
-     orient_cube *get_orient(){ return pos;}
+     std::shared_ptr<orient_cube> get_orient(){ return pos;}
      
      //Dataset/clips
      int add_clip_pt(QString str);
   	 void del_clip_pt(QString str);
      QString get_clip_pt(int ipt);
-     dataset *return_dat(){return dat;}
+     std::shared_ptr<dataset>return_dat(){return dat;}
      void set_data(int id);
 	 int  get_idat(){ return idat;}
      void iter_data(int inc);
@@ -179,58 +182,52 @@ class panel: public QWidget{
      }
      bool get_update_it(){return update_it;}
      void set_update_it(bool x){update_it=x;}
-     view *get_view(){return myv;}
+     std::shared_ptr<view> get_view(){return myv;}
 protected:
 
 
 private slots:
 	
 private:
-#ifdef CHEVRON
-   void check_set_distort();  
-#endif
-   //Command line Parameter functions 
-   QString get_string(QString par, QString def);
-   int get_int(char *par, int def);
-   int *get_ints(char *par, int nmax, int *def);
-  
+
+ 
    
    //Private variables
    bool update_it;
    QPainter *paint;
 
-   mouse_func *func; //what the mouse does
-   annotate *ano;    //Annotations on this window
-   dataset *dat,*dat_o; //Current dataset as primary and overlaid
+   std::shared_ptr<mouse_func>func; //what the mouse does
+   std::shared_ptr<annotate>ano;    //Annotations on this window
+   std::shared_ptr<dataset>dat,dat_o; //Current dataset as primary and overlaid
    int idat; //The dataset number currently being display
    bool overlay;  //Whether or not we are overlaying a dataset
-   datasets  *datas;  //The collections of datasets that exist
-   draw_other *draw_o;  //What do draw in a given view
-   orient_cube *pos;  //Returns info on what to display
-   param_func *pars;  //Grab parameters from the command line
-   float proportions[8]; //The ratios of the various axes we will use 
+   std::shared_ptr<datasets  >datas;  //The collections of datasets that exist
+   std::shared_ptr<draw_other >draw_o;  //What do draw in a given view
+   std::shared_ptr<orient_cube >pos;  //Returns info on what to display
+   std::shared_ptr<paramObj>pars;  //Grab parameters from the command line
+   std::vector<float> proportions; //The ratios of the various axes we will use 
    int jplane,grid1,grid2; //When displaying multiple slices 
    bool first; //First time through
-   slice *fact,*fact_o;  //Current way to display a slice
-   pick_draw *pk;  //The picks
-   orientation_server *serv;
+   std::shared_ptr<slice>fact,fact_o;  //Current way to display a slice
+   std::shared_ptr<pick_draw>pk;  //The picks
+   std::shared_ptr<orientation_server>serv;
    QString view_name;  //Current view being display
    QString iview_s;  //View number in qstring
    QString over_c;  //Over c
    int alpha; //The amount of transparancy
-   draw_what *drawit,*drawo;
-   my_colors *my_cmap;// Color generator
-   my_fonts *fonts;//Font Generator
-   QFont *myf; //Current font
-   QFontMetrics *fm; //Current font metric
+   std::shared_ptr<draw_what >drawit,drawo;
+   std::shared_ptr<my_colors >my_cmap;// Color generator
+   std::shared_ptr<my_fonts>fonts;//Font Generator
+   std::shared_ptr<QFont > myf; //Current font
+   std::shared_ptr<QFontMetrics> fm; //Current font metric
    int *map; //Map used for distortions
    std::vector<QString> com; //Structure to send message
    std::map<QString,QColor>  color_map;  //Color map table
    std::vector<QString> allv;  //List of possible views
    QColor pen_c;  //Background and pen color
-   view *myv,*myv_o;  //Main and overlay view
+   std::shared_ptr<view>myv,myv_o;  //Main and overlay view
    int begx,begy,endx,endy; //Range to display a given panel
-   slice_types *colort;  //Different ways to view slices
+   std::shared_ptr<slice_types>colort;  //Different ways to view slices
    int idat_o; //Data to overlay
    QString wind_ctable,wind_ov,wind_bg;  //color info
    QString font_name; //FOnt name
@@ -238,8 +235,8 @@ private:
    int down_x,down_y,mouse_down; //Mouse status
    float oversamp;//Oversamp number
    QTime timeit; //Time variable for redraw
-   maps *my_maps;
-   orients *my_or;
+   std::shared_ptr<maps>my_maps;
+   std::shared_ptr<orients> my_or;
 
 
 };

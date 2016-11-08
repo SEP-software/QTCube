@@ -1,6 +1,8 @@
 #include "view_panel.h"
 
-view_panel:: view_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+view_panel:: view_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, 
+std::shared_ptr<slice_types>c,std::shared_ptr<maps> mym){
 
 
 
@@ -8,9 +10,9 @@ view_panel:: view_panel(position *p,windows *my_w, panels *my_p, datasets *my_d,
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   layMain=new QVBoxLayout;
   
-  	hypercube *h=my_dat->return_dat(0)->return_grid();
+  	std::shared_ptr<hypercube> h=my_dat->return_dat(0)->return_grid();
 	for(int i=0; i < 8; i++) {
-	   if(h->get_axis(i+1).n >1) validax[i]=true;
+	   if(h->getAxis(i+1).n >1) validax[i]=true;
 	   else validax[i]=false;
 	}
   

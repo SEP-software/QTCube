@@ -18,7 +18,6 @@
 #include<orient_cube.h>
 #include <qtimer.h>
 #include "slice.h"
-#include<param_func.h>
 #include "view.h"
 #include "slice_types.h"
 #include "mode.h"
@@ -39,7 +38,7 @@ class DrawWindow : public QWidget
 	Q_OBJECT
 
     public:
-      DrawWindow(int ngrid1, int ngrid, std::vector<panel*> *panels,int in);
+      DrawWindow(int ngrid1, int ngrid, std::vector<std::shared_ptr<panel>> panels,int in);
       
       void pdf_save(QString sz,QString name);
       void scale();
@@ -85,12 +84,12 @@ class DrawWindow : public QWidget
      void set_grid2(int n);
      int return_grid1(){return ngrid1;}
      int return_grid2(){return ngrid2;}
-     void add_panel(panel *p);
+     void add_panel(std::shared_ptr<panel>p);
      int get_inum(){return inum;}
  
-     panel *return_panel(int i){ return panels[i];}
-     panel *remove_last_panel(){
-        panel *x=panels[panels.size()-1];
+     std::shared_ptr<panel>return_panel(int i){ return panels[i];}
+     std::shared_ptr<panel>remove_last_panel(){
+        std::shared_ptr<panel>x=panels[panels.size()-1];
         panels.erase(panels.begin()+panels.size()-1);
         return x;
      }
@@ -109,7 +108,7 @@ class DrawWindow : public QWidget
       int ngrid1,ngrid2;  //Number of panels 
       int bound_thick;  //Thickness of boundary
       float *port1,*port2;  //Portions along each axis
-      std::vector<panel*> panels;  //Array of panels
+      std::vector<std::shared_ptr<panel>> panels;  //Array of panels
       annotate *ano;  //Annotation
       QImage *image;  //Image
 	  QPixmap	pm;

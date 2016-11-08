@@ -2,8 +2,9 @@
 #include "math.h"
 #include <stdlib.h>
 #include <QFileInfo>
-void dataset::set_basics(std::string titl,QString nm,hypercube *g,io_func *i, param_func *p, int in,int im){
-
+void dataset::set_basics(std::string titl,QString nm,std::shared_ptr<hypercube>g,
+std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
+ if(titl==""){;}
 
  data_type=i->get_data_type();
   name=QFileInfo(nm).baseName();
@@ -14,10 +15,11 @@ void dataset::set_basics(std::string titl,QString nm,hypercube *g,io_func *i, pa
     title_short=title.remove(0,title.length()-20);
   }
   io=i;
-  par=new util(p);
+
+  par=p;
   inum=in;
   
-  values=par->param_string("values",inum," ");
+  values=par->getString(std::string("values")+std::to_string(inum),std::string(" "));
   nmax_buf=im;
   grid=g;
   pickable=true;
@@ -61,7 +63,7 @@ void dataset::set_display_axis(int iax,QString x){
 QString dataset::return_axis_name(int iax){
   if(axes_display[iax]<0){
     QString y;
-    y=grid->get_axis(iax+1).label.c_str();
+    y=grid->getAxis(iax+1).label.c_str();
     return y;
   }
   return io->return_key_name(axes_display[iax]);
@@ -70,7 +72,7 @@ QString dataset::return_axis_name(int iax){
 }
 
 bool dataset::match_grid(){
-  hypercube *iod=io->return_hyper();
+  std::shared_ptr<hypercube>iod=io->return_hyper();
 
   bool valid=true;
   for(int i=0; i < 8 ; i++){
@@ -78,8 +80,8 @@ bool dataset::match_grid(){
     if(data_contains[i]){
        float bg,eg,bd,ed;
        
-       axis ga=grid->get_axis(i+1);
-       axis da=iod->get_axis(i+1);
+       axis ga=grid->getAxis(i+1);
+       axis da=iod->getAxis(i+1);
        if(ga.n >1){      
          bg=ga.o; eg=ga.o+ga.d*(ga.n-1);
          bd=da.o; ed=da.o+da.d*(da.n-1);
@@ -107,7 +109,8 @@ void dataset::set_contains(){
 
 }
 
-unsigned char *dataset::get_char_data(orient_cube *pos,int iax1,int iax2, int n, long long *index){
+unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube>pos,int iax1,int iax2, 
+int n, long long *index){
 
    int ibuf=check_load_buffer(pos,iax1,iax2);
    unsigned char *cbuf=buf[ibuf]->get_char_data(pos,n,index);
@@ -118,7 +121,7 @@ unsigned char *dataset::get_char_data(orient_cube *pos,int iax1,int iax2, int n,
    
 }
 
-unsigned char *dataset::get_char_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2){
 
 
@@ -130,12 +133,12 @@ unsigned char *dataset::get_char_data(orient_cube *pos, int iax1, int f1, int e1
    return cbuf;
    
 }
-float *dataset::get_float_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+float *dataset::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2){
    int ibuf=check_load_buffer(pos,iax1,iax2);
    return buf[ibuf]->get_float_data(pos,iax1,f1,e1,iax2,f2,e2);
 }
-float dataset::get_value(orient_cube *pos){
+float dataset::get_value(std::shared_ptr<orient_cube>pos){
   if((int)buf.size()==0) return 0.;
   
   int ibuf=find_buffer(pos);
@@ -143,7 +146,7 @@ float dataset::get_value(orient_cube *pos){
 }
 
 
-long long dataset::get_trace_num(orient_cube *pos){
+long long dataset::get_trace_num(std::shared_ptr<orient_cube>pos){
   long long ret=0;
   long long block=1;
   int n[8];
@@ -160,21 +163,21 @@ void  dataset::snap_location(float *floc, int single, QString stype){
 
   if((int)buf.size()==0) return ;
   if(stype.contains("no")>0) return;
-    orient_cube pos(grid);
-  for(int i=0; i < 8; i++) pos.set_pos(i,floc[i]);
+  std::shared_ptr<orient_cube> pos(new orient_cube(grid));
+  for(int i=0; i < 8; i++) pos->set_pos(i,floc[i]);
 
-  int ibuf=find_buffer(&pos);
+  int ibuf=find_buffer(pos);
   int ilocs[8];
-  pos.get_locs(ilocs);
-  axis ax=grid->get_axis(single+1);
+  pos->get_locs(ilocs);
+  axis ax=grid->getAxis(single+1);
 
   int ichoose=0;
-  float val=buf[ibuf]->get_value(&pos);
-  int iloc=pos.get_loc(single);
+  float val=buf[ibuf]->get_value(pos);
+  int iloc=pos->get_loc(single);
   for(int i=0,j=-5; i< 5; i++,j++){
     if(iloc+j>=0 && iloc+j < ax.n){
-      pos.set_loc(single,iloc+j);
-      float test=buf[ibuf]->get_value(&pos);
+      pos->set_loc(single,iloc+j);
+      float test=buf[ibuf]->get_value(pos);
       if(stype.contains("low")>0 &&  test < val){
          val=test; ichoose=j;
       }
@@ -186,11 +189,11 @@ void  dataset::snap_location(float *floc, int single, QString stype){
       }
     }
   }
-  pos.set_loc(single,ichoose+iloc);
-  floc[single]=pos.get_pos(single);
+  pos->set_loc(single,ichoose+iloc);
+  floc[single]=pos->get_pos(single);
 
 }
-int dataset::check_load_buffer(orient_cube *pos, int iax1,  int iax2){
+int dataset::check_load_buffer(std::shared_ptr<orient_cube>pos, int iax1,  int iax2){
         
  
  for(int i=0; i < (int)buf.size(); i++){
@@ -208,12 +211,12 @@ int dataset::check_load_buffer(orient_cube *pos, int iax1,  int iax2){
  return buf.size()-1;  
       
 }
-void dataset::delete_dataset(orient_cube *pos,int iax1, int iax2){
-  if(pos==0 || iax1==0 || iax2==0);
-  delete buf[0];
+void dataset::delete_dataset(std::shared_ptr<orient_cube>pos,int iax1, int iax2){
+  if(pos==0 || iax1==0 || iax2==0){;}
+  //delete buf[0];
    buf.erase(buf.begin());
 }
-int dataset::find_buffer(orient_cube *pos){
+int dataset::find_buffer(std::shared_ptr<orient_cube>pos){
 
   float loc[8];
   pos->get_poss(loc);
@@ -337,14 +340,13 @@ void dataset::build_conv(){
   com.push_back("set_pts"); com.push_back(return_clip());
   emit actionDetected(com);
 }
-QString dataset::validate_view(QString nm, orient_cube *pos){
+QString dataset::validate_view(QString nm, std::shared_ptr<orient_cube>pos){
 
 
 // pos->get_axes(as);
- std::vector<int> n=return_io_hyper()->return_ns();
+ std::vector<int> n=return_io_hyper()->returnNs();
  
  int order[8]; pos->get_orders(order);
- bool three;
  bool valid[8];
  for(int i=0; i < 8; i++){
    valid[i]=valid_display(i,order,n);
@@ -353,13 +355,11 @@ QString dataset::validate_view(QString nm, orient_cube *pos){
  //See if requested view works
  if(nm=="CUBE" || nm=="CUT" || nm=="THREE" || nm=="MULTI"){
    if(valid[0] && valid[1] && valid[2]) return nm;
-   three=true;
  }
  else {
     if(nm=="FRONT" && valid[0] && valid[1]) return nm;
     else if(nm=="SIDE" && valid[0] && valid[2]) return nm;
     else if(nm=="TOP" && valid[1] &&  valid[2]) return nm;
-    three=false;
  }
  //Now choose another view
  if(valid[0]){

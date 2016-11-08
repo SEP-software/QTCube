@@ -9,25 +9,25 @@
 class autopick{
 
   public:
-    autopick(pick_draw *_pks);
+    autopick(std::shared_ptr<pick_draw>_pks);
     
-    int pick_2d(view *myv,orient_cube *pos);
-    int extend_picks(view *myv, orient_cube *pos);
-    int flat_view(view *myv,orient_cube *pos);
+    int pick_2d(std::shared_ptr<view>myv,std::shared_ptr<orient_cube> pos);
+    int extend_picks(std::shared_ptr<view>myv, std::shared_ptr<orient_cube>pos);
+    int flat_view(std::shared_ptr<view> myv,std::shared_ptr<orient_cube>pos);
 
     int get_ipick(){return ipick;}
     void set_correlate(){ correlate=true;}
     void set_amplitude(){ correlate=false;}
-     float_2d *extract_dat (orient_cube *pos,dataset *dat,int isingle, int isort,
-     float_1d *line, int ns,int f);
-    void pick_line(view *myv,float *fpos,orient_cube *pos,int iax1,int iax2, int isort,
-      int isingle, pairs_new *myp,int iax3);
+    std::shared_ptr<float_2d>extract_dat (std::shared_ptr<orient_cube>pos,std::shared_ptr<dataset>dat,int isingle, int isort,
+    std::shared_ptr<float_1d> line, int ns,int f);
+    void pick_line(std::shared_ptr<view>myv,float *fpos,std::shared_ptr<orient_cube>pos,int iax1,int iax2, int isort,
+      int isingle, std::shared_ptr<pairs_new>myp,int iax3);
     void set_nsearch(int ns){nsearch=ns;}
     void set_ncor(int nc){ncor=nc;}
     bool get_correlate(){return correlate;}
     int get_ncor(){return ncor;}
     int get_nsearch(){return nsearch;}
-    float_2d *correlate_it(float_2d *ar, int ncor,std::vector <int> close);
+    std::shared_ptr<float_2d> correlate_it(std::shared_ptr<float_2d> ar, int ncor,std::vector <int> close);
     int decrease_auto(){ cur_auto--; return 0;}
     int get_auto(){return cur_auto;}
     float get_error(){return error;}
@@ -44,7 +44,7 @@ class autopick{
     void decline_picks();
     void init_method();
   private:
-    pick_draw *pks;
+    std::shared_ptr<pick_draw>pks;
     int ipick;
     int ncor;
     bool correlate;
@@ -54,7 +54,7 @@ class autopick{
    int cur_auto;
    int accept;
    float *dip; //temporary
-   autopick_2d *auto_2d;
+   std::shared_ptr<autopick_2d> auto_2d;
    QString method;
    QString plane;
   

@@ -3,15 +3,16 @@
 #include "byte_buffer.h"
 
 
-partial_data_float::partial_data_float(std::string title,QString nm,hypercube *g,io_func *i, param_func *p, int in,int im){
+partial_data_float::partial_data_float(std::string title,QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
   set_basics(title,nm,g,i,p,in,im);
   
 
 }
-buffer *partial_data_float::create_buffer(orient_cube *pos, int iax1, int iax2){
+std::shared_ptr<buffer> partial_data_float::create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2){
  
-   int nw[8],fw[8];
-   std::vector<axis> axes=grid->return_axes(8);
+    std::vector<int> nw(8,1),fw(8,1);
+   std::vector<axis> axes=grid->getAxes();
+   for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
    for(int i=0; i< 8; i++){
      if(!data_contains[i]){
 
@@ -25,13 +26,13 @@ buffer *partial_data_float::create_buffer(orient_cube *pos, int iax1, int iax2){
      }
    }
    
-   if(iax1==0 && iax2==0 && pos==0);
-    float_buffer *b=new float_buffer(par,grid,io,inum,nw,fw);
+   if(iax1==0 && iax2==0 && pos==0){;}
+    std::shared_ptr<float_buffer>b(new float_buffer(par,grid,io,inum,nw,fw));
    
    return b;
 }
 
-partial_data_byte::partial_data_byte(std::string title,QString nm, hypercube *g,io_func *i, param_func *p, int in,int im){
+partial_data_byte::partial_data_byte(std::string title,QString nm, std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
   set_basics(title,nm,g,i,p,in,im);
   
 }
@@ -39,8 +40,11 @@ void partial_data::set_contains(){
 
  
   datas=io->return_hyper();
-  std::vector<axis> adat=io->return_hyper()->return_axes(8);
-  std::vector<axis> axes=grid->return_axes(8);
+  std::vector<axis> adat=io->return_hyper()->getAxes();
+  std::vector<axis> axes=grid->getAxes();
+       for(int i=axes.size(); i < 8; i++) adat.push_back(axis(1));
+
+     for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
      for(int i=0; i < 8; i++){
        if(axes[i].n>1 && adat[i].n==1) data_contains[i]=false;
         if(axes[i].n>1 && adat[i].n==1) display_axis[i]=false;
@@ -49,10 +53,11 @@ void partial_data::set_contains(){
 
 
 }
-buffer *partial_data_byte::create_buffer(orient_cube *pos, int iax1, int iax2){
+std::shared_ptr<buffer> partial_data_byte::create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2){
 
-    int nw[8],fw[8];
-   std::vector<axis> axes=grid->return_axes(8);
+    std::vector<int> nw(8,1),fw(8,1);
+   std::vector<axis> axes=grid->getAxes();
+      for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
    for(int i=0; i< 8; i++){
      if(!data_contains[i]){
 
@@ -65,7 +70,7 @@ buffer *partial_data_byte::create_buffer(orient_cube *pos, int iax1, int iax2){
        fw[i]=0;
      }
    }
-   if(iax1==0 && iax2==0 && pos==0);
-    byte_buffer *b=new byte_buffer(par,grid,io,inum,nw,fw);
+   if(iax1==0 && iax2==0 && pos==0){;}
+    std::shared_ptr<byte_buffer>b(new byte_buffer(par,grid,io,inum,nw,fw));
    return b;
 }

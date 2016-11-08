@@ -5,8 +5,8 @@
 #include <QPixmap>
 #include "my_colors.h"
 
-void wiggle::draw_slice(QPainter *painter, dataset *dat,QPen *pen, 
- orient_cube *pos,bool ov,bool draw_grid){
+void wiggle::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen, 
+ std::shared_ptr<orient_cube>pos,bool ov,bool draw_grid){
 
 
   if(ov);
@@ -316,8 +316,8 @@ void wiggle::PaintWiggles(int n2, int n1, QPainter *painter, unsigned char *buf)
 	painter->restore();
 }
 
-slice *wiggle::clone(){
-   wiggle *x=new wiggle();
+std::shared_ptr<slice>wiggle::clone(){
+   std::shared_ptr<wiggle>x(new wiggle());
    x->pos_color=pos_color;
    x->posColor=posColor;
    x->negColor=negColor;

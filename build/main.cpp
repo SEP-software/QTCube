@@ -1,237 +1,125 @@
+#include "centerwindow.h"
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qapplication.h>
 #include <qsplitter.h>
 #include <qsettings.h>
 #include <qstatusbar.h>
-#ifdef CHEVRON
-#include "chev_strat_data.h"
-#endif
-#include "centerwindow.h"
+#include <fileIO.h>
 #include "drawwindow.h"
 //#include "pick_groups.h"
 #include "surface_data.h"
-#include<sep_params.h>
 #include "incore_data.h"
 #include "partial_data.h"
 #include "created_data.h"
 #include "outcore_data.h"
-#include "sep_reg_io.h"
 #include "util.h"
-#include "su_reg_io.h"
-#include "seispak_reg_io.h"
-#include "segy_reg_io.h"
-#include "sep_reg_mmap_io.h"
 #include "nmoed.h"
 #include "nmo_semblance.h"
 #include "part_semb_data.h"
 #include "pick_draw.h"
+#include<ioModes.h>
 
 int main(int argc, char** argv) {
 	
 	
-	
-	QApplication app(argc, argv);
-
-
-	sep_params *pars=new sep_params(argc,argv);
-	
-
-
-
-
-
-
-
-
-	util *pp=new util(pars);
-  //pick_maps *mp=new pick_maps();
-  //pick_groups *pks= new pick_groups(mp);
-  pick_draw *pk=new pick_draw();
-  hypercube *grid=new hypercube(); //Grid for implementation
-  datasets *datas=new datasets(pars,pk);
-        QString red="red", blue="blue";
-  std::string title;
-  int mmap=pars->get_int("mmap",0);
- io_func *io=0;
-  if(1==pars->get_int("basic_sep_io",1)){
-    sreg *d=new sreg("in");
-    std::vector<axis>  as=d->return_axes(8);
-    grid->set_axes(as);
-    int esize=d->get_int("esize",4);
-   
-    if(esize==4) io=new sep_reg_io_float("in",pp);
-    else io=new sep_reg_io_byte("in",pp);
-    std::string title=d->get_string("title","stdin");
-    datas->add_dat(new incore_data_byte(title,title.c_str(),grid,io,pars,0,1));
-  }
-  else{ //Called from script
-  std::vector<axis> axes;
-  char tt[20];
-   //First set up the grid
-   for(int i=0; i < 8; i++){
-     axes.push_back(axis(1));
-     sprintf(tt,"ng_%d",i+1); axes[i].n=pars->get_int(tt,1);
-     sprintf(tt,"og_%d",i+1); axes[i].o=pars->get_float(tt,0.);
-     sprintf(tt,"dg_%d",i+1); axes[i].d=pars->get_float(tt,1.);
-     sprintf(tt,"labelg_%d",i+1); axes[i].label=pars->get_string(tt," ");
-   }
-
-   grid->set_axes(axes);
-   //Now set up the datasets
-   std::string type,nm,store;
-   for(int idat=0; idat< pars->get_int("ndata"); idat++){
-
-     sprintf(tt,"type%d",idat); type=pars->get_string(tt,"NONE");
-     if(0==strcmp(type.c_str(),"NONE")) seperr("didn't specify1 %s ",tt);
-     sprintf(tt,"data%d",idat); nm=pars->get_string(tt,"NONE");
-     if(0==strcmp(nm.c_str(),"NONE")) seperr("didn't specify2 %s ",tt);
-     sprintf(tt,"store%d",idat); store=pars->get_string(tt,"NONE");
-     int it_axis=pars->get_int("it_axis",0);
-     int ioff_axis=pars->get_int("off_axis",1);
-     int imes_axis=pars->get_int("mes_axis",5);
-     int imov=pars->get_int("moveout_data",0);
-     if(0==strcmp(store.c_str(),"NONE")) seperr("didn't specify3 %s ",tt);
-     io_func *io;
-
-
-     if(0==strcmp(type.c_str(),"SEP")){
-       sreg *d=new sreg(nm);
-       int esize=d->get_int("esize",4);
-
-       if(mmap==1 && esize==4){
-          io=new sep_reg_mmap_io_float(nm.c_str(),pp);
-
-       }
-       else{       
-
-         if(esize==4) {
-         
-         io=new sep_reg_io_float(nm.c_str(),pp);
-         }
-         else if(esize==1) io=new sep_reg_io_byte(nm.c_str(),pp);
-         std::vector<axis> ju=d->return_axes(8);
-
-         for(int i=0; i < 8; i++) axes[i]=ju[i];
-
-       }
-       title=d->get_title();
-     }
-     else{
-       for(int i=0; i < 8; i++){
-         sprintf(tt,"n%d_%d",idat,i+1); axes[i].n=pars->get_int(tt,1);
-         sprintf(tt,"o%d_%d",idat,i+1); axes[i].o=pars->get_float(tt,0.);
-         sprintf(tt,"d%d_%d",idat,i+1); axes[i].d=pars->get_float(tt,1.);
-         sprintf(tt,"label%d_%d",idat,i+1); axes[i].label=pars->get_string(tt," ");
-      }
-
-      sprintf(tt,"swap%d",idat); int s=pars->get_int(tt,0);
-      bool swap=false;
-      if(s==1) swap=true;
-      hypercube *dd=new hypercube();
-      dd->set_axes(axes);
-      if(0==strcmp(type.c_str(),"SU"))  io=new su_reg_io_float(nm.c_str(),dd,swap,idat,pp);
-      else if(0==strcmp(type.c_str(),"SEGY")) io=new segy_reg_io_float(nm.c_str(),dd,swap,idat,pp);
-      else if(0==strcmp(type.c_str(),"SEISPAKF")) 
-        io=new seispak_reg_io_float(nm.c_str(),dd,swap,idat,pp);
-      else if(0==strcmp(type.c_str(),"SEISPAKS")) 
-        io=new seispak_reg_io_short(nm.c_str(),dd,swap,idat,pp);
-      else if(0==strcmp(type.c_str(),"NMOED")) 
-        io=new nmoed(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pp,pk,red,blue);
- //         pp,mp->groups["red"],mp->groups["blue"]);
-       
-      else if(0==strcmp(type.c_str(),"SEMBLANCE")) 
-        io=new nmo_semblance(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pp,pk,
-         red,blue);
-   //        mp->groups["red"],mp->groups["blue"]);
-      else{
+  std::shared_ptr<ioModes> modes(new ioModes(argc,argv));
   
-      
-      
-        pars->error("Error in type specification\n");
-      }
-            title=pars->get_string("title",nm);
+  std::shared_ptr<genericIO> defaultIO=modes->getDefaultIO();
+  std::string defaultType=modes->getDefaultType();
+	
 
-     }
-     
-      if(strcmp(store.c_str(),"IN_FLOAT")==0) {
-        datas->add_dat(new incore_data_float(title,nm.c_str(),grid,io,pars,idat,mmap,1));
-        }
-      else if(strcmp(store.c_str(),"IN_BYTE")==0) 
-        datas->add_dat(new incore_data_byte(title,nm.c_str(),grid,io,pars,idat,1));
-      else if(strcmp(store.c_str(),"SEMB_BYTE")==0) {
-        datas->add_dat(new  part_semb_data_byte(title,nm.c_str(),grid,io,
-          it_axis,ioff_axis,imes_axis,pk,red,blue,pars,idat,1));
-       }
-      else if(strcmp(store.c_str(),"OUT_FLOAT")==0) 
-        datas->add_dat(new outcore_data_float(title,nm.c_str(),grid,io,pars,idat,3));
-      else if(strcmp(store.c_str(),"OUT_BYTE")==0) 
-        datas->add_dat(new outcore_data_byte(title,nm.c_str(),grid,io,pars,idat,3));
-      else if(strcmp(store.c_str(),"PART_FLOAT")==0) 
-        datas->add_dat(new partial_data_float(title,nm.c_str(),grid,io,pars,idat,1));
-      else if(strcmp(store.c_str(),"PART_BYTE")==0) 
-        datas->add_dat(new partial_data_byte(title,nm.c_str(),grid,io,pars,idat,1));
-      else if(strcmp(store.c_str(),"CREATED_FLOAT")==0) 
-        datas->add_dat(new created_data_float(title,nm.c_str(),grid,io,pars,idat,1));
-      else if(strcmp(store.c_str(),"CREATED_BYTE")==0) 
-        datas->add_dat(new created_data_byte(title,nm.c_str(),grid,io,pars,idat,1));
-      else{
-        fprintf(stderr,"store%d=%s \n",idat,store.c_str());
-        pars->error("Undefined storage\n");
-      }
-     
-	}
-}
+  QApplication app(argc, argv);
+  std::shared_ptr<paramObj> pars(defaultIO->getParamObj());
+  std::shared_ptr<pick_draw> pk(new pick_draw());
+  std::shared_ptr<datasets> datas(new datasets(pars,pk));
+  QString red="red", blue="blue";
+  /*pars if we are doing NMO*/
+  int it_axis=pars->getInt("it_axis",0);
+  int ioff_axis=pars->getInt("off_axis",1);
+  int imes_axis=pars->getInt("mes_axis",5);
+  int imov=pars->getInt("moveout_data",0);
+  
+  std::shared_ptr<hypercube> grid;
+  for(int i=0; i < pars->getInt("ndata"); i++){
+    std::string type=pars->getString(std::string("type")+std::to_string(i+1),"FILE");
+    std::string name=pars->getString(std::string("data")+std::to_string(i+1));
+    std::string storage=pars->getString(std::string("storage")+std::to_string(i+1),"IN_BYTE");
+    std::string title=pars->getString(std::string("title")+std::to_string(i+1),name);
+    std::shared_ptr<io_func> iof;
+    QString nameq=QString(name.c_str());
+    if(i==0 && type!=std::string("FILE")) pars->error("First type specified must be a file");
+    if(type==std::string("FILE")){
+      std::string fileType=pars->getString(std::string("fileType"),defaultType);
+        std::shared_ptr<fileIO> fileI(new fileIO(name,modes,fileType));
+        iof=fileI;
+        if(i==0)  grid=iof->return_hyper();
+    }
+    else if(type==std::string("SEMBLANCE")){
+        std::shared_ptr<nmo_semblance> se(new nmo_semblance(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
+        iof=se;
+    }
+     else if(type== std::string("NMOED")){
+        std::shared_ptr<nmoed>  nmo(new nmoed(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
+        iof=nmo;
+   }
+   else pars->error(std::string("Unknown storage type :")+type);
+    
 
-  int ndat=pars->get_int("ndata");
-  int surf=0;
-  getch("do_surface","d",&surf);
-    if(surf==1){
-    datas->add_dat(new surface_data(grid,"Surface","single",datas->return_dat(0),
-       pars,pk,"red",ndat));
-       
-}
-#ifdef CHEVRON
-int doc=0;
-getch("do_chevron","d",&doc);
-if(doc==1){
-    datas->add_dat(new chev_strat_data(grid,"CHEV_STRAT",pk,"red",ndat+1));
-}
-#endif
-	slice_types *ct=new slice_types();
-
-     MainWindow *window=new MainWindow(pars,datas,pk,ct,pp);
-   //  window.showMaximized();
-
-     window->show();
-       QString name=pars->get_string("run_history","NONE").c_str();
-
-    if(name!="NONE") {
-      window->my_hist->load_history(name);
+  
+    
+   if(storage==std::string("IN_FLOAT")){
+        std::shared_ptr<incore_data_float> icf(new incore_data_float(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icf);
+   }
+   else if(storage==std::string("IN_BYTE")){
+        std::shared_ptr<incore_data_byte> icb(new incore_data_byte(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+   }
+   else if(storage== std::string("PART_FLOAT")){
+        std::shared_ptr<partial_data_float> icb(new partial_data_float(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+  }
+   else if(storage==std::string("PART_BYTE")){
+        std::shared_ptr<partial_data_byte> icb(new partial_data_byte(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
  }
- 
- 
+   else if(storage== std::string("OUT_FLOAT")){
+        std::shared_ptr<outcore_data_float> icb(new outcore_data_float(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+     }
+   else if(storage==std::string("OUT_BYTE")){
+        std::shared_ptr<outcore_data_byte> icb(new outcore_data_byte(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+    }
+   else if(storage== std::string("CREATED_FLOAT")){
+        std::shared_ptr<created_data_float> icb(new created_data_float(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+  }
+   else if(storage== std::string("CREATED_BYTE")){
+        std::shared_ptr<created_data_byte> icb(new created_data_byte(title,nameq,grid,iof,pars,i,1));
+        datas->add_dat(icb);
+ }
+   else
+        pars->error("unknown storage type");
+    
+  }
+  int surf=pars->getInt("do_surface",0);
+  if(surf==1){
+     std::shared_ptr<surface_data> sd(new surface_data(grid,"Surface","single",datas->return_dat(0),
+       pars,pk,"red",pars->getInt("ndata")));
+  }
+  std::shared_ptr<slice_types> ct(new slice_types());
+
+  MainWindow *window=new MainWindow(defaultIO,datas,pk,ct);
+  window->show();
+  QString name=pars->getString("run_history","NONE").c_str();
+  if(name!="NONE")  window->my_hist->load_history(name); 
   app.setWindowIcon(QIcon(QPixmap(":/images/qt_cube.icns")));
-     return app.exec();
-     /*
-
-	CenterWindow* window=new CenterWindow(pars,datas,pk,ct,pp);
-
-	//app.setMainWidget(window);
-	window->show();
-
-	window->display_it();
-
-    QString name=pars->get_string("run_history","NONE").c_str();
-    if(name!="NONE") window->up->load_history(name);
-
-    int x=app.exec();
-*/
-  std::vector<QString> coms;
-
-  delete datas;
-  delete grid;
-  delete pp;
-  delete pars;
+  return app.exec();
 
 }
+
+
+

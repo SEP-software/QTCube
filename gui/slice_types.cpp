@@ -5,37 +5,37 @@
 #include "util.h"
 slice_types::slice_types()
 {
-
-  slices["grey"]=new grey(255); names.push_back("grey");
-  slices["flag"]=new flag(255); names.push_back("flag");
-  slices["cbl"]=new cbl(255); names.push_back("cbl");
-  slices["cgsi"]=new cgsi(255); names.push_back("cgsi");
-  slices["rainbow"]=new rainbow(255); names.push_back("rainbow");
-  slices["jet"]=new jet(255); names.push_back("jet");
-  slices["patriotic"]=new patriotic(255); names.push_back("patriotic");
-  slices["ava"]=new ava(255); names.push_back("ava");
-  slices["cycle"]=new color_cycle(255); names.push_back("cycle");
-  slices["user"]=new user_color(255); names.push_back("user");
-  slices["wiggle"]=new wiggle(); names.push_back("wiggle");
-  slices["contour"]=new contour(); names.push_back("contour");
-
+   
+ std::shared_ptr<grey> x1(new grey(255)); slices["grey"]=x1; names.push_back("grey");
+ std::shared_ptr<flag> x2(new flag(255)); slices["flag"]=x2; names.push_back("flag");
+ std::shared_ptr<cgsi> x3(new cgsi(255)); slices["cbl"]=x3; names.push_back("cbl");
+ std::shared_ptr<cgsi> x4(new cgsi(255)); slices["cgsi"]=x4; names.push_back("cgsi");
+ std::shared_ptr<rainbow> x5(new rainbow(255)); slices["rainbow"]=x5; names.push_back("rainbow");
+ std::shared_ptr<jet> x6(new jet(255)); slices["jet"]=x6; names.push_back("jet");
+ std::shared_ptr<patriotic> x7(new patriotic(255)); slices["patriotic"]=x7; names.push_back("patriotic");
+ std::shared_ptr<color_cycle> x8(new color_cycle(255)); slices["ava"]=x8; names.push_back("ava");
+ std::shared_ptr<color_cycle> x9(new color_cycle(255)); slices["cycle"]=x9; names.push_back("cycle");
+ std::shared_ptr<user_color> xa(new user_color(255)); slices["user"]=xa; names.push_back("user");
+ std::shared_ptr<wiggle> xb(new wiggle()); slices["wiggle"]=xb; names.push_back("wiggle");
+ std::shared_ptr<contour> xc(new contour()); slices["contour"]=xc; names.push_back("contour");
 }
 
 
-slice *slice_types::return_color_table(QString val){
+std::shared_ptr<slice>slice_types::return_color_table(const QString val){
   
   assert(slices.count(val)!=0);
+  
   for(int i=0; i < (int)names.size(); i++){
     if(names[i].contains(val)>0) icol=i;
   }
   return slices[val];
 
 }
-slice *slice_types::return_overlay_color_table(QString val,int alpha){
+std::shared_ptr<slice>slice_types::return_overlay_color_table(QString val,int alpha){
   assert(slices.count(val)!=0);
   assert(slices[val]->is_raster);
-  raster *rast=(raster*)slices[val];
-  raster *rast2=(raster*)rast->clone_alpha(alpha);
+  std::shared_ptr<raster>rast=std::static_pointer_cast<raster>(slices[val]);
+  std::shared_ptr<raster> rast2=std::static_pointer_cast<raster>(rast->clone_alpha(alpha));
   rast2->set_overlay();
 
   return rast2;
@@ -43,7 +43,7 @@ slice *slice_types::return_overlay_color_table(QString val,int alpha){
 
 }
 void slice_types::update_colortable(std::vector<QString> command){
-  user_color *col=(user_color*) slices["user"];
+  std::shared_ptr<user_color>col=std::static_pointer_cast<user_color>( slices["user"]);
   if(command[2].contains("set_green")>0){
     int *vv=util::int_array_from_string(command[3]);
     col->set_green(vv);

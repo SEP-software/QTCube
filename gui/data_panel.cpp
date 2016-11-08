@@ -4,7 +4,9 @@
 #include "view_panel.h"
 #include "navigate_panel.h"
 
-data_panel:: data_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+data_panel:: data_panel(std::shared_ptr<position >p,std::shared_ptr<windows>my_w, 
+std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, 
+std::shared_ptr<slice_types> c,std::shared_ptr<maps>mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
 
   for(int i=0; i < my_dat->return_ndat(); i++){
@@ -19,16 +21,13 @@ data_panel:: data_panel(position *p,windows *my_w, panels *my_p, datasets *my_d,
   addTab(my_tabs["add"],"+");
   
 }
-add_dataset::add_dataset(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+add_dataset::add_dataset(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, std::shared_ptr<panels>my_p, 
+std::shared_ptr<datasets> my_d, std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types>c,std::shared_ptr<maps>mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   create_sep_tab();
   create_seispak_tab();
 
   create_surface_tab();
-
-  #ifdef CHEVRON
-  create_flattening_tab();
-  #endif
 
 
 }
@@ -109,34 +108,7 @@ void add_dataset::create_surface(){
     emit actionDetected(coms);
 
 }
-#ifdef CHEVRON
-void add_dataset::create_flattening_tab(){
-  flattenTab=new QWidget();
-  flattenLay=new QHBoxLayout();
-  std::vector<QString> dlist;
-  
-  std::vector<QString>  mp=my_c->return_cvec();
 
-  colorFlatten= new basicComboBox("Pickset","Pickset to use for layer boundaries",mp);
-  createFlatten=new basicButtonBox("","Create","Create surface datasest",false);
- 
-  flattenLay->addWidget(colorFlatten->group());
-  flattenLay->addWidget(createFlatten->group());
-     connect(createFlatten->my_radios[0], SIGNAL(clicked()), this, SLOT(create_flatten()));
-
-  
-  flattenTab->setLayout(flattenLay)	;
-  addTab(flattenTab,"Strat col");
-  flattenTab->setMaximumHeight(90);
-}
-void add_dataset::delete_flattening_tab(){
-
-  delete colorFlatten;
-  delete createFlatten;
-  delete flattenLay;
-  delete flattenTab;
-}
-#endif
 void add_dataset::create_semblance_tab(){
 
 }
@@ -293,7 +265,9 @@ void data_sub_panel::update_menu(std::vector<QString> coms){
   }
 #endif
 }
-data_sub_panel:: data_sub_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c, maps *mym,int id){
+data_sub_panel:: data_sub_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, 
+std::shared_ptr<slice_types>c, std::shared_ptr<maps>mym,int id){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   idat=id;
 #ifdef CHEVRON
@@ -381,7 +355,8 @@ QWidget *data_sub_panel::create_info_window(){
   list.append("Properties");
   list.append("Values");
   statusView->setHeaderLabels(list);
-  std::vector<axis> axes=my_dat->return_dat(idat)->return_io_hyper()->return_axes(8);
+  std::vector<axis> axes=my_dat->return_dat(idat)->return_io_hyper()->getAxes();
+  for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
   QStringList mm;
  mm.append("Axes"); mm.append(" ");
   dataInfo=new QTreeWidgetItem*[2];

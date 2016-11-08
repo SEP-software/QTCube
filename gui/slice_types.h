@@ -1,6 +1,8 @@
 #include "simple_color.h"
 #include<string>
 #include<vector>
+#include<memory>
+#include "slice.h"
 #include<map>
 #include<simple_color.h>
 #ifndef SLICE_TYPES_H
@@ -11,8 +13,11 @@ class slice_types
   
     slice_types();
  
-    slice *return_color_table(QString val);
-    slice *return_overlay_color_table(QString val,int alpha);
+    std::shared_ptr<slice>return_color_table(const QString val);
+    std::shared_ptr<slice>return_color_table(std::string x){
+       return return_color_table(QString(x.c_str()));
+    }
+    std::shared_ptr<slice>return_overlay_color_table(QString val,int alpha);
     QString cycle_color(); 
 
     void set_ecolor(QString tab,QString col);
@@ -25,7 +30,7 @@ class slice_types
       slices.clear();
       names.clear();
     }
-    std::map<QString,slice*> slices;
+    std::map<QString,std::shared_ptr<slice>> slices;
     //std::vector<slice*> slices;
     std::vector<QString> names;
     int icol;

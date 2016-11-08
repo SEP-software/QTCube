@@ -11,7 +11,8 @@
 class ano_panel: public qcubeWidgetBasic{
   Q_OBJECT
   public:
-    ano_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    ano_panel(std::shared_ptr<position> p,std::shared_ptr<windows> my_w, std::shared_ptr<panels> my_p, 
+     std::shared_ptr<datasets> my_d, std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types> c,std::shared_ptr<maps> mym);
 
     ~ano_panel(){delete_ano_panel();}
          void update_menu(std::vector<QString>);
@@ -31,10 +32,10 @@ class ano_panel: public qcubeWidgetBasic{
   private:
     void delete_ano_panel();
     basicRadioBox *shape;
-    QHBoxLayout *layBot,*layTop;
-    QVBoxLayout *layMain;
-    QGroupBox *gbox,*gbox2;
-    basicComboBox *thick,*colorB,*font;
+    std::shared_ptr<QHBoxLayout> layBot,layTop;
+    std::shared_ptr<QVBoxLayout> layMain;
+    std::shared_ptr<QGroupBox> gbox,gbox2;
+    std::shared_ptr<basicComboBox> thick,colorB,font;
     basicLineEditBox *txt;    
 };
 #endif

@@ -1,50 +1,86 @@
 #include<raster.h>
 
-QImage *raster::makeImage(unsigned char * uc, int nx, int ny)
+QImage *raster::makeImage(unsigned char * uc,const  int nx,const  int ny, const int xsize, const int ysize)
 {
-	//assert(nx%4 == 0);
+  int nxuse=nx,nyuse=ny;
+  bool resized=false;
+  int xsu,ysu;
+  unsigned char *ucuse=uc;
+  
+  int jx=nx/xsize;
+  int jy=ny/ysize;
+  
+  if(jx >1 || jy>1){
+    nxuse=nx/std::max(jx,1);
+    nyuse=ny/std::max(jy,1);
+    int *space=new int[std::max(nx,ny)*2];
+    resized=true;
+    ucuse=new unsigned char[nxuse*nyuse];
+    unsigned char *tmp=new unsigned char[nyuse*nx];
+    if(jy>1){
+       for(int i2=0; i2 < nx ;i2++){
+         resampleBand(uc,i2*ny,1,nx,tmp,i2*nyuse,1,nyuse,jy,space);
+       }
+    }
+    else memcpy(tmp,uc,nyuse*nx);
+    if(jx>1){
+      for(int i1=0; i1 < nyuse; i1++){
+        resampleBand(tmp,i1,nyuse,nx,ucuse,i1,nyuse,nxuse,jx,space);
+      }
+    }
+    else memcpy(ucuse,tmp,nxuse*nyuse);
+
+    delete [] tmp;
+    delete [] space;
+  }
 	
+	
+	
+	
+	
+	QImage *image = new QImage(nxuse, nyuse, QImage::Format_Indexed8);
 
-	//QImage *image = new QImage(nx, ny, 8, 256, QImage::IgnoreEndian);
-		QImage *image = new QImage(nx, ny, QImage::Format_Indexed8);
 
-   // QRgb *tb=image->colorTable();
-    //int n=tb->size();
-      //    image->setAlphaBuffer(true);
 
-    //if (nx/4*4 != nx) return NULL;
+
 	
 	int iy,ix;
 	
-	//for(iy=0; iy < ny/2; iy++) for(ix=0; ix < nx; ix++) uc_tmp[iy*nx+ix] = uc[ix*ny+iy]; 
-	int diff=nx%4;
+	int diff=nxuse%4;
 	if(diff!=0) diff=4-diff;
-	unsigned char *uc_tmp = new unsigned char[diff+nx];
+	unsigned char *uc_tmp = new unsigned char[diff+nxuse];
 
-	for(iy=0; iy < ny; iy++) {
-	  for(ix=0; ix < nx; ix++){
-	  uc_tmp[ix] = uc[ix*ny+iy]; 
+	for(iy=0; iy < nyuse; iy++) {
+	  for(ix=0; ix < nxuse; ix++){
+	  uc_tmp[ix] = ucuse[ix*nyuse+iy]; 
 	 }
-	 memcpy((void*)image->scanLine(iy),(const void*)uc_tmp,nx);
+	 memcpy((void*)image->scanLine(iy),(const void*)uc_tmp,nxuse);
 	}
-	//memcpy(image->bits(), uc_tmp, nx*ny);
 	delete []uc_tmp;
 	
-	
-	//memcpy(image->bits(), uc, nx*ny);
-	
-	// set colors
-//	QVector<uint>  cp = image->colorTable();
-//	for(int i=0; i < 256; i++){
-//	cp[i]=this->scale[i];
-
-//	}
+    if(resized) delete [] ucuse;
 
 	image->setColorTable(scale);
 
-	//memcpy(cp, this->scale, 256*4);
 	
 	return image;
+}
+void raster::resampleBand(const unsigned char *in, const int fin,const  int jin, const int nin,
+unsigned char *out, const int fout, const int jout, const int nout, const int resamp, int *space) const{
+  int jw=1+2*resamp;
+  int *sp1=space;
+  int *sp2=&space[nin];
+  int jw2=jw*jw;
+  sp1[0]=jw*in[fin];
+  for(int i=1; i < jw; i++) sp1[i]=in[fin+jin*i]-in[fin]+sp1[i-1];
+  for(int i=jw; i < nin; i++) sp1[i]=in[fin+jin*i]-in[fin+jin*(i-jw)]+sp1[i-1];
+  sp2[nin-1]=sp1[nin-1]*jw;
+  for(int i=1; i < jw; i++)  sp2[nin-1-i]=sp2[nin-i]+sp1[nin-i-1]-sp1[nin-1];
+  for(int i=jw; i < nin; i++) sp2[nin-1-i]=sp2[nin-i]+sp1[nin-i-1]-sp1[nin-i-1+jw];
+  for(int i=0; i < nout; i++){
+    out[fout+jout*i]=  (unsigned char) (sp2[i*resamp]/jw2);
+ }
+
 }
 void raster::set_bcolor(QString col){
   if(col.contains("none")) scale[0]=scale[1];
@@ -93,8 +129,8 @@ void raster::set_ecolor(QString col){
    ecolor=col;
 }
 
-void raster::draw_slice(QPainter *painter, dataset *dat,QPen *pen, 
- orient_cube *pos,bool ov,bool draw_grid){
+void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen, 
+ std::shared_ptr<orient_cube>pos,bool ov,bool draw_grid){
 
    if(ov);
   my_dat=dat;
@@ -103,8 +139,8 @@ void raster::draw_slice(QPainter *painter, dataset *dat,QPen *pen,
   axes[0]=pos->get_rot_axis(iax1);
   axes[1]=pos->get_rot_axis(iax2);
   int e1,e2,f1,f2,n1,n2;
-  pos->get_axis_range(iax1,&f1,&e1); n1=e1-f1;
-  pos->get_axis_range(iax2,&f2,&e2); n2=e2-f2;
+  pos->getAxis_range(iax1,&f1,&e1); n1=e1-f1;
+  pos->getAxis_range(iax2,&f2,&e2); n2=e2-f2;
 
   
   ox=axes[1].o;
@@ -138,7 +174,7 @@ void raster::draw_slice(QPainter *painter, dataset *dat,QPen *pen,
 //  if(rev_1){ it=e_1;e_1=b_1; b_1=it;}
  // if(rev_2){ it=e_2;e_2=b_2; b_2=it;}
 
-   QImage *temp=makeImage(buf,n2,n1);
+   QImage *temp=makeImage(buf,n2,n1,xe-xb,ye-yb);
 
    
 //   temp->setAlphaBuffer(true);
@@ -179,8 +215,8 @@ void raster::draw_slice(QPainter *painter, dataset *dat,QPen *pen,
 
    delete temp; delete [] buf;
 }
-slice *raster::clone_alpha(int alpha){
-  raster *x = new raster();
+std::shared_ptr<slice> raster::clone_alpha(int alpha){
+  std::shared_ptr<raster>x ( new raster());
   for(int i=0; i < 256; i++) x->scale.push_back(qRgba(0,0,0,0));
 
   for(int i=0; i<scale.size(); i++) {
@@ -195,8 +231,8 @@ slice *raster::clone_alpha(int alpha){
   is_raster=true;
   return x;
 }
-slice *raster::clone(){
-  raster *x = new raster();
+std::shared_ptr<slice> raster::clone(){
+  std::shared_ptr<raster>x ( new raster());
   for(int i=0; i < 256; i++) x->scale.push_back(qRgba(0,0,0,0));
 
   for(int i=0; i<scale.size(); i++) {

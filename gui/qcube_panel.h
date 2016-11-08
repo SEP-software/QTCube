@@ -20,21 +20,24 @@
 class qcube_panel{
  public:
    qcube_panel(){;}
-   void set_basics(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c, maps *m);
+   void set_basics(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
+   std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, 
+   std::shared_ptr<pick_draw>pk, std::shared_ptr<slice_types>c, 
+   std::shared_ptr<maps> m);
    ~qcube_panel(){ delete_qcube_panel();}
     virtual void actionRespond(std::vector<QString>){;}
 
 
-     position *pos,*my_pos;
-     windows *my_wind;
-     panels *my_pan;
-     datasets *my_dat;
-     pick_draw *my_pick;
-     slice_types *my_slices;
-     my_colors *my_c;
-     my_fonts *my_f;
-     maps *my_maps;
-     view_types *my_v;
+     std::shared_ptr<position>pos,my_pos;
+     std::shared_ptr<windows>my_wind;
+     std::shared_ptr<panels>my_pan;
+     std::shared_ptr<datasets>my_dat;
+     std::shared_ptr<pick_draw>my_pick;
+     std::shared_ptr<slice_types>my_slices;
+     std::shared_ptr<my_colors>my_c;
+     std::shared_ptr<my_fonts>my_f;
+     std::shared_ptr<maps>my_maps;
+     std::shared_ptr<view_types> my_v;
 
 
   private:

@@ -19,9 +19,9 @@ class pick_holder{
 };
 class orient_map{
  public:
-  orient_map(bool rot, int iax1,  int iax2,int *rot_ax,  axis *ax_rot, 
+  orient_map(bool rot, int iax1,  int iax2,int *rot_ax,  std::vector<axis> ax_rot, 
      int **rot_to_reg_1,  int **rot_to_reg_2, int *beg,
-     int *iloc, int *end,int *ns,bool r1, bool r2,int *m1d,int sax,int bs, int es);
+     int *iloc, int *end,int *ns,bool r1, bool r2,std::vector<int> m1d,int sax,int bs, int es);
 
   void calc_get_pars(int iax1, int iax2, long long *j1, long long *j2,
   long long *first);
@@ -38,7 +38,7 @@ class orient_map{
   std::vector<int> return_picks_index(QString col);
   std::map<long long, int> *get_map_to_index(){ return &map_to_index;}
   ~orient_map(){ if(map!=0) delete [] map; map=0;  picks.clear(); map_to_index.clear();}
-  void set_picks(picks_vec *pks);
+  void set_picks(std::shared_ptr<picks_vec>pks);
   void add_pick(QString col,long long index);
   void del_pick(QString col,long long index);
   bool check_same(int *iloc, int f1, int f2, int e1, int e2);
@@ -57,7 +57,7 @@ class orient_map{
    int **locs;
    int nsz;
    int n1,n2;
-   int *map_1d;
+   std::vector<int> map_1d;
    int shift_ax;
    int b_s,e_s;
    long long skip[8];

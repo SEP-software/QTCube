@@ -2,7 +2,7 @@
 #include "float_buffer.h"
 #include "byte_buffer.h"
 
-void outcore_data::hold_pattern(orient_cube *pos, int iax1, int iax2, bool *hold){
+void outcore_data::hold_pattern(std::shared_ptr<orient_cube>pos, int iax1, int iax2, bool *hold){
 
  for(int i=0; i < 8; i++) hold[i]=false;
  int order[8];
@@ -13,7 +13,7 @@ void outcore_data::hold_pattern(orient_cube *pos, int iax1, int iax2, bool *hold
  else hold[order[2]]=true;
  
 }
-void outcore_data::delete_dataset(orient_cube *pos, int iax1, int iax2){
+void outcore_data::delete_dataset(std::shared_ptr<orient_cube> pos, int iax1, int iax2){
 
    bool hold[8],hh[8];
    hold_pattern(pos,iax1,iax2,hold);
@@ -24,12 +24,13 @@ void outcore_data::delete_dataset(orient_cube *pos, int iax1, int iax2){
 
      buf[i]->return_hold(hh);
      bool test=true;
-     std::vector<axis> axes=buf[i]->hyper_io->return_axes(8);
+     std::vector<axis> axes=buf[i]->hyper_io->getAxes();
+          for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
+
      for(int j=0; j< 8; j++) if(hold[j]!=hh[j] && axes[j].n >1) test=false;
 
 
      if(test){
-       delete buf[i];
        buf.erase(buf.begin()+i);
        found=true;
           fprintf(stderr,"deleting dataset %d of %d \n",i,(int)buf.size());
@@ -40,26 +41,25 @@ void outcore_data::delete_dataset(orient_cube *pos, int iax1, int iax2){
    if(!found){
       fprintf(stderr,"deleting dataXset 0 of %d \n",(int)buf.size());
 
-     delete buf[0];
      buf.erase(buf.begin());
    }
 }
 
-outcore_data_float::outcore_data_float(std::string title,QString nm,hypercube *g,io_func *i, param_func *p, int in,int im){
+outcore_data_float::outcore_data_float(std::string title,QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
   set_basics(title,nm,g,i,p,in,im);
     datas=io->return_hyper();
 
 }
 
 
-buffer *outcore_data_float::create_buffer(orient_cube *pos, int iax1, int iax2){
+std::shared_ptr<buffer> outcore_data_float::create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2){
  
-   int nw[8],fw[8];
+   std::vector<int> nw(8,1),fw(8,0); 
    bool hold[8];
    
    hold_pattern(pos,iax1,iax2,hold);
-   std::vector<axis> axes=grid->return_axes(8);
-
+   std::vector<axis> axes=grid->getAxes();
+   for(int i=axes.size(); i<8; i++) axes.push_back(axis(1));
    
    for(int i=0; i < 8; i++){
      if(!hold[i]){
@@ -73,22 +73,24 @@ buffer *outcore_data_float::create_buffer(orient_cube *pos, int iax1, int iax2){
      }
      
 
-    float_buffer *b=new float_buffer(par,grid,io,inum,nw,fw);
+    std::shared_ptr<float_buffer>b(new float_buffer(par,grid,io,inum,nw,fw));
    
 
    return b;
 }
 
-outcore_data_byte::outcore_data_byte(std::string title,QString nm, hypercube *g,io_func *i, param_func *p, int in,int im){
+outcore_data_byte::outcore_data_byte(std::string title,QString nm, std::shared_ptr<hypercube>g,std::shared_ptr<io_func >i,std::shared_ptr< paramObj>p, int in,int im){
   set_basics(title,nm,g,i,p,in,im);
   datas=io->return_hyper();
 
 }
-buffer *outcore_data_byte::create_buffer(orient_cube *pos, int iax1, int iax2){
+std::shared_ptr<buffer>outcore_data_byte::create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2){
  
  
-   int nw[8],fw[8];
-   std::vector<axis> axes=grid->return_axes(8);
+    std::vector<int> nw(8,1),fw(8,1);
+   std::vector<axis> axes=grid->getAxes();
+        for(int i=axes.size(); i < 8; i++) axes.push_back(axis(1));
+
    bool hold[8];
       hold_pattern(pos,iax1,iax2,hold);
 
@@ -104,7 +106,7 @@ buffer *outcore_data_byte::create_buffer(orient_cube *pos, int iax1, int iax2){
    }
 
    if(iax1==0 && iax2==0 && pos==0);
-    byte_buffer *b=new byte_buffer(par,grid,io,inum,nw,fw);
+    std::shared_ptr<byte_buffer> b(new byte_buffer(par,grid,io,inum,nw,fw));
 
    return b;
 }

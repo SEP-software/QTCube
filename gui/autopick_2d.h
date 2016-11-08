@@ -7,7 +7,7 @@ class autopick_2d{
  autopick_2d(){};
 
  
-  virtual std::vector<path> return_path(std::vector<int> pik,float_2d *array);
+  virtual std::vector<path> return_path(std::vector<int> pik,std::shared_ptr<float_2d>array);
   virtual ~autopick_2d(){};
 
 };

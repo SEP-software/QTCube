@@ -14,24 +14,23 @@ class panels: public QObject{
  Q_OBJECT
 
  public:
-    panels(pick_draw *p,maps *my_maps,orients *my_o);
+    panels(std::shared_ptr<genericIO> io,std::shared_ptr<pick_draw> p,std::shared_ptr<maps>my_maps,std::shared_ptr<orients> my_o);
      signals:
     void actionDetected(std::vector<QString> text);
     void secondaryDetected(std::vector<QString> text);
     void windows_update();
   public:
-    void add_panel(panel *um);
+    void add_panel(std::shared_ptr<panel> um);
     void delete_panel(int ipan){ 
-      std::map<int,panel*>::iterator it=my_pan.find(ipan); 
+      auto it=my_pan.find(ipan); 
        assert(my_pan.count(ipan)==1);      
        disconnect_it(ipan);
-       delete my_pan[ipan];
       
       my_pan.erase(it);
     }
     void set_active(int iact);
-    void sync_panel(panel *x);
-    panel *get_panel(int ipan){ 
+    void sync_panel(std::shared_ptr<panel> x);
+    std::shared_ptr<panel> get_panel(int ipan){ 
        return my_pan[ipan];}
     void sync_panel(int ipan){sync_panel(my_pan[ipan]);}
     int get_next_panel_num(){pan_num++; return pan_num-1;}
@@ -42,9 +41,9 @@ class panels: public QObject{
     void perform_orient(std::vector<QString> coms);
         void perform_view(std::vector<QString> coms);
     void perform_navigate(std::vector<QString> coms);
-    position *get_position(){ return my_pan[0]->get_orient();}
+    std::shared_ptr<position> get_position(){ return my_pan[0]->get_orient();}
     ~panels(){delete_panels();}
-    void update_mouse(mouse_func *f);
+    void update_mouse(std::shared_ptr<mouse_func> f);
     void connect_all();
     void connect_it(int i);
     void disconnect_it(int i);
@@ -53,9 +52,9 @@ class panels: public QObject{
     int size(){ return my_pan.size();}
     void update_all();
     void set_locked(bool x){ locked=x;}
-    void update_it(panel *active){ if(locked) update_all(); else update_only(active);}
+    void update_it(std::shared_ptr<panel >active){ if(locked) update_all(); else update_only(active);}
     void update_it(int iact){ update_it(my_pan[iact]);}
-    void update_only(panel *active){ active->set_update_it(true);}
+    void update_only(std::shared_ptr<panel > active){ active->set_update_it(true);}
     void update_only(int iact){ update_only(my_pan[iact]);}
     void update_what(int ival, QString what);
     void run_movie();
@@ -69,16 +68,17 @@ class panels: public QObject{
     void update_movie();
   
     private:
-    maps *my_maps;
+    std::shared_ptr<maps> my_maps;
     QTimer *movie_timer;
-    autopick *autop;
+    std::shared_ptr<autopick> autop;
+    std::shared_ptr<genericIO> _io;
     std::map<int,int> panel_to_window;
   int movie_delay;
     int active_num;
     bool locked;
-    pick_draw *pk;
-    orients *my_or;
-   std::map<int,panel*> my_pan;
+    std::shared_ptr<pick_draw>pk;
+    std::shared_ptr<orients>my_or;
+   std::map<int,std::shared_ptr<panel>> my_pan;
    int pan_num;
 };
 #endif

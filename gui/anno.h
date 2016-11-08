@@ -1,6 +1,7 @@
 #ifndef ANNO_NEW_H
 #define ANNO_NEW_H 1
 #include<QString>
+#include <memory>
 #include "my_fonts.h"
 #include "my_colors.h"
 #include "assert.h"
@@ -13,7 +14,7 @@ class anno{
     }
     virtual ~anno(){;}
     virtual void shift_anno(float bx, float by, float ex, float ey, float dx, float dy){ pctx=bx+dx; pcty=by+dy; endx=ex+dx; endy=ey+dy;}
-    virtual void draw(QPainter *painter, my_fonts *fonts, my_colors *col, int bx, int ex, int by, int ey){
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts> fonts, std::shared_ptr<my_colors> col, int bx, int ex, int by, int ey){
       if(bx==ex && by==ey && painter==0 && fonts==0  && col==0){;};}
     float pctx,pcty;
         float endx,endy;
@@ -26,7 +27,7 @@ class anno_text: public anno{
     anno_text(){;}
     anno_text(float px,float py,QString c,QString t,QString f,int th){ txt=t; font=f; pctx=px; pcty=py; col=c;thick=th;}
     virtual float return_dist(float px, float py);
-    virtual void draw(QPainter *painter, my_fonts *fonts, my_colors *col, int bx, int ex, int by, int ey);
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>col, int bx, int ex, int by, int ey);
     virtual ~anno_text(){;}
     QString txt;
     QString font;
@@ -37,7 +38,7 @@ class anno_line: public anno{
     anno_line(){;}
     anno_line(float px,float py,QString c,int t,float ex, float ey){ thick=t;pctx=px; pcty=py; col=c; endx=ex; endy=ey;}
     virtual float return_dist(float px, float py);
-    virtual void draw(QPainter *painter, my_fonts *fonts, my_colors *colors, int bx, int ex, int by, int ey);
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>col, int bx, int ex, int by, int ey);
     virtual ~anno_line(){;}
 };
 class anno_arrow: public anno{
@@ -45,7 +46,7 @@ class anno_arrow: public anno{
     anno_arrow(){;}
     anno_arrow(float px,float py,QString c,int t,float ex,float ey){ thick=t;pctx=px; pcty=py; col=c; endx=ex; endy=ey;}
     virtual float return_dist(float px, float py);
-    virtual void draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int bx, int ex, int by, int ey);
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>col,int bx, int ex, int by, int ey);
     virtual ~anno_arrow(){;}
 };
 class anno_ellipse: public anno{
@@ -55,7 +56,7 @@ class anno_ellipse: public anno{
     virtual void shift_anno(float bx, float by, float ex, float ey, float dx, float dy){ 
          if(ex==ey) {;};pctx=bx+dx; pcty=by+dy;}
     virtual float return_dist(float px, float py);
-    virtual void draw(QPainter *painter,  my_fonts *fonts,  my_colors *colors,int bx, int ex, int by, int ey);
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>col,int bx, int ex, int by, int ey);
     virtual ~anno_ellipse(){;}
 };
 class anno_box: public anno{
@@ -63,8 +64,8 @@ class anno_box: public anno{
     anno_box(){;}
     anno_box(float px,float py,QString c,int t,float ex,float ey){ thick=t;pctx=px; pcty=py; col=c; endx=ex; endy=ey;}
     virtual float return_dist(float px, float py);
-    virtual void draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int bx, int ex, int by, int ey);
-    virtual ~anno_box(){;}
+    virtual void draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>col,int bx, int ex, int by, int ey);
+
 };
 class annotate{
   public:
@@ -94,19 +95,16 @@ class annotate{
     void draw(QPainter *painter,int bx, int by, int ex, int ey);
     void clear();
     
-    ~annotate(){ 
-       delete fonts; 
-       delete colors;
-       }
+
 
 
   private:
-    std::vector<anno*> annos;
+    std::vector<std::shared_ptr<anno>> annos;
     QString cur_col,cur_font,cur_text,cur_shape;
     int cur_thick;
     bool in_progress;
-    my_fonts *fonts;
-    my_colors *colors;
+    std::shared_ptr<my_fonts> fonts;
+    std::shared_ptr<my_colors> colors;
     int active_anno;
     float bxh,exh,byh,eyh;
 

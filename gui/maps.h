@@ -2,35 +2,38 @@
 #define MAPS_H 1 
 #include <vector>
 #include "hypercube.h"
+#include <genericIO.h>
 #include <QString>
 
 class map_1{
   public:
     map_1(){;}
-    map_1(QString nm, hypercube *h, float oversamp);
-    int *return_index(){return ind;}
+    map_1(std::shared_ptr<genericIO> io,QString nm, const std::shared_ptr<hypercube>h, float oversamp);
+    std::vector<int> return_index(){return ind;}
     QString return_name(){ return name;}
     float return_oversamp(){ return oversamp;}
   private:
-    int *ind;
+    std::vector<int> ind;
     QString name;
+    std::shared_ptr<genericIO> _io;
     float oversamp;
 
 };
 
 class maps{
   public:
-  maps(){;}
-  void add_map(map_1 *x){ my_maps.push_back(x);}
-  map_1 *return_map(int inum);
-  map_1 *return_map(QString nm);
+  maps(std::shared_ptr<genericIO> io){_io=io;}
+  void add_map(std::shared_ptr<map_1> x){ my_maps.push_back(x);}
+  std::shared_ptr<map_1> return_map(int inum);
+  std::shared_ptr<map_1>return_map(QString nm);
   std::vector<QString> return_names();
   int size(){ return (int)my_maps.size();}
   int return_num(QString nm);
   
   private:
 
-  std::vector<map_1*> my_maps;
+  std::vector<std::shared_ptr<map_1>> my_maps;
+  std::shared_ptr<genericIO> _io;
 
 };
 

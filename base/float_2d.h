@@ -7,12 +7,14 @@ class float_2d:public hypercube_float{
   
    public:
      float_2d(){} //Default constructor
-     float_2d(axis a1, axis a2);
-     float_2d(axis a1, axis a2, float *array);
-     float_2d(int n1, int n2);
-     float_2d(int n1, int n2, float *array);
+     float_2d(const axis a1, const axis a2);
+     float_2d(const float_2d *x);
+     float_2d(const std::shared_ptr<float_2d>x);
+     float_2d(const axis a1, const axis a2, const float *array);
+     float_2d(const int n1,const  int n2);
+     float_2d(const int n1,const  int n2,const  float *array);
      virtual ~float_2d(){};
-     void base_init_2df(axis a1,axis a2);
+     void base_init_2df(const axis a1,const axis a2);
 
   
   

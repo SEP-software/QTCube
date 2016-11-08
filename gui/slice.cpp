@@ -6,7 +6,7 @@
 /*
 	Sets the parameters for drawing the slice.
 */
-void slice::set_draw_params(QFontMetrics *f_m,orient_cube *pos, int i1, int i2, int off,int b_x, int e_x, int b_y, int e_y,
+void slice::set_draw_params(std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<orient_cube>pos, int i1, int i2, int off,int b_x, int e_x, int b_y, int e_y,
 int dopos,bool at,bool ab, bool al, bool ar,float s1,float s2, bool rev1, bool rev2, bool verb){
 
   sx=s1;  //Skew parameter
@@ -29,8 +29,8 @@ offset=off;
   int idat1=pos->get_order(i1), idat2=pos->get_order(i2);
    pos->get_begs(ia);
    pos->get_ends(ia);
-   pos->get_axis_range(idat1,&b1_grid,&e1_grid);
-      pos->get_axis_range(idat2,&b2_grid,&e2_grid);
+   pos->getAxis_range(idat1,&b1_grid,&e1_grid);
+      pos->getAxis_range(idat2,&b2_grid,&e2_grid);
 
 
 
@@ -61,8 +61,8 @@ offset=off;
   iax1=idat1;
   iax2=idat2;
   int f2,e2;
- pos->get_axis_range(iax1,&f1,&e1); n1_slice=e1-f1;
- pos->get_axis_range(iax2,&f2,&e2); n2_slice=e2-f2;
+ pos->getAxis_range(iax1,&f1,&e1); n1_slice=e1-f1;
+ pos->getAxis_range(iax2,&f2,&e2); n2_slice=e2-f2;
  
 
   ps=pos;
@@ -100,8 +100,8 @@ void slice::form_pixel_slice_map(){
    */
 
 int n1,n2;
-  my_pos->get_axis_range(iax1,&b_1,&e_1); n1=e_1-b_1;
-  my_pos->get_axis_range(iax2,&b_2,&e_2); n2=e_2-b_2;
+  my_pos->getAxis_range(iax1,&b_1,&e_1); n1=e_1-b_1;
+  my_pos->getAxis_range(iax2,&b_2,&e_2); n2=e_2-b_2;
 //int *map=new int[xe*ye*2];
 //for(int i=0; i < 2*xe*ye; i++) map[i]=-1;
 int i=0;
@@ -140,11 +140,11 @@ long long *slice::get_slice_to_grid_map(){
    return slice_to_grid_map;
 
 }
-pairs_new *slice::return_pick_locs(QString col,picks_vec *pk ){
-  pairs_new *pout=new pairs_new();
+std::shared_ptr<pairs_new>slice::return_pick_locs(QString col,std::shared_ptr<picks_vec>pk ){
+  std::shared_ptr<pairs_new>pout( new pairs_new());
   for(int i=0; i < pk->return_size(); i++){
     int ix,iy;
-    pick_new *p=pk->return_pick(i);
+    std::shared_ptr<pick_new >p=pk->return_pick(i);
     if(col==p->col){
       bool inside=get_shifted_image_pos_from_sample(p->iloc[iax2],p->iloc[iax1],&ix,&iy);
       if(inside) pout->add_point(ix,iy,p->txt);
@@ -155,11 +155,11 @@ pairs_new *slice::return_pick_locs(QString col,picks_vec *pk ){
 }
 long long *slice::get_index_map_ptr(int idelta){
   int f2,e2,f1,e1;
-  ps->get_axis_range(iax1,&f1,&e1); 
-  ps->get_axis_range(iax2,&f2,&e2); 
+  ps->getAxis_range(iax1,&f1,&e1); 
+  ps->getAxis_range(iax2,&f2,&e2); 
   return ps->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,idelta);
 }
-void slice::draw_pos(QPainter *painter, orient_cube *pos){
+void slice::draw_pos(QPainter *painter, std::shared_ptr<orient_cube>pos){
   int p_1,p_2,ix1,ix2,iy1,iy2;
  // int ix1_1,ix1_2,iy1_1,iy1_2;
  // int ix2_1,ix2_2,iy2_1,iy2_2;
@@ -243,14 +243,14 @@ void slice::get_shifted_axis_pos2( bool top, float pct,int *ix, int *iy){
     *iy=ey+(int)((float)xe*pct*(float)sx);
 }
 
-void slice::draw_axes(QPainter *painter,orient_cube *pos,bool draw_grid){
+void slice::draw_axes(QPainter *painter,std::shared_ptr<orient_cube>pos,bool draw_grid){
   int tic_len=fm->height()/3;
   int npixels=20; //Distance between tics (approx)
-  axis ax1=pos->get_axis(iax1);
-  axis ax2=pos->get_axis(iax2);
+  axis ax1=pos->getAxis(iax1);
+  axis ax2=pos->getAxis(iax2);
   int xs,ys;
    int f,e;
-   pos->get_axis_range(iax1,&f,&e); 
+   pos->getAxis_range(iax1,&f,&e); 
    float ov1=pos->get_oversamp(iax1),ov2=pos->get_oversamp(iax2);
 
   float mn=f*ax1.d/ov1+ax1.o;
@@ -439,7 +439,7 @@ void slice::draw_axes(QPainter *painter,orient_cube *pos,bool draw_grid){
   ang=atan(sx)*180./3.1415926536;
   rad=atan(sx);
    int ff,ee;
-   pos->get_axis_range(iax2,&ff,&ee); 
+   pos->getAxis_range(iax2,&ff,&ee); 
    mn=ff*ax2.d/ov2+ax2.o;
    mx=(ee-1)*ax2.d/ov2+ax2.o;
 
@@ -528,7 +528,7 @@ bool slice::in_slice(int ix, int iy){
    if(i_x >= xb && i_x <= xe && i_y >= yb && i_y <=ye) ret=true;
    return ret;
 }
-void slice::update_pos(std::vector<QString> *com,int ix,int iy, orient_cube *pos){
+void slice::update_pos(std::vector<QString> *com,int ix,int iy, std::shared_ptr<orient_cube>pos){
    int loc[8];
    std::vector<QString> com2;
   com->at(1)="none";
@@ -555,7 +555,7 @@ std::vector<long long> slice::get_multi_locs(int ix_old,int iy_old, int ix, int 
  
   int  n1;
   //CHECK CHECK CHECK
-  my_pos->get_axis_range(iax1,&b_1,&e_1); n1=e_1-b_1;
+  my_pos->getAxis_range(iax1,&b_1,&e_1); n1=e_1-b_1;
   std::vector<long long > locs;
   if(this->in_slice(ix,iy)==true){
      int i_x=(int)(-(iy-by)*sy+ix-bx);
@@ -577,7 +577,7 @@ std::vector<long long> slice::get_multi_locs(int ix_old,int iy_old, int ix, int 
   }
       return locs;  
 }
-void slice::update_range(std::vector<QString> *com, int ix_old,int iy_old, int ix, int iy, orient_cube *pos){
+void slice::update_range(std::vector<QString> *com, int ix_old,int iy_old, int ix, int iy, std::shared_ptr<orient_cube>pos){
  com->at(1)="none";
   if(this->in_slice(ix,iy)==true){
     int beg[8],end[8];
@@ -635,12 +635,12 @@ void slice::get_data_loc(int ix, int iy,int *loc_new){
 void slice::get_data_pos(int ix,int iy,float *pos){
  int iloc[8];
   get_data_loc(ix,iy,iloc);
-  axis a1=my_pos->get_axis(iax1),a2=my_pos->get_axis(iax2);
+  axis a1=my_pos->getAxis(iax1),a2=my_pos->getAxis(iax2);
   pos[0]=a1.o+a1.d*iloc[iax1]; 
   pos[1]=a2.o+a2.d*iloc[iax2];
 
 }
-void slice::get_slice_axes(orient_cube *pos, int *i1, int *i2, int *i3){
+void slice::get_slice_axes(std::shared_ptr<orient_cube>pos, int *i1, int *i2, int *i3){
   *i1=iax1;
   *i2=iax2;
   int d1=pos->get_order(0), d2=pos->get_order(1), d3=pos->get_order(2);

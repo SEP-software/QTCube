@@ -1,10 +1,9 @@
 #ifndef IO_FUNC_H
 #define IO_FUNC_H 1
-#include "param_func.h"
 #include "hypercube.h"
 #include "util.h"
  #include <QTreeWidgetItem>
-
+#include<memory>
  #include <qobject.h>
 
 
@@ -16,20 +15,18 @@ class io_func: public QObject{
 	    void actionDetected(std::vector< QString> text);
   public:
     io_func(){hyper=0;};
-    void set_basics(util *pars, hypercube *h);
+    void set_basics(std::shared_ptr<util>pars, std::shared_ptr<hypercube>h);
     
-    virtual ~io_func(){
-       if(hyper!=0) delete hyper;
-    }
+  
     
-    virtual void read_block_float(int *nw, int *fw, float *buf);
-    virtual void read_block_byte(int *nw, int *fw,  unsigned char *buf);
-    virtual void convert_to_local(int *nwin,int *fwin, int *nwout, int *fwout);
+    virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
+    virtual void read_block_byte(std::vector<int>&nw, std::vector<int>&fw,  unsigned char *buf);
+    virtual void convert_to_local(std::vector<int>&nwin,std::vector<int>&fwin, std::vector<int>&nwout, std::vector<int>&fwout);
     void return_clips(float *b, float *e){
       *b=bclip; *e=eclip;
     }
     virtual void read_headers(){};
-    hypercube *return_hyper();
+    std::shared_ptr<hypercube> return_hyper();
     bool not_byte(){ return non_byte;}
     bool io_changed(){return changed;}
     void set_clip(float *dat,int inum, long long nelem,int swap=0){
@@ -75,8 +72,8 @@ class io_func: public QObject{
   virtual void del_pt_action(int *iloc){if(iloc==0){;};}
      bool am_region(){return isregion;}
     
-    hypercube *hyper;
-    util *par;
+    std::shared_ptr<hypercube>hyper;
+    std::shared_ptr<util>par;
     float bclip,eclip;
     bool non_byte;
     bool changed;

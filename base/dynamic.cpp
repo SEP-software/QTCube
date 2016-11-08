@@ -2,23 +2,25 @@
 #include "dynamic.h"
 dynamic::dynamic(float_2d *s, float jump_pen){
 
- sim=(float_2d*)s->clone();
+
+ std::shared_ptr<float_2d> sc(new float_2d(s));
+ sim=sc;
+ std::shared_ptr<float_2d> sc2(new float_2d(s));
+ score=sc2;
  jump=jump_pen;
- score=(float_2d*)sim->clone();
- for(int i=0; i < score->get_n123();i++) score->vals[i]=0.;
+ for(int i=0; i < score->getN123();i++) score->vals[i]=0.;
 }
 void dynamic::add_to_sim(float_2d *s){
- for(int i=0; i< sim->get_n123(); i++) sim->vals[i]+=s->vals[i];
+ for(int i=0; i< sim->getN123(); i++) sim->vals[i]+=s->vals[i];
  
 }
 void dynamic::calc_score()
 {
-  int n1=sim->get_axis(1).n;
-  int n2=sim->get_axis(2).n;
+  int n1=sim->getAxis(1).n;
+  int n2=sim->getAxis(2).n;
   //First fill the bottom edges
-  for(int i=0; i < n2; i++) score[n1-1+i*n2]=sim[n1-1+i*n2];
-  for(int i=0; i < n1; i++) score[n1*(n2-1)+i]=sim[n1*(n2-1)+i];
-  int i2,i1,i,j;
+  for(int i=0; i < n2; i++) score->vals[n1-1+i*n2]=sim->vals[n1-1+i*n2];
+  for(int i=0; i < n1; i++) score->vals[n1*(n2-1)+i]=sim->vals[n1*(n2-1)+i];
   float mymax2=-100.,mymax,sc;
   for(int i2=n2-2; i2 >=0 ; i2--){
     for(int i1=n1-2; i1>=0; i1--){
@@ -44,8 +46,8 @@ std::vector<path> dynamic::return_path(){
   std::vector<path> myp;
   
   int i1=maxloc[0], i2=maxloc[1];
-  int n1=sim->get_axis(1).n;
-  int n2=sim->get_axis(2).n;
+  int n1=sim->getAxis(1).n;
+  int n2=sim->getAxis(2).n;
   float down,right,diagonal;
   myp.push_back(path(i1,i2));
   while(i1 !=n1-1 && i2 !=n2-1){

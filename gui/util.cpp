@@ -35,105 +35,20 @@ float *util::float_array_from_string(QString str){
 
   return buf;
 }
-  QString util::param_string(QString p, int inum){
-     QString get=param_string(p,inum,"NaNa");
-     char buf[1024];
-     if(get=="NaNa") {
-       sprintf(buf,"Couldn't read %s \n",p.toAscii().constData());
-       par->error(buf);
-        
-      }
-     return get;
-  }
-  QString util::param_string(QString para, int inum, QString def){
-    std::string dumb="NaNa";
-    QString tmp=para+QString::number(inum);
-    std::string dumb2=par->get_string(
-    tmp.toAscii().constData(),dumb);
-    std::string defs=def.toAscii().constData();
-    if(dumb2==dumb) return par->get_string(para.toAscii().constData(),defs).c_str();
-    return dumb2.c_str();
-  
-  }
-  int util::param_int(QString para, int inum){
-    int get=param_int(para,inum,-931246);
-    
-      char buf[1024];
-       sprintf(buf,"Couldn't read %s \n",para.toAscii().constData());
-     
-    if(get==-931246) par->error(buf);
-    return get;
-  }
-  int util::param_int(QString para, int inum, int def){
-    int dumb=-9761234;
-    QString tmp=para+QString::number(inum);
-    int dumb2=par->get_int(tmp.toAscii().constData(),dumb);
-    if(dumb2==dumb)
-      return par->get_int(para.toAscii().constData(),def);
-    return dumb2;
-    
-  }
-    float util::param_float(QString para, int inum){
-    float get=param_float(para,inum,-931246);
-       char buf[1024];
-       sprintf(buf,"Couldn't read %s \n",para.toAscii().constData());
-    if(get==-931246) par->error(buf);
-    return get;
-  }
-  float util::param_float(QString para, int inum, float def){
-    float dumb=-9761234;
-    QString tmp=para+QString::number(inum);
-    float dumb2=par->get_float(tmp.toAscii().constData(),dumb);
-    if(dumb2==dumb)
-      return par->get_float(para.toAscii().constData(),def);
-    return dumb2;
-    
-  }
-  std::vector<int> util::param_ints(QString para, int inum, std::vector<int> def){
-    int dumb[9999];
-    for(int i=0; i < 9999; i++) dumb[i]=-9761234;
-    QString tmp=para+QString::number(inum);
-    int *dumb2=par->get_ints(tmp.toAscii().constData(),9999,dumb);
-    if(dumb2[0]==-9761234){
-       delete [] dumb2;
-       dumb2=par->get_ints(para.toAscii().constData(),9999,dumb);
-    }
-    std::vector<int> back;
-    if(dumb2[0]!=-9761234){
-      int i=0;
-      
-      while(dumb2[i]!=-9761234){
-         back.push_back(dumb2[i]);
-         i+=1;
-      }
-      delete [] dumb2;
-      return back;
-    }
-    delete [] dumb2;
-    for(int i=0; i< (int)def.size(); i++){
-      def.push_back(def[i]);
-    }
-    return def;
-  }
-  std::vector<int> util::param_ints(QString para, int inum){
-    std::vector<int> a;
-    std::vector<int> get=param_ints(para,inum,a);
-    char buf[1024];
-       sprintf(buf,"Couldn't read %s \n",para.toAscii().constData());
-    if((int)a.size()==0) par->error(buf);
-    return get;
-  }
-  
+
+
+
+
  void util::set_float_clip( float *buf, int inum,long long nelem, float *bc, float *ec, int swap){
 
  float bclip,eclip,clip,bpclip,epclip,pclip,minv,maxv;
 
-  bclip=param_float("bclip",inum,-98765.);
-  eclip=param_float("eclip",inum,-98765.);
-  clip=param_float("clip",inum,-98765.);
-  bpclip=param_float("bpclip",inum,-1.);
-  epclip=param_float("epclip",inum,-1.);
-  pclip=param_float("pclip",inum,-1.);
+  bclip=par->getFloat(std::string("bclip")+std::to_string(inum),-98765.);
+  eclip=par->getFloat(std::string("eclip")+std::to_string(inum),-98765.);
+  clip=par->getFloat(std::string("clip")+std::to_string(inum),-98765.);
+  bpclip=par->getFloat(std::string("bpclip")+std::to_string(inum),-1.);
+  epclip=par->getFloat(std::string("epclip")+std::to_string(inum),-1.);
+  pclip=par->getFloat(std::string("pclip")+std::to_string(inum),-1.);
   if(bclip!=-98765){
     if(eclip==-98765) par->error("If you provide bclip you must also provide eclip");
     minv=bclip; maxv=eclip;
@@ -143,7 +58,7 @@ float *util::float_array_from_string(QString str){
   }
   else{
    
-    percentile *p=new percentile();
+    percentile p=percentile();
     int j=1;
     int nsmall;
     int sub=7;
@@ -166,18 +81,17 @@ float *util::float_array_from_string(QString str){
     if(bpclip!=-1 || epclip!=-1){
       if(bpclip==-1) bpclip=0;
       if(epclip==-1) epclip=100;
-      minv=p->find(tempf,nelem,((int)(nsmall*(float)(bpclip/100.))));
-      maxv=p->find(tempf,nelem,((int)(nsmall*(float)(epclip/100.))));
+      minv=p.find(tempf,nelem,((int)(nsmall*(float)(bpclip/100.))));
+      maxv=p.find(tempf,nelem,((int)(nsmall*(float)(epclip/100.))));
     }
     else{
       if(pclip==-1.) pclip=99;
       int pos=(int)nsmall*(float)(pclip/100.);
       if(pos>=nsmall) pos=nsmall-1;
-      maxv=p->find_abs(tempf,nsmall,pos);
+      maxv=p.find_abs(tempf,nsmall,pos);
       minv=-maxv;
     }
     delete []tempf;
-    delete p;
    }
    *bc=minv;
    *ec=maxv;
@@ -190,6 +104,7 @@ void util::convert_to_byte(float *fbuf, long long foff, unsigned char *cbuf, lon
   float range=eclip-bclip;
   for(long long i=0; i < nelem; i++){
     j=(int)(255*(fbuf[i+foff]-bclip)/range);
+
     if(j<0) j=0;
     if(j>255) j=255;
     cbuf[i+coff]=j;

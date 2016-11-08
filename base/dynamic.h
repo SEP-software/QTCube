@@ -2,6 +2,7 @@
 #define DYNAMIC_H 1
 #include<float_2d.h>
 #include <path.h>
+#include<memory>
 class dynamic{
 
   public:
@@ -14,10 +15,9 @@ class dynamic{
     virtual ~dynamic(){delete_ar();}
 
     void delete_ar(){
-      if(sim!=0) delete sim;
-      if(score!=0) delete score;
+    
     }
-   float_2d *sim,*score;
+   std::shared_ptr<float_2d>sim,score;
    float jump;
    int maxloc[2];
   

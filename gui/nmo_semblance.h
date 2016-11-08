@@ -8,8 +8,8 @@ class nmo_semblance: public move_semblance{
 
   public:
      nmo_semblance(){};
-     nmo_semblance(hypercube *grid, dataset *dat, int it,int ioff, int imes,
-       util *pars,pick_draw *pk,QString col1, QString col2);
+     nmo_semblance(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
+       std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pk,QString col1, QString col2);
        
      virtual void semblance_it(int *f,float *semb);
 

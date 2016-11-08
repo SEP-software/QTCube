@@ -15,10 +15,10 @@ int multiple::in_slice(int ix, int iy){
 }
 
 
-std::vector<QString> multiple::key_release_multiple( QKeyEvent *e,orient_cube *pos ){
+std::vector<QString> multiple::key_release_multiple( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
   return key_press_view(e,pos);
 }
-std::vector<QString> multiple::key_press_multiple( QKeyEvent *e,orient_cube *pos ){
+std::vector<QString> multiple::key_press_multiple( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
   if(e==0);
  return key_press_view(e,pos);
 }

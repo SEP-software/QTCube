@@ -15,21 +15,21 @@ class three_view: public multiple
 public:
   three_view(){}
   //required view constructors
-  std::vector<QString> keyReleaseEvent( QKeyEvent *e,orient_cube *pos ){
+  std::vector<QString> keyReleaseEvent( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
     return key_release_multiple(e,pos);
   }
-  std::vector<QString> keyPressEvent(QKeyEvent *e, orient_cube *pos){
+  std::vector<QString> keyPressEvent(QKeyEvent *e, std::shared_ptr<orient_cube>pos){
     return key_press_multiple(e,pos);
   }
   //Left 
 
-  virtual std::vector<QString> left_mouse_down(float x, float y, orient_cube *pos, mouse_func *func);
-  virtual std::vector<QString> left_mouse_move(float x, float y, orient_cube *pos, mouse_func *func);
-  virtual std::vector<QString> left_mouse_release(float x, float y, orient_cube *pos, mouse_func *func);
+  virtual std::vector<QString> left_mouse_down(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
+  virtual std::vector<QString> left_mouse_move(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
+  virtual std::vector<QString> left_mouse_release(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
 
-    //std::vector<QString> l_mouse_m(float x, float y, orient_cube *pos, mouse_func *func);
+    //std::vector<QString> l_mouse_m(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
 
- // std::vector<QString> l_mouse_r(float x, float y, orient_cube *pos, mouse_func *func);
+ // std::vector<QString> l_mouse_r(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
    virtual void resize_view(int ix,int iy);
         virtual void resize_view_beg(int ix,int iy);
     virtual void resize_view_end(int ix,int iy);

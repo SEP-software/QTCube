@@ -15,15 +15,15 @@ class trace_io: public io_func{
   }
   
    void read_block(int *nw, int *fw, unsigned char *buf,int nbytes);
-   void set_trace_basics(QString fl, hypercube *d, int reel_h,int head, bool sw, util *pars,int in);
+   void set_trace_basics(QString fl, std::shared_ptr<hypercube>d, int reel_h,int head, bool sw, std::shared_ptr<util>pars,int in);
    void read_block_float(int *nw, int *fw, float *buf);
    void read_block_byte(int *nw, int *fw, unsigned char *buf);
    char file[1024];
    bool swap;
    int reel_head,header,inum;
    FILE *fd;
-   hypercube *des;
-   util *pars;
+   std::shared_ptr<hypercube >des;
+   std::shared_ptr<util>pars;
    char *header_buf;
    std::vector<QString> headers;
    std::vector<int> hoff;

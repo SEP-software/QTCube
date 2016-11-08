@@ -11,10 +11,10 @@
 class pick_bucket{
   public:
    pick_bucket(){ setit=6;}
-   pick_bucket(position *pos);
-   std::map<int,picks_vec*>return_picks_from_range(int ip,std::vector<int> keys,int *iloc );
-   pick_new *add_pick(int *iloc,long long p, int te, QString col, int ex,QString txt);
-   pick_new *add_pick(int *iloc, int te, QString col, int ex,QString t){
+   pick_bucket(std::shared_ptr<position> pos);
+   std::map<int,std::shared_ptr<picks_vec>>return_picks_from_range(int ip,std::vector<int> keys,int *iloc );
+   std::shared_ptr<pick_new>add_pick(int *iloc,long long p, int te, QString col, int ex,QString txt);
+   std::shared_ptr<pick_new>add_pick(int *iloc, int te, QString col, int ex,QString t){
      long long i=loc_to_index(iloc);
       return add_pick(iloc,i,te,col,ex,t);
    }
@@ -31,22 +31,22 @@ void index_to_loc(long long ind,int *iloc){
    }
  }   
  void print();
- picks_vec  *return_pick_plane(int *iloc, QString col="None");
+ std::shared_ptr<picks_vec  >return_pick_plane(int *iloc, QString col="None");
    void delete_bucket();
-   pick_new *get_pick(long long p, QString col);
-   picks_vec *picks_from_vec(std::vector<int> *bs, QString col);
-   picks_vec  *get_pick_type(int typ,QString col);
+   std::shared_ptr<pick_new >get_pick(long long p, QString col);
+   std::shared_ptr<picks_vec >picks_from_vec(std::vector<int> *bs, QString col);
+   std::shared_ptr<picks_vec  >get_pick_type(int typ,QString col);
    void del_pick(long long p, QString col);
    long long find_nearest(long long p, int iax1, int iax2,QString col);
    inline int bucket_num(long long p);
    inline void get_index(long long p, int *index);
    int get_nbuckets(){return buckets.size();}
-   picks_new *get_bucket(int i){return buckets[i];}
+   std::shared_ptr<picks_new >get_bucket(int i){return buckets[i];}
    inline int bucket_num(int *index);
    void ignore_axis(int iax){ dig[iax]=false;}
-    std::map<long long,pick_new*> return_all(QString col);
+    std::map<long long,std::shared_ptr<pick_new>> return_all(QString col);
     
-    picks_vec *return_all_picks(QString col);
+    std::shared_ptr<picks_vec>return_all_picks(QString col);
     ~pick_bucket(){
     void delete_bucket();
   }
@@ -55,9 +55,9 @@ void index_to_loc(long long ind,int *iloc){
     int block_b[8];
     int next[8];
     long long block[8];
-    std::vector<picks_new*> buckets;
-    position *myp;
-    my_colors myc;
+    std::vector<std::shared_ptr<picks_new>> buckets;
+    std::shared_ptr<position >myp;
+    std::shared_ptr<my_colors >myc;
     bool dig[8];
     int setit;
 

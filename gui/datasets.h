@@ -9,26 +9,26 @@
 class datasets: public QObject{
  Q_OBJECT
   public:
-   datasets(param_func *p,pick_draw *pk);
+   datasets(std::shared_ptr<paramObj>p,std::shared_ptr<pick_draw >pk);
    datasets(){}
    ~datasets(){ clean_dats();}
-   void set_orients(orients *my){my_or=my;}
+   void set_orients(std::shared_ptr<orients>my){my_or=my;}
    void clean_dats();
    void update_data(std::vector<QString> coms);
 
-   void add_dat(dataset *dat);
-   dataset *return_dat(int i);
-   dataset *return_dat(QString nm);
+   void add_dat(std::shared_ptr<dataset >dat);
+   std::shared_ptr<dataset >return_dat(int i);
+   std::shared_ptr<dataset>return_dat(QString nm);
    int return_ndat(){ return (int)dats.size();}
    int dataNumFromName(QString name);
      signals:
     void actionDetected(std::vector<QString> text);
   private:
-    std::vector<dataset*> dats;
-    param_func *par;
-    util *my_util;
-    pick_draw *my_pk;
-    orients *my_or;
+    std::vector<std::shared_ptr<dataset>> dats;
+    std::shared_ptr<paramObj >par;
+    std::shared_ptr<util >my_util;
+    std::shared_ptr<pick_draw >my_pk;
+    std::shared_ptr<orients>my_or;
     private slots:
     void actionRespond(std::vector< QString> text);
 };

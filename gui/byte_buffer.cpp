@@ -1,19 +1,20 @@
 #include "byte_buffer.h"
-#include "seplib.h"
 
 //Initialize and read in buffer
-byte_buffer::byte_buffer(util *p, hypercube *h,io_func *i,int in,int *nwbuf, int *fwbuf){
+byte_buffer::byte_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,std::vector<int>&nwbuf, std::vector<int>&fwbuf){
  
     set_basics(p,h,i,in);
 
 
      window_to_local(nwbuf,fwbuf);
     cbuf=new unsigned char [n123_buf];
-    int nwio[8],fwio[8],nloop[8],ndim;
-    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,&ndim);
+    std::vector<int> nwio(8,1),fwio(8,1),nloop(8,1);
+    int ndim;
+    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,ndim);
   read_buffer(nwbuf,fwbuf,nwio,fwio,ndim,nloop);
  }
-void byte_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int ndim ,int *nloop){
+void byte_buffer::read_buffer(std::vector<int> &nwbuf,std::vector<int> &fwbuf,
+std::vector<int> &nwio,std::vector<int> &fwio, int ndim ,std::vector<int> &nloop){
  
 
    long long nblock=1;
@@ -29,8 +30,8 @@ void byte_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int n
 
    long long total=1;
    block=1;
-   std::vector<axis> axes=hyper_io->return_axes(8);
-   
+   std::vector<axis> axes=hyper_io->getAxes();
+   for(int i=axes.size();i < 8; i++) axes.push_back(axis(1));
    for(int i=0; i< 8; i++) {
      block=block*(long long)nwio[i];
      total=total*axes[i].n;
@@ -40,8 +41,9 @@ void byte_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int n
    float *tflt=new float[nread*block];
   // unsigned char *tbuf=new unsigned char [nblock];
    int iread=0;
-   int fsend[8];fsend[0]=fwbuf[0];        fsend[1]=fwio[1];
+   std::vector<int> fsend(8,0); ;fsend[0]=fwbuf[0];        fsend[1]=fwio[1];
    std::vector<io_store> fsave;
+   fprintf(stderr,"in read buffer \n");
    for(int i7=0; i7 < nloop[7];i7++){     fsend[7]=fwio[7]+i7;
     for(int i6=0; i6 < nloop[6];i6++){   fsend[6]=fwio[6]+i6;
      for(int i5=0; i5 < nloop[5];i5++){   fsend[5]=fwio[5]+i5;
@@ -51,7 +53,7 @@ void byte_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int n
          for(int i1=0; i1 < nloop[1];i1++){fsend[1]=fwio[1]+i1;
           if(iread<nread-1 && io->not_byte()){
              io->read_block_float(nwio,fsend,&tflt[iread*block]);
-             
+
           }
           else if(iread==nread-1&& io->not_byte()){
             io->read_block_float(nwio,fsend,&tflt[iread*block]);
@@ -71,7 +73,6 @@ void byte_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int n
           }
           else{
             io->read_block_byte(nwio,fsend,(cbuf+(long long)iread*(long long)block));
-            
           //  off+=resize_buffer(nwbuf,fwbuf,nwio,fsend,ndim,
         //     off,(unsigned char*)tbuf,(unsigned char*)cbuf,(int)sizeof(unsigned char));
   
@@ -90,13 +91,13 @@ if(tflt!=0) delete [] tflt;
 // fprintf(stderr,"CHECK THIS %f %f \n",bclip,eclip);
  io->return_clips(&bclip,&eclip);
 }
-unsigned char *byte_buffer::get_char_data(orient_cube *pos, int iax1, int f1,
+unsigned char *byte_buffer::get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1,
 int e1,
   int iax2, int f2, int e2){
 
    if(!hold[iax1] || !hold[iax2]) {
          fprintf(stderr,"requested axis=%d and %d \n",iax1,iax2);
-         par->error("Internal error don't hold axes requested");
+         _par->error("Internal error don't hold axes requested");
    }
    if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
@@ -109,9 +110,9 @@ int e1,
 }
 
 
-unsigned char *byte_buffer::get_char_data(orient_cube *pos,int n, long long *mp){
+unsigned char *byte_buffer::get_char_data(std::shared_ptr<orient_cube>pos,int n, long long *mp){
    unsigned char *out=new unsigned char[n];
-  if(pos==0);
+  if(!pos){;}
    long long *index=grid_to_index(n,mp);
    for(int i=0 ; i < n; i++){
      //fprintf(stderr,"LOOK WHAT %d %lld \n",i,index[i]);
@@ -125,10 +126,10 @@ unsigned char *byte_buffer::get_char_data(orient_cube *pos,int n, long long *mp)
     delete [] index;
     return out;
   }   
-float *byte_buffer::get_float_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,int f2, int e2){
+float *byte_buffer::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,int f2, int e2){
     
     
-    if(!hold[iax1] || !hold[iax2]) par->error("Internal error don't hold axes requested");
+    if(!hold[iax1] || !hold[iax2]) _par->error("Internal error don't hold axes requested");
        if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
       pos->set_no_rotate();
@@ -178,7 +179,7 @@ void byte_buffer::calc_histo(){
      histo[i]=(float)count[i]/(float)mym;
    }
  }
-float byte_buffer::get_value(orient_cube *pos){
+float byte_buffer::get_value(std::shared_ptr<orient_cube>pos){
    return bclip+((float)(eclip-bclip)/256.0*cbuf[point_to_local(pos)]);
  
  }

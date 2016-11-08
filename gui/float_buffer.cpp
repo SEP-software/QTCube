@@ -3,23 +3,23 @@
 #include<stdlib.h>
 
 //Initialize and read in buffer
-float_buffer::float_buffer(util *p, hypercube *h,io_func *i,int in,int *nwbuf, int *fwbuf){
+float_buffer::float_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,std::vector<int>&nwbuf, std::vector<int>&fwbuf){
  
     set_basics(p,h,i,in);
 
      window_to_local(nwbuf,fwbuf);
     fbuf=new float [n123_buf];
 
-    int nwio[8],fwio[8],nloop[8],ndim;
-
-    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,&ndim);
+    int ndim;
+    std::vector<int> nwio(8,1),fwio(8,0),nloop(8,1);
+    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,ndim);
     read_buffer(nwbuf,fwbuf,nwio,fwio,ndim,nloop);
 float minv, maxv;
           io->return_clips(&minv,&maxv);
 
  }
  
- void float_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int ndim ,int *nloop){
+ void float_buffer::read_buffer(std::vector<int>&nwbuf, std::vector<int>&fwbuf,std::vector<int>&nwio, std::vector<int>&fwio, int ndim ,std::vector<int>&nloop){
  
 
    long long nblock=1,off=0;
@@ -27,7 +27,7 @@ float minv, maxv;
    for(int i=0; i< ndim; i++) block=block*(long long) nwbuf[i];
    for(int i=0; i< ndim; i++) nblock=nblock*(long long)nwio[i];
    long long count=0;
-   int fsend[8];fsend[0]=fwbuf[0];        fsend[1]=fwbuf[1];
+   std::vector<int>fsend(8,0);fsend[0]=fwbuf[0];        fsend[1]=fwbuf[1];
    for(int i7=0; i7 < nloop[7];i7++){     fsend[7]=fwbuf[7]+i7;
     for(int i6=0; i6 < nloop[6];i6++){   fsend[6]=fwbuf[6]+i6;
      for(int i5=0; i5 < nloop[5];i5++){   fsend[5]=fwbuf[5]+i5;
@@ -60,9 +60,8 @@ float minv, maxv;
  //srite("x22.H",fbuf,1000*250*4);
  calc_histo();
 }
- unsigned char *float_buffer::get_char_data(orient_cube *pos, int iax1, int f1, int e1,
-  int iax2, int f2, int e2){
-      if(!hold[iax1] || !hold[iax2]) par->error("Internal error don't hold axes requested");
+ unsigned char *float_buffer::get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2, int f2, int e2){
+      if(!hold[iax1] || !hold[iax2]) _par->error("Internal error don't hold axes requested");
       int n1=abs(e1-f1), n2=abs(e2-f2);
          if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
@@ -98,9 +97,9 @@ unsigned char *float_buffer::get_char_data(int n, long long *index){
     return out; 
   }   
    
-float *float_buffer::get_float_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+float *float_buffer::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
     int f2, int e2){
-    if(!hold[iax1] || !hold[iax2]) par->error("Internal error don't hold axes requested");
+    if(!hold[iax1] || !hold[iax2]) _par->error("Internal error don't hold axes requested");
        if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
       pos->set_no_rotate();
@@ -148,7 +147,7 @@ float *float_buffer::get_float_data(orient_cube *pos, int iax1, int f1, int e1, 
    }
  }
 
- float float_buffer::get_value(orient_cube *pos){
+ float float_buffer::get_value(std::shared_ptr<orient_cube>pos){
    return fbuf[point_to_local(pos)];
  
  }

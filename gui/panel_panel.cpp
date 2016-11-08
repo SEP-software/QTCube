@@ -3,7 +3,9 @@
 #include "orient_panel.h"
 #include "view_panel.h"
 #include "navigate_panel.h"
-panel_panel::panel_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+panel_panel::panel_panel(std::shared_ptr<position> p,std::shared_ptr<windows> my_w, std::shared_ptr<panels>my_p,
+ std::shared_ptr<datasets> my_d, std::shared_ptr<pick_draw> pk, std::shared_ptr<slice_types>c,
+  std::shared_ptr<maps> mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
    for(int i=0; i < my_p->size(); i++){
       my_tabs[QString::number(i+1)]=new sub_panel_panel(p,my_w,my_p,my_d,pk,c,mym,QString::number(i));
@@ -74,7 +76,10 @@ void sub_panel_panel::update_menu(std::vector<QString>coms){
      ((display_panel*)my_tabs["display"])->update_menu(coms);
   }
  }
-sub_panel_panel::sub_panel_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym,QString v){
+sub_panel_panel::sub_panel_panel(std::shared_ptr<position>p,
+  std::shared_ptr<windows>my_w, std::shared_ptr<panels> my_p, std::shared_ptr<datasets>
+  my_d,std::shared_ptr< pick_draw> pk, std::shared_ptr<slice_types>c,
+  std::shared_ptr<maps> mym,QString v){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   vnum=v;
 

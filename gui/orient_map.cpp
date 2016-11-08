@@ -2,14 +2,13 @@
 #include <math.h>
 #include <utility>
 #include <string.h>
-#include "seplib.h"
 #include "assert.h"
 
 
 
-orient_map::orient_map( bool rot, int i_ax1,  int i_ax2, int *rotax,  axis *axrot, 
+orient_map::orient_map( bool rot, int i_ax1,  int i_ax2, int *rotax,  std::vector<axis> axrot, 
      int **rr1,  int **rr2, int *begs,
-     int *i_loc, int *ends,  int *n_s,bool r1, bool r2,int *mp, int sa,int bs,
+     int *i_loc, int *ends,  int *n_s,bool r1, bool r2,std::vector<int> mp, int sa,int bs,
      int es){
 
    map=0;
@@ -51,9 +50,9 @@ std::vector<int> orient_map::return_picks_index(QString col){
   return out;
 
 }
-void orient_map::set_picks(picks_vec *pks){
+void orient_map::set_picks(std::shared_ptr<picks_vec>pks){
   for(int i=0; i < pks->return_size(); i++){
-    pick_new *p=pks->return_pick(i);
+    std::shared_ptr<pick_new>p(pks->return_pick(i));
     picks[p->col].add_pick(p->pos);
   }
 }
@@ -127,8 +126,7 @@ if(1==3){
 int b1=beg[iax1],e1=end[iax1],b2=beg[iax2],e2=end[iax2];
 
 int n1=abs(e1-b1);
-typedef std::pair<long long,int>s_d_p;
-typedef std::pair<int, long long> d_s_p;
+
 
 if( (iax1 ==rot_ax[0] && iax2==rot_ax[1])  || (iax1==rot_ax[1] && iax2==rot_ax[0])){
 
@@ -264,7 +262,7 @@ void orient_map::find_loc(int *iloc,int id1, int id2){
   iloc[1]=(int)(v/skip[1]); 
   iloc[0]=(int)(v-skip[1]*iloc[1]);
 
-  if(map_1d!=0){
+  if(map_1d.size()>0){
     iloc[shift_ax]=map_1d[map[id1+id2*n1]];
   
   }
@@ -307,6 +305,7 @@ void orient_map::form_index_map(){
   
   long long j1,j2,jax1=0,jax2=0;
   long long first;
+  int  ilast;
   calc_get_pars(iax1,iax2,&j1,&j2,&first);
    n1=abs(e1-f1);
    n2=abs(e2-f2);
@@ -326,7 +325,6 @@ void orient_map::form_index_map(){
   int i=0;
   //Impiclict assumption that the rotated axis is held....
  if(!rotate){
-   int ilast;
 
      for(int i2=0; i2 < n2; i2++){
           for(int i1=0; i1 < n1; i1++,i++){
@@ -492,10 +490,9 @@ void orient_map::form_index_map(){
   }
 
  int mid=0;
-  if(map_1d!=0 ){
+  if(map_1d.size()>0 ){
           int nfast=n1;
      bool fast=false; 
-     int iuse;
      if(iax1==0 && !rev1) fast=true;
           int iold=0;
          for(int i=0; i < n1*n2; i++){
@@ -542,7 +539,7 @@ else{
   }
 void orient_map::rotation_to_grid_loc(int *loc){
 
-   if(map_1d==0) return;
+   if(map_1d.size()==0) return;
    if(iax1!=0 && iax2!=0) return;
    long long ib=loc[1]*skip[1]+loc[2]*skip[2]+loc[3]*skip[3]+loc[4]*skip[4]+loc[5]*skip[5]+loc[6]*skip[7]+loc[7]*skip[7];
    for(int i=0; i  < ns[0]-1; i++,ib++){
@@ -560,7 +557,7 @@ void orient_map::rotation_to_grid_loc(int *loc){
 }
 void orient_map::orient_data_loc(int *cur,int *ipos){
    
-    if(map_1d!=0) {
+    if(map_1d.size()>0) {
        int i1=ipos[iax1]-beg[iax1];
        int i2=ipos[iax2]-beg[iax2];
        int i_1=cur[iax1]-beg[iax1];
@@ -777,7 +774,7 @@ void orient_map::calc_get_pars(int iax1, int iax2, long long *j1, long long *j2,
           iloc[i];
    }
   }
-  if(map_1d!=0 && iax1!=0 && iax2!=0){
+  if(map_1d.size()>0 && iax1!=0 && iax2!=0){
     int iuse,iold;
     ipos+=iloc[0];
     iuse=std::max(0,std::min((int)skip[1]-1,map_1d[ipos]));

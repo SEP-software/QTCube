@@ -1,8 +1,9 @@
-#ifndef COLOR_PANEL
-#define COLOR_PANEL_H 1
+ #pragma once 
+#ifndef COLOR_BAR
+#define COLOR_BAR_H 1
 #include "qcubewidgetbasics.h"
 #include "widget_tools.h"
-
+#include<memory>
 #include <vector>
 
 
@@ -12,7 +13,7 @@ class color_bar2: public QWidget{
   signals:
     void emitit(std::vector<QString> com);
   public:
-    color_bar2(  user_color *col);
+    color_bar2(  std::shared_ptr<user_color>col);
     
     void extract_draw(QString color, QPainter *painter);
     void draw_bar();
@@ -47,7 +48,7 @@ class color_bar2: public QWidget{
       void actionDetected(std::vector <QString>);
     public:
     int ipt_down,nh_bar,fh_bar;
-    user_color *ctable;
+    std::shared_ptr<user_color>ctable;
     std::map<QString,float*> maps;  
     std::map<QString,int> bh,nh;
     QString color;
@@ -60,7 +61,12 @@ class color_bar2: public QWidget{
 class color_panel: public qcubeWidgetBasic{
   Q_OBJECT
   public: 
-    color_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    color_panel(std::shared_ptr<position>p,
+    std::shared_ptr<windows>my_w, 
+    std::shared_ptr<panels>my_p, 
+    std::shared_ptr<datasets>my_d,
+     std::shared_ptr<pick_draw>pk, 
+    std::shared_ptr<slice_types>c,std::shared_ptr<maps>mym);
        void update_menu(std::vector<QString>);
      ~color_panel(){;}
    
@@ -74,7 +80,7 @@ class color_panel: public qcubeWidgetBasic{
      basicButtonBox *loadsave;
      basicComboBox *color;
      QGroupBox *colorBox;
-     color_bar2 *cbar;
+     std::shared_ptr<color_bar2> cbar;
 
 
  

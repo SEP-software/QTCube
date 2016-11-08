@@ -18,9 +18,9 @@ class wiggle: public slice
  
  	void PaintWiggles(int n2, int n1, QPainter *painter, unsigned char *buf);
 
-  virtual void draw_slice(QPainter *painter,dataset *dat,QPen *pen,
-  orient_cube *pos,  bool ov,bool draw_grid);
-  slice *clone();
+  virtual void draw_slice(QPainter *painter,std::shared_ptr<dataset>dat,QPen *pen,
+  std::shared_ptr<orient_cube>pos,  bool ov,bool draw_grid);
+  std::shared_ptr<slice>clone();
   
   void set_wiggle_color(QString color);
   QString return_wiggle_color();

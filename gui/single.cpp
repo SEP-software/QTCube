@@ -7,7 +7,7 @@
 #include <QKeyEvent>
 
 
-single::single(QString view,int iv1, int iv2, QFontMetrics *f_m,pick_draw *_pks, draw_other *dr,float *prop){ 
+single::single(QString view,int iv1, int iv2, std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks, std::shared_ptr<draw_other>dr,std::vector<float >prop){ 
   fm=f_m; i_v1=iv1; i_v2=iv2; this->zero_bufs();
 
   iview=view;
@@ -24,7 +24,7 @@ void single::zero_bufs(){
 
 }
 
-std::vector<QString> single::keyReleaseEvent( QKeyEvent *e,orient_cube *pos ){
+std::vector<QString> single::keyReleaseEvent( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
   if(pos==0);
   com[1]="none";
   switch( e->key() )
@@ -33,7 +33,7 @@ std::vector<QString> single::keyReleaseEvent( QKeyEvent *e,orient_cube *pos ){
   }
   return com;
 }
-std::vector<QString> single::keyPressEvent( QKeyEvent *e,orient_cube *pos ){
+std::vector<QString> single::keyPressEvent( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
  if(e==0); if(pos==0);
  com[1]="none";
  return com;
@@ -42,8 +42,8 @@ std::vector<QString> single::keyPressEvent( QKeyEvent *e,orient_cube *pos ){
 	The following five methods deal with the pressing, releasing, and moveing of the mouse and its buttons.
 */
 
-void single::viewit(QPainter *painter,QPen *pen, slice *fact, 
-  dataset *dat,orient_cube *pos,int bx, int ex, int by, int ey,draw_what *draws,
+void single::viewit(QPainter *painter,QPen *pen, std::shared_ptr<slice>fact, 
+  std::shared_ptr<dataset>dat,std::shared_ptr<orient_cube>pos,int bx, int ex, int by, int ey,std::shared_ptr<draw_what>draws,
   bool overlay){
    if(proportions[0]>0.){
    

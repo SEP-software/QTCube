@@ -1,8 +1,6 @@
 #include<lloyd_1d.h>
 #include<math.h>
-#include<sep_pars_external.h>
 
-#include<sep_main_external.h>
 void lloyd_1d::find_bound(){
 
   for(int i=0; i < center.size()-1; i++) bound[i]=(center[i]+center[i+1])/2.;
@@ -298,27 +296,6 @@ void lloyd_1d_p::compute_back(){
    //  fprintf(stderr,"SETTING BAACK %f %f %f %f %f %d \n",trace[i],beg,end,back[i],f,i);
    }
    */
-   if(iter==1 && writeit){
-     float *backf=new float[back.size()];
-     float *pos=new float[center.size()*2];
-     int n=back.size(); auxputch("n1","d",&n,"back");
-          n=2; auxputch("n2","d",&n,"back");
-     n=center.size(); auxputch("n1","d",&n,"pts");
-     n=8; auxputch("esize","d",&n,"pts");
-      for(int i=0; i<  back.size(); i++) backf[i]=trace[i]-back[i];
-     srite("back",backf,4*(int)back.size());
-     for(int i=0; i<  back.size(); i++) backf[i]=back[i];
-     srite("back",backf,4*(int)back.size());
-     
-     for(int i=0; i<  back.size(); i++) backf[i]=back[i];
-     for(int i=0; i<  center.size();i++){
-       pos[i*2]=center[i];
-       pos[i*2+1]=trace[(int)(center[i]+.5)];
-     }
-     srite("pts",pos,8*(int)center.size());
-     delete [] pos; delete [] backf;
-   
-   }
 }
 
 void lloyd_1d_p::compute_distort(){

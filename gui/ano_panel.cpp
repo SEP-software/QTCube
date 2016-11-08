@@ -1,16 +1,21 @@
 #include "ano_panel.h"
 
 
-ano_panel:: ano_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+ano_panel:: ano_panel(std::shared_ptr<position> p,std::shared_ptr<windows>my_w, 
+ std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw> pk, 
+ std::shared_ptr<slice_types> c,std::shared_ptr<maps> mym){
   set_basics(p,my_w,my_p,my_d,pk,c,mym);
   
-       layTop=new QHBoxLayout();
+  std::shared_ptr<QHBoxLayout> lt(new QHBoxLayout()),lb(new QHBoxLayout());
+  std::shared_ptr<QVBoxLayout>  lm(new QVBoxLayout());
+  std::shared_ptr<QGroupBox> gb(new QGroupBox()),gb2(new QGroupBox());
+       layTop=lt;
 
      
-     layBot=new QHBoxLayout();
-     layMain=new QVBoxLayout();
-     gbox= new QGroupBox();
-          gbox2= new QGroupBox();
+     layBot=lb;
+     layMain=lm;
+     gbox=gb;
+          gbox2=gb2;
 
      shape=new basicRadioBox("Shape","box","Draw a box");
      shape->addButton("text","Draw text");
@@ -20,12 +25,14 @@ ano_panel:: ano_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, p
      shape->set_checked(0);
      std::vector<QString> len;
      for(int i=0; i < 20; i++) len.push_back(QString::number(i));
-     thick=new basicComboBox("Thickness","Thickness of line",len);
+     std::shared_ptr<basicComboBox> th(new basicComboBox("Thickness","Thickness of line",len));
+     thick=th;
      thick->set_current(0,3);
      std::vector<QString> color=my_c->return_cvec();
-     colorB=new basicComboBox("Color","Color of line/text",color);
-     
-    font=new basicComboBox("Font","Font to use for text",my_f->font_list);
+     std::shared_ptr<basicComboBox> cb(new basicComboBox("Color","Color of line/text",color));
+     colorB=cb;
+     std::shared_ptr<basicComboBox> fn(new basicComboBox("Font","Font to use for text",my_f->font_list));
+    font=fn;
     
     txt=new basicLineEditBox("Text",20,"Enter","Text to annotate with");
 
@@ -46,14 +53,14 @@ ano_panel:: ano_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, p
     layBot->addWidget(font->group());
     layBot->addWidget(txt->group());
     
-    gbox->setLayout(layBot);
+    gbox->setLayout(layBot.get());
     layTop->addWidget(shape->group());
         layTop->addWidget(colorB->group());
 
-    gbox2->setLayout(layTop);
-    layMain->addWidget(gbox2);
-    layMain->addWidget(gbox);
-    setLayout(layMain);
+    gbox2->setLayout(layTop.get());
+    layMain->addWidget(gbox2.get() );
+    layMain->addWidget(gbox.get());
+    setLayout(layMain.get());
   
 
 }
@@ -63,14 +70,6 @@ void ano_panel::update_menu(std::vector<QString>){
 }
 void ano_panel::delete_ano_panel(){
   delete shape;
-  delete layBot;
-  delete gbox;
-  delete gbox2;
-  delete layTop;
-  delete layMain;
-  delete thick;
-  delete colorB;
-  delete font;
   delete txt;
  
 }

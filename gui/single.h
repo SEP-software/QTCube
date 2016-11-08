@@ -13,14 +13,14 @@ class single: public view
 
 public:
   single(){zero_bufs();}
-  single(QString view,int iv1, int iv2,QFontMetrics *f_m,pick_draw *_pks, draw_other *dr,float *proportions);
-  void viewit(QPainter *pm,QPen *pen, slice *fact,dataset *dat,orient_cube *pos,
-  int bx, int ex, int by, int ey,draw_what *draws, bool overlay);
+  single(QString view,int iv1, int iv2,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks, std::shared_ptr<draw_other>dr,std::vector<float >proportions);
+  void viewit(QPainter *pm,QPen *pen, std::shared_ptr<slice>fact,std::shared_ptr<dataset>dat,std::shared_ptr<orient_cube>pos,
+  int bx, int ex, int by, int ey,std::shared_ptr<draw_what>draws, bool overlay);
   
 
   
- std::vector<QString> keyPressEvent( QKeyEvent *e , orient_cube *pos);
-  std::vector<QString> keyReleaseEvent( QKeyEvent *e, orient_cube *pos );
+ std::vector<QString> keyPressEvent( QKeyEvent *e , std::shared_ptr<orient_cube>pos);
+  std::vector<QString> keyReleaseEvent( QKeyEvent *e, std::shared_ptr<orient_cube>pos );
    ~single(){
      delete_slices();
    }

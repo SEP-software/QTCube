@@ -1,6 +1,6 @@
 #include<cube_cut.h>
 #include<ctime>
-cube_cut::cube_cut(QString view,QFontMetrics *f_m,pick_draw *_pks,draw_other *dr,float *prop){ 
+cube_cut::cube_cut(QString view,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks,std::shared_ptr<draw_other>dr,std::vector<float>prop){ 
  pct_top=.4; pct_front=.6;fm=f_m;
  set_basics(_pks,dr);
   ori_f=0; ori_s=0; ori_t=0; ori=0;
@@ -11,13 +11,9 @@ cube_cut::cube_cut(QString view,QFontMetrics *f_m,pick_draw *_pks,draw_other *dr
    com.push_back("");
 } 
 void cube_cut::delete_orient(){
-  if(ori_f!=0) delete ori_f;
-  if(ori_s!=0) delete ori_s;
-  if(ori_t!=0) delete ori_t;
-  if(ori!=0) delete ori;
-  ori_f=0; ori_s=0; ori_t=0; ori=0;
+
 }
-void cube_cut::viewit(QPainter *painter,QPen *pen, slice *fact, dataset *dat,orient_cube *pos,int b_x, int e_x, int b_y, int e_y, draw_what *draws,bool overlay){
+void cube_cut::viewit(QPainter *painter,QPen *pen, std::shared_ptr<slice>fact, std::shared_ptr<dataset>dat,std::shared_ptr<orient_cube>pos,int b_x, int e_x, int b_y, int e_y, std::shared_ptr<draw_what>draws,bool overlay){
     cur_dat=dat;
     this->set_size(b_x,e_x,b_y,e_y);
 
@@ -71,7 +67,8 @@ void cube_cut::viewit(QPainter *painter,QPen *pen, slice *fact, dataset *dat,ori
     
   int order[8];
   for(int i=0; i <8; i++) order[i]=pos->get_order(i);
-  ori=new  orient_cube(pos);
+  std::shared_ptr<orient_cube> o(new orient_cube(pos));
+  ori=o;
   for(int i=0; i < 3; i++){
     ori->set_loc(order[i],pos->get_beg(order[i]));
   }
@@ -91,10 +88,13 @@ void cube_cut::viewit(QPainter *painter,QPen *pen, slice *fact, dataset *dat,ori
      slices[i]->draw_slice(painter,dat,pen,ori,overlay,false);
 
 
+  std::shared_ptr<orient_cube> x1(new orient_cube(pos));
+    std::shared_ptr<orient_cube> x2(new orient_cube(pos));
+  std::shared_ptr<orient_cube> x3(new orient_cube(pos));
 
-  ori_f=new  orient_cube(pos);
-  ori_s=new  orient_cube(pos);
-  ori_t=new  orient_cube(pos);
+  ori_f=x1;
+  ori_s=x2;
+  ori_t=x3;
 
   //Now shift into position
   int shiftx,shifty;
@@ -198,7 +198,8 @@ top_x_b=(int)((pct[1]-.01)*((float)(top_x_e-top_x_b-baxes))+baxes-shift+baxes*-1
     draw_o->reset();
   }
   
-      if(draws->draw_bar) draw_bar(4*bound_l,painter,pen,(raster*)fact,dat->conv,draws->draw_title);
+      if(draws->draw_bar) draw_bar(4*bound_l,painter,pen,std::static_pointer_cast<raster>(fact),
+        dat->conv,draws->draw_title);
      
      
     if(draws->draw_title) draw_title(0,painter,pen,dat->get_name());

@@ -5,11 +5,13 @@
 #include "cube.h"
 #include "cube_cut.h"
 #include "threeface.h"
-#include "sregf.h"
 #include "view_types.h"
 
 
-panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds, int idata,  slice_types *ct,  mouse_func *f,  orientation_server *server, orients *oo, maps *mym) {
+panel::panel(int inum, std::shared_ptr<paramObj>pr,std::shared_ptr<position>p,
+std::shared_ptr<pick_draw>_pks, std::shared_ptr<datasets>ds, int idata,  std::shared_ptr<slice_types>ct,  
+std::shared_ptr<mouse_func>f,  std::shared_ptr<orientation_server> server, std::shared_ptr<orients>oo, 
+std::shared_ptr<maps> mym) {
 
     set_mouse_func(f);  //Set how the mouse function works for this panel
     idat=idata;  //Setup which dataset we will display by default
@@ -17,9 +19,11 @@ panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds,
     dat=datas->return_dat(idat);  //Primary dataset to display
     dat_o=0;  //No overlaid dataset to begin with
     serv=server;
-    draw_o=new draw_other();  //What we are going to display in a view
+    std::shared_ptr<draw_other> mydo(new draw_other());
+    draw_o=mydo;  //What we are going to display in a view
     update_it=false;
-    ano=new annotate();
+    std::shared_ptr<annotate> myao(new annotate());
+    ano=myao;
     pars=pr;  //Parameter reading class
     pk=_pks;  //Picks 
     my_maps=mym;
@@ -28,21 +32,26 @@ panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds,
     my_or=oo;
 
     //What order to display the axes
-    int ord[]={1,2,3,4,5,6,7,8};  
-    int *order=this->get_ints("order",8,ord);
+    std::vector<int> ord;
+    for(int i=0; i<8; i++) ord.push_back(i+1);
+    std::vector<int> order=pars->getInts(std::string("order")+std::to_string(iview),ord);
     
     //Setup the orientation cube class
-    this->pos=new orient_cube(p,order,server);
+    std::shared_ptr<orient_cube> op(new orient_cube(p,order,server));
+    pos=op;
     my_or->add_orient(pos);
-    delete [] order;
+   
+    std::shared_ptr<my_fonts> myfff(new my_fonts());
 
-    fonts=new my_fonts();   //Create font server object
+    fonts=myfff;   //Create font server object
     font_name="Arial-12-Normal";  //Set the default font name
+    
     myf=fonts->return_font(font_name); //Get that font info
+    
     fm=fonts->return_font_metric(font_name);
 
    //Set the proportions -1 when means they haven't been specified
-   for(int i=0; i < 8; i++) proportions[i]=-1;
+   for(int i=0; i < 8; i++) proportions.push_back(-1);
 
    //Set the parameter for the grid for multi panel displays
    jplane=1; grid1=1;grid2=1;
@@ -50,15 +59,14 @@ panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds,
    first=true;  //Whether or not this is the initial creation
 
    //Sets the initial view to THREE and create it
-   this->myv=view_by_name(this->get_string("view","THREE"));
+   this->myv=view_by_name(pars->getString(std::string("view")+std::to_string(iview),std::string("FRONT")));
    //Sets the initial data color to grey.
-   this->fact=ct->return_color_table(this->get_string("color","grey"));
+   std::string col=pars->getString(std::string("color")+std::to_string(iview),"grey");
+   this->fact=ct->return_color_table(col);
 
    oversamp=1.;
    map=0;
-#ifdef CHEVRON
-   check_set_distort();  //Whether or not we have a distorted coordinate system
-#endif
+
 
   iview_s=QString::number(inum); //View in QString
 
@@ -71,9 +79,10 @@ panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds,
   build_overlay_fact(); //Build overlay factor
     set_alpha(128) ; //Start with 50/50 transparency
 
-
-  drawit=new draw_what();  //what to draw
-  my_cmap=new my_colors(); //What colors to use
+  std::shared_ptr<draw_what> dw(new draw_what());
+  std::shared_ptr<my_colors> my(new my_colors());
+  drawit=dw;  //what to draw
+  my_cmap=my; //What colors to use
   
 
   
@@ -90,8 +99,8 @@ panel::panel(int inum, param_func *pr,position *p,pick_draw *_pks, datasets *ds,
   first=false;
 }
 
-panel *panel::clone(int in){
-  panel *x=new panel(in,pars,pos,pk,datas,idat,colort,func,serv,my_or,my_maps);
+std::shared_ptr<panel>panel::clone(int in){
+  std::shared_ptr<panel>x( new panel(in,pars,pos,pk,datas,idat,colort,func,serv,my_or,my_maps));
   return x;
 }
 void panel::set_alpha(int a){
@@ -137,13 +146,9 @@ QString panel::iter_views(int iview){
 }
 void panel::set_o_data(int id){ 
   if(id==-1){
-     if(myv_o!=0) delete myv_o;
-     delete myv;
      return;
   }
   dat_o=datas->return_dat(id);idat_o=id;
-  if(myv_o!=0) delete myv_o;
-  delete myv;
   myv=view_by_name(view_name);
   myv_o=view_by_name(view_name);
 
@@ -154,7 +159,6 @@ void panel::set_draw_bar(bool db){
 std::cerr<<db<<std::endl;
   drawit->draw_bar=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
   }
@@ -163,64 +167,50 @@ void panel::set_pos_transp(int db){
   drawit->draw_pos=db;
 
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_grid(bool db){
   drawit->draw_grid=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_title(bool db){
   drawit->draw_title=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_axis1(bool db){
   drawit->draw_axis1=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_axis2(bool db){
   drawit->draw_axis2=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_axis3(bool db){
   drawit->draw_axis3=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_draw_picks(bool db){
   drawit->draw_picks=db;
   if(myv_o!=0) {
-    delete myv_o;
     myv_o=view_by_name(view_name);
   }
-  delete myv;
   myv=view_by_name(view_name);
 }
 void panel::set_overlay_color(QString o){ 
@@ -255,7 +245,7 @@ void panel::set_data(int id){
 
   com2.push_back("new_data");
 
-  std::vector<axis> ax=dat->return_io_hyper()->return_axes(8);
+  std::vector<axis> ax=dat->return_io_hyper()->getAxes(8);
   int ns[8];for(int i=0; i < 8; i++) ns[i]=ax[i].n;
   com2[3]=util::string_from_int_array(8,ns);
 
@@ -272,7 +262,6 @@ void panel::initial_view(){
  }
 void panel::build_overlay_fact(){
 
-  if(fact_o!=0) delete fact_o;
       fact_o=colort->return_overlay_color_table(over_c,alpha);
  if(dat_o!=0){
  fact_o->set_bcolor(dat_o->get_bcolor());
@@ -281,7 +270,7 @@ void panel::build_overlay_fact(){
 }
 
 void panel::viewit(QString up){
-
+ if(up==QString("")){;}
 }
 /*
   QString up2="none",up3;
@@ -340,14 +329,12 @@ float ix,iy;
  if(old==name) set=true;
  this->myv->get_pcts(&ix,&iy);
  int c=myv->get_corner_sel();
-  delete myv;
  
  this->myv=view_by_name(name);
  if(set) this->myv->set_pcts(ix,iy);
  myv->set_corner_sel(c);
  if(overlay){
    build_overlay_fact();
-   if(myv_o!=0) delete myv_o;
    myv_o=view_by_name(name); 
    if(set) myv_o->set_pcts(ix,iy);
    myv_o->set_corner_sel(c);
@@ -359,9 +346,9 @@ float ix,iy;
  }
 // this->viewit("current");
 }
-view *panel::view_by_name(QString name){
+std::shared_ptr<view> panel::view_by_name(QString name){
 
- view *my;
+ std::shared_ptr<view> my;
 
  iview_s=QString::number(iview);
 //ADD NEW VIEWS HERE
@@ -373,18 +360,35 @@ view *panel::view_by_name(QString name){
   name=dat->validate_view(name,pos);
   view_name=name;
 //The FRONT, SIDE and TOP views all display one single face so the single class is called
- if(name=="FRONT") {my=new single(iview_s,0,1,fm,pk,draw_o,proportions);}
- else if(name=="SIDE") my= new single(iview_s,0,2,fm,pk,draw_o,proportions);
- else if(name=="TOP")  my=new single(iview_s,1,2,fm,pk,draw_o,proportions);
+ if(name=="FRONT") {
+   std::shared_ptr<single> myfront(new single(iview_s,0,1,fm,pk,draw_o,proportions));
+   my=myfront;
+ }
+ else if(name=="SIDE") {
+   std::shared_ptr<single> myside(new single(iview_s,0,2,fm,pk,draw_o,proportions));
+   my=myside;
+  }
+ else if(name=="TOP") {
+   std::shared_ptr<single> mytop(new single(iview_s,1,2,fm,pk,draw_o,proportions));
+   my=mytop;
+  }
 //CUT, CUBE and THREE all call their own individual classes since each is a unique type of view. 
-  else if(name=="CUT")  my=new cube_cut(iview_s,fm,pk,draw_o,proportions);
-  else if(name=="CUBE")  my=new cube(iview_s,fm,pk,draw_o,proportions);
-    else if(name=="MULTI")  {
-      my=new multi_face(iview_s,fm,pk,draw_o,grid1,grid2,jplane);
-}
+  else if(name=="CUT") {
+    std::shared_ptr<cube_cut> mycut(new cube_cut(iview_s,fm,pk,draw_o,proportions));
+    my=mycut;
+  }
+  else if(name=="CUBE") {
+    std::shared_ptr<cube> mycube(new cube(iview_s,fm,pk,draw_o,proportions));
+    my=mycube;
+  }
+  else if(name=="MULTI")  {
+      std::shared_ptr<multi_face> mymf(new multi_face(iview_s,fm,pk,draw_o,grid1,grid2,jplane));
+      my=mymf;
+  }
  else              {
-   my=new three_face(iview_s,fm,pk,draw_o,proportions);
-   }
+   std::shared_ptr<three_face> myt(new three_face(iview_s,fm,pk,draw_o,proportions));
+   my=myt;
+ }
 
  return my;
 }
@@ -445,28 +449,9 @@ void panel::set_view_pcts(float pt, float pf){
  myv->set_pcts(pt,pf);
   if(overlay) myv_o->set_pcts(pt,pf);
 }
-QString panel::get_string(QString beg, QString def){
-  char temp_ch[128];
-  sprintf(temp_ch,"%s%d",beg.toAscii().constData(),iview);
-  std::string temp= this->pars->get_string(temp_ch,def.toAscii().constData());
-  QString ret=temp.c_str();
-  return ret;
-}
-int panel::get_int(char *beg, int def){
-  char temp_ch[128];
-  sprintf(temp_ch,"%s%d",beg,iview);
-  
-  QString v=temp_ch;
-  return this->pars->get_int(temp_ch,def);
 
-}
-int *panel::get_ints(char *beg, int max, int *def){
-  char temp_ch[128];
-  sprintf(temp_ch,"%s%d",beg,iview);
-  return this->pars->get_ints(temp_ch,max,def);
- 
 
-}
+
 void panel::update_display(){
   /*
   std::vector<QString> com2; com2.push_back(iview_s); com2.push_back("menu");
@@ -579,11 +564,12 @@ void panel::pdf_save(QPainter *painter){
   pen.setColor(this->pen_c);
   painter->setFont(*myf);
   QFont font=painter->font();
-  QFontMetrics fm2= painter->fontMetrics();
-  myv->set_new_font(&fm2);
+  QFontMetrics fm2=painter->fontMetrics();
+  std::shared_ptr<QFontMetrics> fm3(new QFontMetrics(fm2));
+  myv->set_new_font(fm3);
 
 	if(overlay){
-    myv_o->set_new_font(&fm2);
+    myv_o->set_new_font(fm3);
     myv->viewit(painter,&pen,fact,dat,pos,begx,endx,begy,endy,drawit,false);
 
     myv_o->viewit(painter,&pen,fact_o,dat_o,pos,begx,endx,begy,endy,drawit,true);
@@ -682,25 +668,7 @@ if (e->button() == Qt::MidButton  || ( e->modifiers() & Qt::ControlModifier && e
   this->myv->clear_mouse();
 }
 void panel::delete_panel(){
-  delete ano;
 
-  delete myv;
-
-  if(myv_o!=0) delete myv_o;
-  if(map!=0) delete map;
-
-  delete drawit;
-  delete my_cmap;
-
-  if(fact_o!=0) delete fact_o;
-  if(draw_o!=0) delete draw_o;
-
-//  if(fact!=0) delete fact;
- // if(colort!=0) delete colort;
-
-  delete fonts;
-  my_or->del_orient(pos);
-  delete pos;
 
 }
 #ifdef CHEVRON
@@ -730,7 +698,7 @@ void panel::check_set_distort(){
 #endif
 
 void panel::change_map(int imap){
-   map_1 *mp=my_maps->return_map(imap);
+   std::shared_ptr<map_1> mp=my_maps->return_map(imap);
    pos->set_one_shift(0,mp->return_oversamp(),mp->return_index());
 }
 

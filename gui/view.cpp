@@ -15,9 +15,9 @@ void view::convert_to_local_loc(float x,float y, int *ix, int *iy){
    *iy=((int)(y*(ey-by)))+by;
 
 }
-std::vector<QString> view::key_release_view( QKeyEvent *e,orient_cube *pos ){
-  if(pos==0);
-  if(e==0);
+std::vector<QString> view::key_release_view( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
+  if(pos==0){;}
+  if(e==0){;}
   com[1]="none";
   switch( e->key() )
   {
@@ -26,18 +26,17 @@ std::vector<QString> view::key_release_view( QKeyEvent *e,orient_cube *pos ){
       return com;  
   }
 }
-std::vector<QString> view::key_press_view( QKeyEvent *e,orient_cube *pos ){
-if (e==0 || pos==0);
+std::vector<QString> view::key_press_view( QKeyEvent *e,std::shared_ptr<orient_cube>pos ){
+if (e==0 || pos==0){;}
  com[1]="none";return com;
 
 }
 void view::delete_slices(){
-  for(int i=0; i< (int)slices.size(); i++)  delete slices[i];
   slices.clear();
 }
-void view::set_title_pos(QPainter *painter, dataset *dat){
+void view::set_title_pos(QPainter *painter, std::shared_ptr<dataset>dat){
   float px,py;
-  if(painter==0);
+  if(painter==0){;}
    get_pcts(&py,&px);
      int pw = fm->width( dat->get_name() );
       int ph = fm->height();
@@ -57,7 +56,7 @@ void view::set_title_pos(QPainter *painter, dataset *dat){
 
 
 }
-void view::draw_bar( int xshift,QPainter *painter,QPen *pen, raster *fact,  unsigned char *conv, bool draw_title){
+void view::draw_bar( int xshift,QPainter *painter,QPen *pen, std::shared_ptr<raster>fact,  unsigned char *conv, bool draw_title){
 
   QString aa,title=cur_dat->get_values();
   int pw = fm->width( title );
@@ -75,7 +74,7 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, raster *fact,  unsi
     
    }
   int bbar=bx+xshift+ph*3,ebar=ex-ph*3,rbar=ebar-bbar;
-  QImage *img=fact->makeImage(uc,256,1);
+  QImage *img=fact->makeImage(uc,256,1,rbar,ph*2);
   QImage newt=img->scaled(rbar,ph*2);
   QPixmap t2=QPixmap::fromImage(newt, Qt::OrderedAlphaDither);
   painter->drawPixmap(bbar,ey-5*ph-yshift,t2);
@@ -91,7 +90,7 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, raster *fact,  unsi
    }
    	painter->drawPolyline(histarray);
   //Make the axis
-  float minv=cur_dat->get_minval(),maxv=cur_dat->get_maxval(),onum,dnum;
+  float minv=cur_dat->get_minval(),maxv=cur_dat->get_maxval();
   std::vector<float> tics=slices[0]->optimal_with_font(rbar,minv,maxv);
   float pct;
   QString ab;
@@ -115,7 +114,7 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, raster *fact,  unsi
   delete [] histo;
 }
 void view::draw_title(int xshift,QPainter *painter,QPen *pen,QString title){
-   if(xshift==0);
+   if(xshift==0){;}
    int pw = fm->width( title );
       int ph = fm->height();
         painter->setPen(*pen);
@@ -123,12 +122,12 @@ void view::draw_title(int xshift,QPainter *painter,QPen *pen,QString title){
       
       
  }
-std::vector<QString> view::do_noth(float x, float y, orient_cube *pos){
- if(x==0. && y==0. && pos==0) ;
+std::vector<QString> view::do_noth(float x, float y, std::shared_ptr<orient_cube>pos){
+ if(x==0. && y==0. && pos==0) {;}
  com[1]="none";
  return com;
 }
-std::vector<QString> view::r_mouse_d_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::r_mouse_d_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  this->convert_to_local_loc(x,y,&ix,&iy);
  bool found=false;
@@ -142,7 +141,7 @@ std::vector<QString> view::r_mouse_d_view(float x, float y, orient_cube *pos, mo
   if(com[1].contains("pass")>0) return r_mouse_d_e(ix,iy,pos,mode,draw_o);
   return com;
 }
-std::vector<QString> view::r_mouse_m_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::r_mouse_m_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
 
  com[1]="pass";
@@ -158,7 +157,7 @@ std::vector<QString> view::r_mouse_m_view(float x, float y, orient_cube *pos, mo
  if(com[1].contains("pass")>0) return r_mouse_m_e(ix,iy,pos,mode,draw_o);
    return com;
 }
-std::vector<QString> view::r_mouse_r_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::r_mouse_r_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -173,7 +172,7 @@ std::vector<QString> view::r_mouse_r_view(float x, float y, orient_cube *pos, mo
   return com;
 }
 
-std::vector<QString> view::m_mouse_d_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::m_mouse_d_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -189,7 +188,7 @@ std::vector<QString> view::m_mouse_d_view(float x, float y, orient_cube *pos, mo
   if(com[1].contains("pass")>0) return m_mouse_d_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::m_mouse_m_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::m_mouse_m_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
 bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -206,7 +205,7 @@ bool found=false;
   if(com[1].contains("pass")>0) return m_mouse_m_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::m_mouse_r_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::m_mouse_r_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
 
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -223,7 +222,7 @@ std::vector<QString> view::m_mouse_r_view(float x, float y, orient_cube *pos, mo
     return com;
 
 }
-std::vector<QString> view::l_mouse_d_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::l_mouse_d_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -237,7 +236,7 @@ std::vector<QString> view::l_mouse_d_view(float x, float y, orient_cube *pos, mo
   if(com[1].contains("pass")>0) return l_mouse_d_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::l_mouse_m_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::l_mouse_m_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
 
 
@@ -255,7 +254,7 @@ bool found=false;
   if(com[1].contains("pass")>0) return l_mouse_m_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::l_mouse_r_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::l_mouse_r_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -270,7 +269,7 @@ std::vector<QString> view::l_mouse_r_view(float x, float y, orient_cube *pos, mo
    return com;
 
 }
-std::vector<QString> view::l_mouse_double_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::l_mouse_double_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -284,7 +283,7 @@ std::vector<QString> view::l_mouse_double_view(float x, float y, orient_cube *po
   if(com[1].contains("pass")>0) return l_mouse_double_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::m_mouse_double_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::m_mouse_double_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
  bool found=false;
  this->convert_to_local_loc(x,y,&ix,&iy);
@@ -298,7 +297,7 @@ std::vector<QString> view::m_mouse_double_view(float x, float y, orient_cube *po
   if(com[1].contains("pass")>0) return m_mouse_double_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-std::vector<QString> view::r_mouse_double_view(float x, float y, orient_cube *pos, mouse_func *mode){
+std::vector<QString> view::r_mouse_double_view(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>mode){
  int ix,iy;
 
  bool found=false;
@@ -313,7 +312,7 @@ std::vector<QString> view::r_mouse_double_view(float x, float y, orient_cube *po
   if(com[1].contains("pass")>0) return r_mouse_double_e(ix,iy,pos,mode,draw_o);
     return com;
 }
-void view::render_it(QPainter *painter,QPen *pen, slice *fact,  dataset *dat, orient_cube *pos, bool overlay, draw_what *draws)
+void view::render_it(QPainter *painter,QPen *pen, std::shared_ptr<slice>fact,  std::shared_ptr<dataset>dat, std::shared_ptr<orient_cube>pos, bool overlay, std::shared_ptr<draw_what>draws)
 {
 
      for(int i=0; i < (int)slices.size(); i++){
@@ -333,7 +332,7 @@ void view::render_it(QPainter *painter,QPen *pen, slice *fact,  dataset *dat, or
 
    }
 
-      if(draws->draw_bar && !overlay) draw_bar(4*bound_l,painter,pen,(raster*)fact,dat->conv,draws->draw_title);
+      if(draws->draw_bar && !overlay) draw_bar(4*bound_l,painter,pen,std::static_pointer_cast<raster>(fact),dat->conv,draws->draw_title);
       if(draws->draw_title&& !overlay) draw_title(0,painter,pen,dat->get_name());
 
 

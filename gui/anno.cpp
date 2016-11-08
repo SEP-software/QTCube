@@ -8,8 +8,8 @@ annotate::annotate(){
   cur_col="red";
   cur_text=" ";
   cur_shape="box";
-  fonts=new my_fonts();
-  colors= new my_colors();
+  fonts=std::shared_ptr<my_fonts> (new my_fonts());
+  colors= std::shared_ptr<my_colors> (new my_colors());
   active_anno=-1;
 }
 
@@ -35,10 +35,9 @@ float anno_ellipse::return_dist(float px, float py){
 return sqrtf((pctx-px)*(pctx-px)+(pcty-py)*(pcty-py));
 
 }
-void  anno_text::draw(QPainter *painter, my_fonts *fonts, my_colors *colors, int bx, int by, int ex, int ey){
-    QFont *myf=fonts->return_font(font);
-    
-    QFontMetrics *fm=fonts->return_font_metric(font);
+void  anno_text::draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>colors, int bx, int by, int ex, int ey){
+    assert(!fonts);
+    std::shared_ptr<QFontMetrics> fm=fonts->return_font_metric(font);
     painter->setFont(*fonts->return_font(font));
 
     int pw=fm->width(txt);
@@ -64,8 +63,9 @@ if(thick!=0){
 
     
 }
-void anno_line::draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int bx, int by, int ex, int ey){
+void anno_line::draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>colors,int bx, int by, int ex, int ey){
    
+     assert(!fonts);
  int xlt=bx+(int)(pctx*(ex-bx)),ylt=by+(int)(pcty*(ey-by));
   int xet=bx+(int)(endx*(ex-bx)),yet=by+(int)(endy*(ey-by));
     QPen pen;
@@ -77,9 +77,9 @@ void anno_line::draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int 
     tmp<<QPoint(xlt,ylt)<<QPoint(xet,yet);
     painter->drawPolyline(tmp);
 }
-void  anno_arrow::draw(QPainter *painter, my_fonts *fonts, my_colors *colors, int bx, int by, int ex, int ey){
+void  anno_arrow::draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>colors, int bx, int by, int ex, int ey){
 
-
+  assert(!fonts);
  int xlt=bx+(int)(pctx*(ex-bx)),ylt=by+(int)(pcty*(ey-by));
   int xet=bx+(int)(endx*(ex-bx)),yet=by+(int)(endy*(ey-by));
     QPen pen;
@@ -110,7 +110,8 @@ void  anno_arrow::draw(QPainter *painter, my_fonts *fonts, my_colors *colors, in
      painter->drawPolygon(tmp);
 
 }
-void  anno_box::draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int bx, int by, int ex, int ey){
+void  anno_box::draw(QPainter *painter, std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>colors,int bx, int by, int ex, int ey){
+ assert(!fonts);
  int xlt=bx+(int)(pctx*(ex-bx)),ylt=by+(int)(pcty*(ey-by));
   int xet=bx+(int)(endx*(ex-bx)),yet=by+(int)(endy*(ey-by));
     QPen pen;
@@ -123,7 +124,8 @@ void  anno_box::draw(QPainter *painter, my_fonts *fonts,  my_colors *colors,int 
     tmp<<QPoint(xlt,ylt)<<QPoint(xlt,yet)<<QPoint(xet,yet)<<QPoint(xet,ylt)<<QPoint(xlt,ylt);
     painter->drawPolyline(tmp);
 }
-void  anno_ellipse::draw(QPainter *painter, my_fonts *fonts, my_colors *colors, int bx, int by, int ex, int ey){
+void  anno_ellipse::draw(QPainter *painter,std::shared_ptr<my_fonts>fonts,  std::shared_ptr<my_colors>colors, int bx, int by, int ex, int ey){
+  assert(!fonts);
  int xlt=bx+(int)(pctx*(ex-bx)),ylt=by+(int)(pcty*(ey-by));
   int xet=bx+(int)(endx*(ex-bx)),yet=by+(int)(endy*(ey-by));
       QPen pen;
@@ -155,7 +157,6 @@ else return -1;
 void annotate::delete_nearest(float px, float py){
   int iclose=find_nearest(px,py);
   if(iclose!=-1){
-      delete annos[iclose];
     annos.erase(annos.begin()+iclose);
   }
 }
@@ -163,7 +164,7 @@ void annotate::move_nearest(float px, float py){
 
 active_anno=find_nearest(px,py);
 if(active_anno>=0){
- anno *a=annos[active_anno];
+ std::shared_ptr<anno> a=annos[active_anno];
  bxh=a->pctx;
  byh=a->pcty;
  exh=a->endx;
@@ -172,19 +173,19 @@ if(active_anno>=0){
 }
 void annotate::add_annotate(float px, float py, float ox, float oy){
    if(cur_shape.contains("ellipse")>0){
-      annos.push_back(new anno_ellipse(px,py,cur_col,cur_thick,ox,oy));
+      annos.push_back(std::shared_ptr<anno_ellipse> (new anno_ellipse(px,py,cur_col,cur_thick,ox,oy)));
    }
    else if(cur_shape.contains("text")>0){
-     annos.push_back(new anno_text(px,py,cur_col,cur_text,cur_font,cur_thick));
+     annos.push_back(std::shared_ptr<anno_text> (new anno_text(px,py,cur_col,cur_text,cur_font,cur_thick)));
    }
    else if(cur_shape.contains("line")>0){
-     annos.push_back(new anno_line(px,py,cur_col,cur_thick,ox,oy));
+     annos.push_back(std::shared_ptr<anno_line> (new  anno_line(px,py,cur_col,cur_thick,ox,oy)));
    }
    else if(cur_shape.contains("arrow")>0){
-     annos.push_back(new anno_arrow(px,py,cur_col,cur_thick,ox,oy));
+     annos.push_back(std::shared_ptr<anno_arrow> (new  anno_arrow(px,py,cur_col,cur_thick,ox,oy)));
    }
    else if(cur_shape.contains("box")>0){
-     annos.push_back(new anno_box(px,py,cur_col,cur_thick,ox,oy));
+     annos.push_back(std::shared_ptr<anno_box> (new anno_box(px,py,cur_col,cur_thick,ox,oy)));
    }
    active_anno=annos.size()-1;
 }
@@ -226,6 +227,6 @@ void annotate::draw(QPainter *painter,int bx, int by, int ex, int ey){
   }
 }
 void annotate::clear(){
-  for(int i=0; i <(int) annos.size(); i++) delete annos[i];
+
   annos.clear();
 }

@@ -2,16 +2,16 @@
 #include <math.h>
 #include<assert.h>
 #include <utility>
-#include "seplib.h"
 
-orient_cube::orient_cube(position *pos,int *o,orientation_server *s){
+orient_cube::orient_cube(std::shared_ptr<position>pos,std::vector<int> o,std::shared_ptr<orientation_server>s){
   init=true;
   block[0]=1;
+  ax_rot.resize(2);
   for(int i=0; i < 8; i++){
-    this->set_axis(i,pos->get_axis(i));
+    this->set_axis(i,pos->getAxis(i));
     order[i]=o[i]-1;
     reverse[i]=false;
-    if(i>0) block[i]=block[i-1]*get_axis(i-1).n;
+    if(i>0) block[i]=block[i-1]*getAxis(i-1).n;
    }
      // reg_to_rot_1=0;
     rot_to_reg_1=0;
@@ -19,7 +19,7 @@ orient_cube::orient_cube(position *pos,int *o,orientation_server *s){
     rot_to_reg_2=0;
    serv=s;
     rot_ax[0]=1; rot_ax[1]=2;
-    ax_rot[0]=pos->get_axis(rot_ax[0]); ax_rot[1]=pos->get_axis(rot_ax[1]);
+    ax_rot[0]=pos->getAxis(rot_ax[0]); ax_rot[1]=pos->getAxis(rot_ax[1]);
    orient_num=serv->get_new_num();
    orient_inst=serv->get_new_inst();
     set_no_rotate();
@@ -35,13 +35,13 @@ orient_cube::orient_cube(position *pos,int *o,orientation_server *s){
     get_locs(rot_pt);
     init=false;
  }
- orient_cube::orient_cube(hypercube *h,orientation_server *s){
+ orient_cube::orient_cube(std::shared_ptr<hypercube>h,std::shared_ptr<orientation_server>s){
    init=true;
    block[0]=1;
    serv=s;
     for(int i=0; i < 8; i++){
-       this->set_axis(i,h->get_axis(i+1));
-           if(i>0) block[i]=block[i-1]*get_axis(i-1).n;
+       this->set_axis(i,h->getAxis(i+1));
+           if(i>0) block[i]=block[i-1]*getAxis(i-1).n;
 }
   //  reg_to_rot_1=0;
     rot_to_reg_1=0;
@@ -55,10 +55,10 @@ orient_cube::orient_cube(position *pos,int *o,orientation_server *s){
       orient_num=serv->get_new_num(orient_num,rot_ax,ax_rot,ang,rot_cen);
 
  }
- orient_cube::orient_cube(orient_cube *ori) {
+ orient_cube::orient_cube(std::shared_ptr<orient_cube>ori) {
    init=true;
    for(int i=0; i < 8; i++){
-    this->set_axis(i,ori->get_axis(i));
+    this->set_axis(i,ori->getAxis(i));
     this->order[i]=ori->get_order(i);
     this->reverse[i]=ori->get_reverse(i);
     this->beg[i]=ori->beg[i];
@@ -103,7 +103,6 @@ void orient_cube::init_map_1d(){
    if(i!=0) blocks[i]=blocks[i-1]*ns[i-1];
  }
  n123=blocks[7]*ns[7];
- one_shift=0;
  begs=0;
  ends=0;
  shift_ax=-1;
@@ -132,8 +131,8 @@ int orient_cube::form_map_name(int iax1,int iax2,int idelta,int *i3,int *i3v){
      else {
        *i3=order[0];
        }
-// fprintf(stderr,"MAP %d  %d %d  %d\n",*i3,loc[*i3],get_axis(*i3).n,idelta);
-     *i3v= std::max(0,std::min(get_axis(*i3).n-1,idelta+loc[*i3]));
+// fprintf(stderr,"MAP %d  %d %d  %d\n",*i3,loc[*i3],getAxis(*i3).n,idelta);
+     *i3v= std::max(0,std::min(getAxis(*i3).n-1,idelta+loc[*i3]));
     // fprintf(stderr,"GOOG %d \n",(*i3v)*100+iax1+iax2*10);
   return (*i3v)*100+iax1+iax2*10;
 
@@ -185,7 +184,6 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1, in
     if(f1 >e1) {f_1=e1; e_1=f1;}
     if(f2>e2) { f_2=e2; e_2=f2;}
     bool rev1,rev2;
-    long long *tmp;
     bool found=true;
     if(rot_maps.count(ibig)==0) {
       // assert(1==0);
@@ -218,7 +216,7 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1, in
      if(shift_ax!=-1){
         b_s=bs[shift_ax]; 
         bs[shift_ax]=begs[b_s];
-        e_s=std::min(es[shift_ax],get_axis(shift_ax).n-1); 
+        e_s=std::min(es[shift_ax],getAxis(shift_ax).n-1); 
         es[shift_ax]=ends[e_s];     
                // fprintf(stderr,"setting up axis range2 as %d %d %d %d\n",bs[0],es[0],b_s,e_s);
 
@@ -273,8 +271,8 @@ void orient_cube::get_true_pos(float *pos,float oversamp){
   long long hsh;
   loc_to_index(loc,&hsh);
   for(int i=0; i < 8; i++){
-    axis a=get_axis(i);
-    if(one_shift!=0 && shift_ax==i){
+    axis a=getAxis(i);
+    if(one_shift.size()>0 && shift_ax==i){
        pos[i]=a.o+a.d*(float)one_shift[hsh]/oversamp;
    }
    else pos[i]=a.o+a.d*iloc[i];
@@ -282,14 +280,14 @@ void orient_cube::get_true_pos(float *pos,float oversamp){
 }
 void orient_cube::return_grid_loc(float *p, int *iloc,float oversamp){
  for(int i=0; i < 8; i++){
-   axis a=get_axis(i);
+   axis a=getAxis(i);
     iloc[i]=std::max(0,std::min(a.n-1,(int)((p[i]-a.o)/a.d+.5)));
  }
-if(one_shift!=0){
+if(one_shift.size()>0){
   iloc[0]=0; ;//implicit 0 axis assumption
   long long hsh;
   loc_to_index(iloc,&hsh);
-  axis a=get_axis(0);
+  axis a=getAxis(0);
   int look=std::max(0,std::min(a.n-1,(int)((p[0]-a.o)/a.d*oversamp+.5)));
   int i=0; 
   bool found=false;
@@ -307,15 +305,15 @@ if(one_shift!=0){
 void orient_cube::set_no_shift(){
 
 
- one_shift=0;
+ one_shift.resize(0);
  if(begs!=0) {delete [] begs; begs=0;}
  if(ends!=0) { delete [] ends;ends=0;}
  shift_ax=-1;
 }
- void orient_cube::set_one_shift(int iax, float ov,int *buf){ 
+ void orient_cube::set_one_shift(int iax, float ov,std::vector<int> buf){ 
    rotation_change();
    one_shift=buf; shift_ax=iax;
-   int n=get_axis(shift_ax).n;
+   int n=getAxis(shift_ax).n;
    begs=new int[n];
    ends=new int[n];
    oversamp=ov;
@@ -405,13 +403,13 @@ void orient_cube::set_no_shift(){
  axis orient_cube::get_rot_axis(int iax){
    if(!rotate || (rot_ax[0]!=iax && rot_ax[1]!=iax)) {
    //  if(rotate) fprintf(stderr,"not rotated %d %d %d \n",iax,rot_ax[0],rot_ax[1]);
-     return get_axis(iax);
+     return getAxis(iax);
      }
    if(rot_ax[0]==iax) return ax_rot[0];
     return ax_rot[1];
  }
  
- void orient_cube::get_axis_range(int iax, int *b, int *e){
+ void orient_cube::getAxis_range(int iax, int *b, int *e){
  
  if(!rotate || (rot_ax[0]!=iax && rot_ax[1]!=iax)) {
      *b=get_beg(iax);
@@ -429,7 +427,7 @@ void orient_cube::set_no_shift(){
   }
  }
  void orient_cube::form_maps(){
-   axis a1=get_axis(rot_ax[0]),a2=get_axis(rot_ax[1]);
+   axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
   // reg_to_rot_1=new int*[a2.n];
   // reg_to_rot_2=new int*[a2.n];
    
@@ -480,7 +478,7 @@ void orient_cube::set_no_shift(){
     rotate=false;
     delete_maps();
   }
- void orient_cube::sync_pos(position *pos){
+ void orient_cube::sync_pos(std::shared_ptr<position>pos){
     for(int i=0; i<8; i++){
       this->set_loc(i,pos->get_loc(i));
       this->set_beg(i,pos->get_beg(i));
@@ -496,7 +494,7 @@ void orient_cube::set_no_shift(){
  
  }
  void orient_cube::set_rotation(){
-       axis a1=get_axis(rot_ax[0]),a2=get_axis(rot_ax[1]);
+       axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
 
   rot_cen[0]=a1.o+a1.d*rot_pt[rot_ax[0]];
       rot_cen[1]=a2.o+a2.d*rot_pt[rot_ax[1]];
@@ -546,10 +544,10 @@ void orient_cube::set_no_shift(){
      for(int i1=0; i1 < ax_rot[0].n; i1++){
        if(rot_to_reg_1[i2][i1] >=b1  && rot_to_reg_1[i2][i1] < e1 &&
           rot_to_reg_2[i2][i1] >=b2 && rot_to_reg_2[i2][i1] < e2){
-          b_rot[0]=MIN(b_rot[0],i1);
-          b_rot[1]=MIN(b_rot[1],i2);
-          e_rot[0]=MAX(e_rot[0],i1);
-          e_rot[1]=MAX(e_rot[1],i2);
+          b_rot[0]=std::min(b_rot[0],i1);
+          b_rot[1]=std::min(b_rot[1],i2);
+          e_rot[0]=std::max(e_rot[0],i1);
+          e_rot[1]=std::max(e_rot[1],i2);
         }
      
      }
@@ -572,7 +570,7 @@ void orient_cube::update_loc(){
     }
 }
 void orient_cube::load_map_1d(){
-  if(one_shift==0) return;
+ 
   int iloc[8]; get_locs(iloc);
   int ns[8]; get_ns(ns);
   long long base=0;
@@ -589,10 +587,10 @@ void orient_cube::transpose(int i1,int i2){
     order[i2]=j;
     rotation_change();
  }
-void orients::add_orient(orient_cube *oo){
+void orients::add_orient(std::shared_ptr<orient_cube>oo){
   my_or[oo->get_orient_inst()]=oo;
 }
-void orients::del_orient(orient_cube *oo){
+void orients::del_orient(std::shared_ptr<orient_cube>oo){
   my_or.erase(oo->get_orient_inst());
 }
 

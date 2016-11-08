@@ -3,18 +3,20 @@
 #include "sep_reg_mmap_io.h"
 
 //Initialize and read in buffer
-float_mmap_buffer::float_mmap_buffer(util *p, hypercube *h,io_func *i,int in,int *nwbuf, int *fwbuf){
+float_mmap_buffer::float_mmap_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,
+std::vector<int>&nwbuf, std::vector<int>&fwbuf){
  
     set_basics(p,h,i,in);
 
      window_to_local(nwbuf,fwbuf);
      //fbuf=new float [n123_buf];
-    fbuf=(float*)((sep_reg_mmap_io*)i)->map; 
+    fbuf=(float*)std::static_pointer_cast<sep_reg_mmap_io>(i)->map; 
 
-    int nwio[8],fwio[8],nloop[8],ndim;
-    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,&ndim);
+    std::vector<int> nwio(8,1),fwio(8,1),nloop(8,1);
+    int ndim;
+    calc_read_loop(nwbuf,fwbuf,nwio,fwio,nloop,ndim);
 
-    swap=p->param_int("swap",inum,0);
+    swap=p->getInt(std::string("swap")+std::to_string(inum),0);
 
     read_buffer(nwbuf,fwbuf,nwio,fwio,ndim,nloop);
 
@@ -24,21 +26,21 @@ float_mmap_buffer::float_mmap_buffer(util *p, hypercube *h,io_func *i,int in,int
 
  }
  
- void float_mmap_buffer::read_buffer(int *nwbuf, int *fwbuf,int *nwio, int *fwio, int ndim ,int *nloop){
+ void float_mmap_buffer::read_buffer(std::vector<int>&nwbuf, std::vector<int>&fwbuf,std::vector<int>&nwio, std::vector<int>&fwio, int ndim ,std::vector<int>&nloop){
  
-   if(nwbuf==0 && fwbuf==0 && fwio==0 && ndim==0 && nwio==0 && nloop==0);
+   if(nwbuf[0]==0 && fwbuf[0]==0 && fwio[0]==0 && ndim==0 && nwio[0]==0 && nloop[0]==0){;}
    long long n=4;
    for(int i=0; i < 8; i++)
-     n=(long long) hyper_io->get_axis(i+1).n*n;
+     n=(long long) hyper_io->getAxis(i+1).n*n;
      
      if(n > 50*1000*1000)n=50*1000*1000;
    io->set_clip(fbuf,inum,n,swap);
    io->return_clips(&bclip,&eclip);
  //calc_histo();
 }
- unsigned char *float_mmap_buffer::get_char_data(orient_cube *pos, int iax1, int f1, int e1,
+ unsigned char *float_mmap_buffer::get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1,
   int iax2, int f2, int e2){
-      if(!hold[iax1] || !hold[iax2]) par->error("Internal error don't hold axes requested");
+      if(!hold[iax1] || !hold[iax2]) _par->error("Internal error don't hold axes requested");
          if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
       pos->set_no_rotate();
@@ -58,7 +60,7 @@ float_mmap_buffer::float_mmap_buffer(util *p, hypercube *h,io_func *i,int in,int
         tmpf[i]=fbuf[index[i]];
       }
 
-       if(swap==1) par->swap_float_bytes(n1*n2,tmpf);
+       if(swap==1) _util->swap_float_bytes(n1*n2,tmpf);
 
      for(int i=0; i < n1*n2; i++){
      //fprintf(stderr,"INDEX VAL %ld %f \n",index[i],tmpf[i]);
@@ -79,9 +81,9 @@ float_mmap_buffer::float_mmap_buffer(util *p, hypercube *h,io_func *i,int in,int
     return out; 
   }   
    
-float *float_mmap_buffer::get_float_data(orient_cube *pos, int iax1, int f1, int e1, int iax2,
+float *float_mmap_buffer::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
     int f2, int e2){
-    if(!hold[iax1] || !hold[iax2]) par->error("Internal error don't hold axes requested");
+    if(!hold[iax1] || !hold[iax2]) _par->error("Internal error don't hold axes requested");
        if(pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])){
       fprintf(stderr,"Must hold rotated axes. Defaulting to no rotation.\n");
       pos->set_no_rotate();
@@ -127,7 +129,7 @@ float *float_mmap_buffer::get_float_data(orient_cube *pos, int iax1, int f1, int
    }
  }
 
- float float_mmap_buffer::get_value(orient_cube *pos){
+ float float_mmap_buffer::get_value(std::shared_ptr<orient_cube>pos){
    return fbuf[point_to_local(pos)];
  
  }

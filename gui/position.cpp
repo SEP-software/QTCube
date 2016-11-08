@@ -2,11 +2,11 @@
 #include<math.h>
 
 
-position::position(hypercube *dims, int *c, int *b, int *e,int m_ax)
+position::position(std::shared_ptr<hypercube>dims, int *c, int *b, int *e,int m_ax)
 {
  block[0]=1;
   for(int i=0; i < 8; i++){
-    axes[i]=dims->get_axis(i+1);
+    axes[i]=dims->getAxis(i+1);
     loc[i]=c[i];
     beg[i]=b[i];
     end[i]=e[i];
@@ -53,8 +53,8 @@ void position::delete_position(){
 
 
 }
-void position::increment(int iax, int inc,hypercube *h){
-  axis a=h->get_axis(iax+1);
+void position::increment(int iax, int inc,std::shared_ptr<hypercube> h){
+  axis a=h->getAxis(iax+1);
   float p=axes[iax].o+axes[iax].d*loc[iax]+inc*a.d;
    
   this->loc[iax]=(int)((p-axes[iax].o)/axes[iax].d+.5);
@@ -67,7 +67,7 @@ QString position::return_pos_label(){
   QString ret;
   ret="";
   for(int i=0; i < 8; i++){
-    axis a=get_axis(i);
+    axis a=getAxis(i);
     if(a.n>1) ret+="Axis "+QString::number(i+1)+"("+QString::number(loc[i])+"):"+QString::number(a.o+a.d*loc[i])+"  ";
 
   }
@@ -75,8 +75,8 @@ QString position::return_pos_label(){
 
 
 }
-position *position::clone(){
- position *x=new position();
+std::shared_ptr<position> position::clone(){
+ std::shared_ptr<position> x(new position());
  for(int i=0; i < 8; i++){  
    x->axes[i]=axes[i];
    x->loc[i]=loc[i];

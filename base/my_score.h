@@ -7,8 +7,8 @@ class my_score{
   my_score(){};
   my_score(float i, float g){ init=i; growth=g;}
   virtual float penalty(int iloc, int iold,int inew){
-     if(iloc==0);
-     if(iold==inew) return 0;
+     if(iloc==0){;}
+     if(iold==inew){ return 0;}
      else return -(init+growth*abs(iold-inew));
   }
   float init,growth;
@@ -31,7 +31,7 @@ class semb_score: public my_score{
      //fprintf(stderr,"DV IS %f %f %f %f =%f \n",velo,veln,velo*velo*time,(time-dt)*veln*veln,dv);
     // if(dv < minv || dv >maxv) return -8;
     // else 
-     if(iloc==0);
+     if(iloc==0){;}
      return -abs(iold-inew)*pen;
    }
    virtual ~semb_score(){};

@@ -7,11 +7,10 @@
 
 
 
-void contour::draw_slice(QPainter *painter, dataset *dat,QPen *pen, 
- orient_cube *pos,bool ov,bool draw_grid){
+void contour::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen, 
+ std::shared_ptr<orient_cube>pos,bool ov,bool draw_grid){
 
 
-fprintf(stderr,"CONTOUR DEF %d %f %f \n",num_lines,c0,dc);
   my_dat=dat;
   axes[0]=dat->get_grid_axis(iax1+1);
   axes[1]=dat->get_grid_axis(iax2+1);
@@ -338,9 +337,9 @@ void contour::Paintcontours(int n2, int n1, QPainter *painter, float *buf,
   painter->restore();
 }
 
-slice *contour::clone(){
+std::shared_ptr<slice>contour::clone(){
 
-   contour *x=new contour();
+   std::shared_ptr<contour>x(new contour());
    x->contourColor=contourColor;
   x->is_raster=false;
   x->c0_set=c0_set;
@@ -454,7 +453,7 @@ void contour::get_shifted_image_pos_fract(float fx, float fy,int *id1, int *id2)
     return true;
 
   }
- box::box(int ix, int iy, QString txt,  float ang,QFontMetrics *fm){
+ box::box(int ix, int iy, QString txt,  float ang,std::shared_ptr<QFontMetrics >fm){
     
    int pw = fm->width( txt);
      int ph=  fm->height()/2;

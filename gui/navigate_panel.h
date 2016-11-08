@@ -8,7 +8,9 @@
 class navigate_panel: public qcubeWidgetBasic{
   Q_OBJECT
   public: 
-    navigate_panel(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym);
+    navigate_panel(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, std::shared_ptr<panels>my_p, 
+    std::shared_ptr<datasets>my_d, std::shared_ptr<pick_draw>pk, std::shared_ptr<slice_types>c,
+    std::shared_ptr<maps> mym);
   
      virtual void actionRespond(std::vector<QString>){;}
      ~navigate_panel(){ delete_row_1();delete_row_2(); delete_row_3(); delete layMain;}

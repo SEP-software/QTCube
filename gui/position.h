@@ -2,12 +2,13 @@
 #include<hypercube.h>
 #ifndef POSITION_H
 #define POSITION_H 1
+#include <memory>
 #include <QString>
 class position
 {
   public:
     position(){};
-    position(hypercube *dims, int *start, int *beg, int *end,int movie_dir);
+    position(std::shared_ptr<hypercube> dims, int *start, int *beg, int *end,int movie_dir);
     virtual ~position(){delete_position();}
    void update_position(int iax1, int iax2, int iloc1, int iloc2);
    void update_range(int iax1, int iax2, int beg1, int end1, int beg2, int end2);
@@ -36,10 +37,10 @@ class position
      for(int i=0; i<8;i++) set_loc(i,iloc[i]);
     }
    
-   axis get_axis(int iax){return axes[iax];}
+   axis getAxis(int iax){return axes[iax];}
    int get_movie_axis(){return movie_ax;}
    int get_movie_dir(){return dir;}
-   void increment(int iax,int inc,hypercube *h);
+   void increment(int iax,int inc,std::shared_ptr<hypercube >h);
    QString return_pos_label();
    void set_movie_dir(int iax,int d){movie_ax=iax;dir=d;}
    void set_axis(int iax, axis ax) { 
@@ -54,7 +55,7 @@ class position
      fprintf(stderr,"\n");
    
    }
-   void update_movie_pos(hypercube *hyper,int delta=1){increment(movie_ax,dir*delta,hyper);}
+   void update_movie_pos(std::shared_ptr<hypercube> hyper,int delta=1){increment(movie_ax,dir*delta,hyper);}
    void get_locs(int *iloc){for(int i=0; i<8;i++) iloc[i]=loc[i];}
    void get_begs(int *iloc){for(int i=0; i<8;i++) iloc[i]=beg[i];}
    void get_ends(int *iloc){for(int i=0; i<8;i++) iloc[i]=end[i];}
@@ -64,7 +65,7 @@ class position
    void fix_min(int imin);
    virtual void update_extents(){};
    virtual void update_loc(){};
-   position *clone();
+   std::shared_ptr<position> clone();
 
     inline void loc_to_index(int *ind,long long *loc){
       *loc=ind[0]+ind[1]*block[1]+ind[2]*block[2]+ind[3]*block[3]+ind[4]*block[4]+

@@ -1,12 +1,12 @@
 #include "mouse_func.h"
 #include "util.h"
 
-void  mouse_func::do_noth( std::vector<slice*> slices,int islice,int ix, int iy,orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
-  if((int)slices.size()==0 && islice==0 && ix==0 && iy==0 && pos==0 && draw_o==0);
+void  mouse_func::do_noth( std::vector<std::shared_ptr<slice>> slices,int islice,int ix, int iy,std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
+  if((int)slices.size()==0 && islice==0 && ix==0 && iy==0 && pos==0 && draw_o==0){;}
   com->at(1)="none";
 
 }
-void mouse_func::del_pt(std::vector <slice*>slices,int islice,int ix, int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o,bool move){
+void mouse_func::del_pt(std::vector <std::shared_ptr<slice>>slices,int islice,int ix, int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o,bool move){
     int iloc[8];
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
@@ -21,7 +21,7 @@ void mouse_func::del_pt(std::vector <slice*>slices,int islice,int ix, int iy, or
     TIME.start();
   if(move) com->at(1)="none";
 }
-void mouse_func::update_pos(std::vector <slice*>slices, int islice,int ix, int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::update_pos(std::vector <std::shared_ptr<slice>>slices, int islice,int ix, int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
  
       if(draw_o==0);
     if(islice<0 && ivalid_down!=-5) {com->at(1)=="none"; return;}
@@ -34,7 +34,7 @@ void mouse_func::update_pos(std::vector <slice*>slices, int islice,int ix, int i
   else slices[islice]->update_pos(com,ix,iy,pos);
 
 }
-void mouse_func::add_multi_picks(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::add_multi_picks(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
        if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -55,7 +55,7 @@ void mouse_func::add_multi_picks(std::vector<slice*>slices,int islice, int ix,in
 }
    
 }
-void mouse_func::delete_multi_picks(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::delete_multi_picks(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
        if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -76,7 +76,7 @@ void mouse_func::delete_multi_picks(std::vector<slice*>slices,int islice, int ix
 }
 
 }
-void mouse_func::update_range(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::update_range(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
        if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -87,7 +87,7 @@ void mouse_func::update_range(std::vector<slice*>slices,int islice, int ix,int i
    if(abs(down_x-ix) >2 && abs(down_y-iy) >2) 
    slices[islice]->update_range(com,down_x,down_y,ix,iy,pos);
 }
-void mouse_func::range_down(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::range_down(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
  if((int)slices.size()==0 || pos==0 );
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
@@ -98,7 +98,7 @@ void mouse_func::range_down(std::vector<slice*>slices,int islice, int ix,int iy,
   TIME.start();
   com->at(1)="none"; 
 }
-void mouse_func::range_move(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::range_move(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
   if((int)slices.size() ==0 && pos==0 );
@@ -115,7 +115,7 @@ void mouse_func::range_move(std::vector<slice*>slices,int islice, int ix,int iy,
      }
   com->at(1)="redraw"; com->at(2)="only";
 }
-void mouse_func::redraw_it(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::redraw_it(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
   if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -130,7 +130,7 @@ void mouse_func::redraw_it(std::vector<slice*>slices,int islice, int ix,int iy, 
   com->at(1)="redraw"; com->at(2)="only";
 
 }
-void mouse_func::line_move(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::line_move(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -147,7 +147,7 @@ void mouse_func::line_move(std::vector<slice*>slices,int islice, int ix,int iy, 
      }
   com->at(1)="redraw"; com->at(2)="only";
 }
-void mouse_func::hyper_move(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::hyper_move(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -165,7 +165,7 @@ void mouse_func::hyper_move(std::vector<slice*>slices,int islice, int ix,int iy,
      }
   com->at(1)="redraw"; com->at(2)="only";
 }
-void mouse_func::add_pt(std::vector <slice*>slices,int islice,int ix, int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::add_pt(std::vector <std::shared_ptr<slice>>slices,int islice,int ix, int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0);
 
     if(islice<0) {com->at(1)=="none"; return;}
@@ -190,7 +190,7 @@ void mouse_func::add_pt(std::vector <slice*>slices,int islice,int ix, int iy, or
    ivalid_down=-3;
   
 }
-void mouse_func::reset(std::vector <slice*>slices,int islice,int ix, int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::reset(std::vector <std::shared_ptr<slice>>slices,int islice,int ix, int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0 || ix==0 && iy==0 && islice==0 && (int)slices.size()==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -198,8 +198,8 @@ void mouse_func::reset(std::vector <slice*>slices,int islice,int ix, int iy, ori
     int beg[8],end[8],order[8];
     pos->get_orders(order);
     for( int it=0; it< 8; it++) {
-     // beg[order[it]]=0; end[order[it]]=pos->get_axis(it).n;
-     beg[it]=0; end[it]=pos->get_axis(it).n;
+     // beg[order[it]]=0; end[order[it]]=pos->getAxis(it).n;
+     beg[it]=0; end[it]=pos->getAxis(it).n;
 
     }
 //   for(int it=3; it < 8; it++){
@@ -211,7 +211,7 @@ void mouse_func::reset(std::vector <slice*>slices,int islice,int ix, int iy, ori
     ":"+QString::number(slices[islice]->iax1)+":"+QString::number(slices[islice]->iax2);
     
 }
-void mouse_func::move_pt(std::vector<slice*>slices,int islice, int ix,int iy, orient_cube *pos, std::vector<QString> *com, draw_other *draw_o){
+void mouse_func::move_pt(std::vector<std::shared_ptr<slice>>slices,int islice, int ix,int iy, std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
     if(draw_o==0);
     if(islice<0) {com->at(1)=="none"; return;}
 
@@ -240,7 +240,7 @@ void mouse_func::non_slice_down(int ix,int iy, std::vector<QString> *com){
   com->at(3)=QString::number(ix);      com->at(4)=QString::number(iy);
 
 }
-void mouse_func::non_slice_move(int ix,int iy,std::vector<QString> *com,draw_other *draw_o){
+void mouse_func::non_slice_move(int ix,int iy,std::vector<QString> *com,std::shared_ptr<draw_other>draw_o){
   
  if(draw_o==0);
   ivalid_down=-5;

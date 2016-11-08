@@ -10,7 +10,7 @@ class created_data:public dataset{
       ~created_data(){};
      virtual void set_contains();
      virtual bool match_grid();
-     hypercube *datas;
+     std::shared_ptr<hypercube>datas;
 
 
 };
@@ -18,22 +18,22 @@ class created_data:public dataset{
 class created_data_float: public created_data{
   public:
   created_data_float(){};
-  created_data_float(std::string title,QString nm,hypercube *g,io_func *i, param_func *p, int in,int im=1);
+  created_data_float(std::string title,QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im=1);
    ~created_data_float(){
       
       clean_bufs();
    }
-    buffer *create_buffer(orient_cube *pos, int iax1, int iax2);
+    std::shared_ptr<buffer>create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2);
 };
 
 class created_data_byte: public created_data{
  public:
   created_data_byte(){};
-  created_data_byte(std::string title, QString nm,hypercube *g,io_func *i, param_func *p, int in,int im=1);
+  created_data_byte(std::string title, QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im=1);
    ~created_data_byte(){
       clean_bufs();
    }
-  buffer *create_buffer(orient_cube *pos, int iax1, int iax2);
+  std::shared_ptr<buffer>create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2);
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "qcube_panel.h"
 
-void qcube_panel:: set_basics(position *p,windows *my_w, panels *my_p, datasets *my_d, pick_draw *pk, slice_types *c,maps *mym){
+void qcube_panel:: set_basics(std::shared_ptr<position>p,std::shared_ptr<windows >my_w, 
+std::shared_ptr<panels>my_p, std::shared_ptr<datasets >my_d, std::shared_ptr<pick_draw >pk, 
+std::shared_ptr<slice_types>c,std::shared_ptr<maps> mym){
 
   pos=p;
   my_wind=my_w;
@@ -9,13 +11,15 @@ void qcube_panel:: set_basics(position *p,windows *my_w, panels *my_p, datasets 
   my_maps=mym;
   my_pick=pk;
   my_slices=c;
-  my_f=new my_fonts();
-  my_v= new view_types();
-  my_c = new my_colors();
+  std::shared_ptr<my_fonts> myf(new my_fonts());
+  std::shared_ptr<view_types> myv(new view_types());
+  std::shared_ptr<my_colors> myc(new my_colors());
+
+  my_f=myf;
+  my_v= myv;
+  my_c = myc;
   my_pos=p;
 }
 void qcube_panel::delete_qcube_panel(){
-  delete my_f;
-  delete my_v;
-  delete my_c;
+
 }

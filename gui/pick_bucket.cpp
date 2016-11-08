@@ -2,14 +2,14 @@
  #include <assert.h>
  #include <math.h>
  #define BUCKET_SIZE 20
- pick_bucket::pick_bucket(position  *pos){
+ pick_bucket::pick_bucket(std::shared_ptr<position>pos){
    int n123=1;
    block[0]=1;
    block_b[0]=1;
    for(int i=0; i < 8; i++){
      dig[i]=true;
      
-     next[i]=pos->get_axis(i).n;
+     next[i]=pos->getAxis(i).n;
      if(next[i]==1){ 
      nb[i]=1; delta[i]=1;}
      else{
@@ -24,14 +24,18 @@
      n123=n123*nb[i];
   }
   
-  for(int i=0; i < n123; i++) buckets.push_back(new picks_new(pos));
+  for(int i=0; i < n123; i++){
+     std::shared_ptr<picks_new> x(new picks_new(pos));
+      buckets.push_back(x);
+    }
   myp=pos;
-  myc=my_colors();
+  std::shared_ptr<my_colors> c(new my_colors());
+  myc=c;
  }
 
 
 
- std::map<int,picks_vec* > pick_bucket::return_picks_from_range(int ip,std::vector<int> keys,int *iloc){
+ std::map<int,std::shared_ptr<picks_vec> > pick_bucket::return_picks_from_range(int ip,std::vector<int> keys,int *iloc){
  
    std::vector<int> grab;
    //We may want to parallelize this
@@ -64,23 +68,23 @@
     }
 }
 
-   std::map<int,picks_vec*> pick_out;
-   for(std::vector<int> :: iterator i=keys.begin(); i!=keys.end(); i++){
-    
-     pick_out[*i]=new picks_vec();
+   std::map<int,std::shared_ptr<picks_vec>> pick_out;
+   for(auto i=keys.begin(); i!=keys.end(); i++){
+     std::shared_ptr<picks_vec> x(new picks_vec());
+     pick_out[*i]=x;
    }
-   picks_vec *myp=picks_from_vec(&grab,"None");
+   std::shared_ptr<picks_vec>myp=picks_from_vec(&grab,"None");
 
   for(int i=0; i < myp->return_size(); i++){
 
-    pick_new *p=myp->return_pick(i);
+    std::shared_ptr<pick_new> p=myp->return_pick(i);
     if(pick_out.count(p->iloc[ip])==1)   pick_out[p->iloc[ip]]->add_pick(p);
 
   }
 
   return pick_out;
 }
-picks_vec *pick_bucket::return_pick_plane(int *iloc, QString col){
+std::shared_ptr<picks_vec>pick_bucket::return_pick_plane(int *iloc, QString col){
 
    int iax1=-1, iax2=-1,n1,n2;
    int buck_base=0;  
@@ -102,12 +106,12 @@ for(int i=0; i < 8; i++){
           buck_use+=block_b[iax1];
         }
     }
-  picks_vec *picks=picks_from_vec(&grab,col);
+  std::shared_ptr<picks_vec>picks=picks_from_vec(&grab,col);
   return picks;
 }
-pick_new *pick_bucket::add_pick(int *iloc,long long p, int te, QString col, int ex,QString t){
+std::shared_ptr<pick_new >pick_bucket::add_pick(int *iloc,long long p, int te, QString col, int ex,QString t){
  
-  pick_new *pp=buckets[bucket_num(p)]->add_pick(iloc,p,te,col,ex,t);
+  std::shared_ptr<pick_new> pp=buckets[bucket_num(p)]->add_pick(iloc,p,te,col,ex,t);
   return pp;
 }
 void pick_bucket::print(){
@@ -118,7 +122,7 @@ int count=0;
  }
   fprintf(stderr,"total picks=%d \n",count);
 }
-pick_new *pick_bucket::get_pick(long long p,QString col){
+std::shared_ptr<pick_new >pick_bucket::get_pick(long long p,QString col){
    return buckets[bucket_num(p)]->get_pick(p,col);
 
 
@@ -141,7 +145,7 @@ long long pick_bucket::find_nearest(long long p, int iax1, int iax2, QString col
   send[iax2]=index[iax2]; bs.push_back(bucket_num(send));
   send[iax2]=std::max(0,index[iax2]-b); bs.push_back(bucket_num(send));
   send[iax1]=index[iax1]; bs.push_back(bucket_num(send));
-  picks_vec *picks=picks_from_vec(&bs,col);
+  std::shared_ptr<picks_vec>picks=picks_from_vec(&bs,col);
   long long near=-1;
   int dmin=99999;
   int loc[8];
@@ -165,11 +169,10 @@ long long pick_bucket::find_nearest(long long p, int iax1, int iax2, QString col
       }
     }
   }
-  delete picks;
-  return near;
+
 }
-picks_vec *pick_bucket::picks_from_vec(std::vector<int> *bs, QString col){
-  picks_vec *picks=new picks_vec();
+std::shared_ptr<picks_vec>pick_bucket::picks_from_vec(std::vector<int> *bs, QString col){
+  std::shared_ptr<picks_vec>picks(new picks_vec());
   //Probably want to parallelize this
   
   for(std::vector<int>::iterator it=bs->begin(); it !=bs->end() ; ++it){
@@ -211,30 +214,29 @@ int pick_bucket::bucket_num(int *index){
    return iout;
 }
 void  pick_bucket::delete_bucket(){
-      for(int i=0; i< (int) buckets.size(); i++) delete buckets[i];
+      
       buckets.clear();
    }
- picks_vec *pick_bucket::get_pick_type(int typ,QString col){
-  picks_vec *pk=new picks_vec();
+ std::shared_ptr<picks_vec>pick_bucket::get_pick_type(int typ,QString col){
+  std::shared_ptr<picks_vec>pk(new picks_vec());
   for(int i=0; i <(int) buckets.size(); i++) buckets[i]->get_parse_picks(pk,col,typ);
   return pk;
 }
-std::map<long long,pick_new*> pick_bucket::return_all(QString col){
-  std::map<long long, pick_new*> mp;
+std::map<long long,std::shared_ptr<pick_new>> pick_bucket::return_all(QString col){
+  std::map<long long, std::shared_ptr<pick_new>> mp;
 
   for(int i=0; i< (int) buckets.size(); i++){
-    picks_vec *b=new picks_vec();
+    std::shared_ptr<picks_vec>b(new picks_vec());
     buckets[i]->get_parse_picks(b,col);
 
     for(int j=0; j < (int)b->return_size(); j++){
       mp[b->return_pick(j)->pos]=b->return_pick(j);
     }
-    delete b;
   }
   return mp;
 } 
-picks_vec *pick_bucket::return_all_picks(QString col){
-  picks_vec *p=new picks_vec();
+std::shared_ptr<picks_vec>pick_bucket::return_all_picks(QString col){
+  std::shared_ptr<picks_vec>p(new picks_vec());
   for(int i=0; i< (int) buckets.size(); i++){
     buckets[i]->get_parse_picks(p,col);
   }

@@ -20,11 +20,11 @@
 class pick_orient{
   public:
     pick_orient(){;}
-    pick_orient(position *pos,int o);
+    pick_orient(std::shared_ptr<position>pos,int o);
 
-    pick_planes_new *planes;
-    pick_bucket *buck;
-    ~pick_orient(){ delete buck; delete planes;}
+    std::shared_ptr<pick_planes_new >planes;
+    std::shared_ptr<pick_bucket >buck;
+    ~pick_orient(){ }
     int oc;
 };
 class pick_param{
@@ -32,7 +32,9 @@ class pick_param{
   public:
     pick_param();
     pick_param(int si,int di,int s,QColor c,QString fn){
-      single=si; display_type=di; sz=s; col=c; font_name=fn; myf=new my_fonts();
+      single=si; display_type=di; sz=s; col=c; font_name=fn; 
+      std::shared_ptr<my_fonts> m(new my_fonts());
+      myf=m;
           }
     int get_single(){return single;}
     void set_single(int sing){ single=sing;}
@@ -41,16 +43,16 @@ class pick_param{
     void increase_size(){sz++;}
     void decrease_size(){sz--;}
     int get_sz(){return sz;}
-    void draw(QPainter *painter, int iax1, int iax2, pairs_new *myp, float rat);
-    void draw_points(QPainter *painter,  pairs_new  *myp,bool txt);
-    void draw_line(QPainter *painter,  pairs_new *myp,float rat);
+    void draw(QPainter *painter, int iax1, int iax2, std::shared_ptr<pairs_new >myp, float rat);
+    void draw_points(QPainter *painter,  std::shared_ptr<pairs_new >myp,bool txt);
+    void draw_line(QPainter *painter,  std::shared_ptr<pairs_new >myp,float rat);
   private:
     int single;
     int display_type;
     int sz;
     QColor col;
     QString font_name;
-    my_fonts *myf;
+    std::shared_ptr<my_fonts> myf;
 
 
 
@@ -59,8 +61,8 @@ class pick_param{
 class pick_draw{
   public:
    pick_draw();
-   void set_server(orientation_server *s);
-   void set_position(position *pos);
+   void set_server(std::shared_ptr<orientation_server >s);
+   void set_position(std::shared_ptr<position >pos);
    void set_extra(int ex){ extra=ex;}
    int get_extra(){ return extra;}
    void increase_size();
@@ -78,48 +80,46 @@ class pick_draw{
    QString get_draw_what(){return draw_what;}
    void set_draw_what(QString c){ draw_what=c;}
    void delete_pick_draw();
-   void update_slice_maps(int *iloc, int *inew, int iax1, int iax2, int iax3, slice *slc);
+   void update_slice_maps(int *iloc, int *inew, int iax1, int iax2, int iax3, std::shared_ptr<slice>slc);
    QString get_active_name(){ return active_col;}
    void int_to_float(const int *iloc, float *floc);
    void read_file(const QString &text);
    void write_file(const QString &text);
       void add_rotated_pt(int orient_num,int *iloc, int type,QString col="None",int extra=-99,QString txt="None");
-   void del_nearest(orient_cube *pos, int *floc, int iax1, int iax2);
+   void del_nearest(std::shared_ptr<orient_cube>pos, int *floc, int iax1, int iax2);
    void add_pt(int *iloc, int type,QString col="None",int extra=-99,QString txt="None");
-   void del_pt(orient_cube *pos, int *floc, int iax1, int iax2);
-   void delete_picks(orient_cube *pos, int ival, QString col="None");
+   void del_pt(std::shared_ptr<orient_cube>pos, int *floc, int iax1, int iax2);
+   void delete_picks(std::shared_ptr<orient_cube>pos, int ival, QString col="None");
    void delete_pick_vals(int ival, QString col); 
    void float_to_int(const float *floc, int *iloc);
-   std::map<long long,pick_new*> return_all(QString col){return buck->return_all(col);}
-   picks_vec *return_all_picks(orient_cube *pos, QString col);
-   picks_vec *return_all_plane(int *iloc, int iax1, int iax2, QString col);
-   picks_vec *return_all_plane_single(int *iloc, int iax1, int iax2, QString col);
-   void draw(QPainter *painter, slice *slc);
-   void clear_picks(orient_cube *pos,int *iloc,QString interval);
-   void del_pick_orients(pick_new *pk);
+   std::map<long long,std::shared_ptr<pick_new>> return_all(QString col){return buck->return_all(col);}
+   std::shared_ptr<picks_vec>return_all_picks(std::shared_ptr<orient_cube>pos, QString col);
+   std::shared_ptr<picks_vec>return_all_plane(int *iloc, int iax1, int iax2, QString col);
+   std::shared_ptr<picks_vec>return_all_plane_single(int *iloc, int iax1, int iax2, QString col);
+   void draw(QPainter *painter, std::shared_ptr<slice>slc);
+   void clear_picks(std::shared_ptr<orient_cube>pos,int *iloc,QString interval);
+   void del_pick_orients(std::shared_ptr<pick_new>pk);
    
-   pairs_new *get_pts_sort(orient_cube *orient_num,int *iloc, int i1,int isort, QString col);   
-   picks_vec *create_load_plane(orient_cube *pos,int iax1,int iax2, int *iloc);
-   picks_vec *return_iloc_based( int *iloc,  QString col);
-   pairs_new *get_pts_sort_le(orient_cube *pos, int iax1, int iax2,int ival, int isort,QString col);
+   std::shared_ptr<pairs_new >get_pts_sort(std::shared_ptr<orient_cube>orient_num,int *iloc, int i1,int isort, QString col);   
+   std::shared_ptr<picks_vec >create_load_plane(std::shared_ptr<orient_cube>pos,int iax1,int iax2, int *iloc);
+   std::shared_ptr<picks_vec >return_iloc_based( int *iloc,  QString col);
+  std::shared_ptr< pairs_new >get_pts_sort_le(std::shared_ptr<orient_cube>pos, int iax1, int iax2,int ival, int isort,QString col);
    void add_multi_picks(std::vector<long long> locs);
    void delete_multi_picks(std::vector<long long> locs);
    void set_pick_text(QString t){ active_txt=t; fprintf(stderr,"Setting text %s \n",active_txt.toAscii().constData());}
    void ignore_axis(int i){ buck->ignore_axis(i);}
    void set_move(int im){ bulk=im;}
    int get_move(){return bulk;}
-   void check_create_oc(orient_cube *pos);
-   ~pick_draw(){
-     delete_pick_draw();
-   }
+   void check_create_oc(std::shared_ptr<orient_cube>pos);
+ 
    
   
   private:
-   std::map<int,pick_orient*> orient_planes;
+   std::map<int,std::shared_ptr<pick_orient>> orient_planes;
    std::list<int> orients;
-   pick_planes_new *planes;
-   pick_bucket *buck;
-   std::map<QString,pick_param*> all;
+   std::shared_ptr<pick_planes_new >planes;
+   std::shared_ptr<pick_bucket>buck;
+   std::map<QString,std::shared_ptr<pick_param>> all;
    QString draw_what;
    QString active_col;
    QString active_txt;
@@ -128,13 +128,13 @@ class pick_draw{
    int extra;
    int dist;
    int bulk;
-   position *myp;
-   my_colors myc;
-   my_fonts *myf;
+   std::shared_ptr<position> myp;
+   std::shared_ptr<my_colors> myc;
+   std::shared_ptr<my_fonts > myf;
    float o[8],d[8];
    int dig[8];
    int n[8];
-  orientation_server *serv;
+  std::shared_ptr<orientation_server>serv;
 };
 
 
@@ -148,11 +148,11 @@ picking();
 
 
   pairs_new get_pts_sort(int *iloc,int iax1, int iax2, int isort, int ival,QString col="None");
-  pairs_new get_pts_sort(orient_cube *pos,slice *slc,int ival,int isort, QString col="None");
+  pairs_new get_pts_sort(std::shared_ptr<orient_cube>pos,std::shared_ptr<slice>slc,int ival,int isort, QString col="None");
   pairs_new get_pts_sort_le(int *iloc,int iax1, int iax2, int isort, int ival,QString col="None");
-   pairs_new get_pts_sort_le(orient_cube *pos,int *iloc,int iax1, int iax2, int isort, int ival,QString col="None");
- pairs_new get_pts_sort_le(orient_cube *pos,slice *slc,int ival,int isort, QString col="None");
- std::vector<pick*> all_picks(orient_cube *pos,int *iloc, int iax1, int iax2, QString col);
+   pairs_new get_pts_sort_le(std::shared_ptr<orient_cube>pos,int *iloc,int iax1, int iax2, int isort, int ival,QString col="None");
+ pairs_new get_pts_sort_le(std::shared_ptr<orient_cube>pos,std::shared_ptr<slice>slc,int ival,int isort, QString col="None");
+ std::vector<pick*> all_picks(std::shared_ptr<orient_cube>pos,int *iloc, int iax1, int iax2, QString col);
  std::vector<pick*> all_picks(int *iloc, int iax1, int iax2, int ising,QString col);
 
   private:

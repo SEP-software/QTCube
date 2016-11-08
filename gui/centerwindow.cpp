@@ -11,7 +11,7 @@
 
 #include "centerwindow.h"
 #include "drawwindow.h"
-#include "param_func.h"
+#include "paramObj.h"
 #include "slice_types.h"
 #include<iostream>
 #include <qregexp.h>
@@ -30,59 +30,73 @@
 
 void MainWindow::create_panels(){
 
-  int nviews=pars->get_int("nviews",1);
+  int nviews=pars->getInt("nviews",1);
   int inum=0;
   for(int i=0; i < nviews; i++){
      QString par=tr("npanelx")+QString::number(i+1);
-     int npanx=pars->get_int(par.toAscii().constData(),1);
+     int npanx=pars->getInt(std::string(par.toAscii().constData()),1);
      par=tr("npanely")+QString::number(i+1);
-     int npany=pars->get_int(par.toAscii().constData(),1);
+     int npany=pars->getInt(std::string(par.toAscii().constData()),1);
      int npan=npanx*npany;
      for(int ipan=0; ipan<npan; ipan++,inum++){
-       my_pan->add_panel(new panel(my_pan->get_next_panel_num(), pars,pos,pk,datas,0,colort,cur_func,serv,my_or,my_maps));
+       std::shared_ptr<panel> x(new panel(my_pan->get_next_panel_num(), pars,pos,pk,datas,0,colort,cur_func,serv,my_or,my_maps));
+       my_pan->add_panel(x);
 
      }
   }
   stat_view="mouse";
 }
 void MainWindow::create_windows(){
-   int nviews=pars->get_int("nviews",1);
+   int nviews=pars->getInt("nviews",1);
    int ipan=0;
    for(int iv=0; iv < nviews; iv++){     
 
         QString par=tr("npanelx")+QString::number(iv+1);
-        int npanx=pars->get_int(par.toAscii().constData(),1);
+        int npanx=pars->getInt(std::string(par.toAscii().constData()),1);
         par=tr("npanely")+QString::number(iv+1);
-        int npany=pars->get_int(par.toAscii().constData(),1);
+        int npany=pars->getInt(std::string(par.toAscii().constData()),1);
         int npan=npanx*npany;
-        std::vector<panel*> pp;
+        std::vector<std::shared_ptr<panel>> pp;
         for(int i=0; i < npan; i++){
           pp.push_back(my_pan->get_panel(i+ipan));
           my_pan->set_window(i+ipan,i);
         }
         ipan+=npan;
-        my_wind->add_window(new DrawWindow(npanx,npany,&pp,iv));
+        std::shared_ptr<DrawWindow> d(new DrawWindow(npanx,npany,pp,iv));
+        my_wind->add_window(d);
 
    }
 }
 void MainWindow::create_mouse_funcs(){
-   funcs["pick"]=new mouse_pick();
-    funcs["navigate"]=new mouse_orient();
-    funcs["zoom"]=new mouse_zoom();
-    funcs["region"]=new mouse_region();
-    funcs["overlay"]=new mouse_overlay();
-    funcs["annotate"]=new mouse_anno();
+  std::shared_ptr<mouse_pick> mp(new mouse_pick());
+  std::shared_ptr<mouse_orient> mn(new mouse_orient());
+  std::shared_ptr<mouse_zoom> mz(new mouse_zoom());
+  std::shared_ptr<mouse_region> mr(new mouse_region());
+  std::shared_ptr<mouse_overlay> mo(new mouse_overlay());
+  std::shared_ptr<mouse_anno> ma(new mouse_anno());
+
+   funcs["pick"]=mp;
+    funcs["navigate"]=mn;
+    funcs["zoom"]=mz;
+    funcs["region"]=mr;
+    funcs["overlay"]=mo;
+    funcs["annotate"]=ma;
 
 	cur_func=funcs["zoom"];
 
 }
-MainWindow::MainWindow(param_func *par,datasets *d,pick_draw *_pks, slice_types *col,  util *p){
+MainWindow::MainWindow(std::shared_ptr<genericIO> ios,std::shared_ptr<datasets> d,
+ std::shared_ptr<pick_draw> _pks, std::shared_ptr<slice_types> col){
 
- pp=p;
-    datas=d;
-      my_or=new orients();
+  _io=ios;
+  pars=ios->getParamObj();
+  std::shared_ptr<util> xutil(new util(pars));
+  pp=xutil;
+ datas=d;
+    std::shared_ptr<orients> o(new orients());
+      my_or=o;
 
-    connect(datas, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+    connect(datas.get() , SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
 //setStyleSheet("border-radius 0px; font: bold 14px; padding: 0px; border-style: inset; spacing: 0px");
 //setStyleSheet("QGroupBox { spacing: 40px }");
@@ -91,15 +105,17 @@ setStyleSheet("QGroupBox { border: 2px solid gray; border-radius: 3px; }");
 setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-position: top left; padding:9 13px;}");
     pk=_pks;
     stat_view="mouse";
-    pars=par;
 	this->colort=col;
     QFont font("Arial", 12, QFont::Normal);
 	QApplication::setFont(font);
-	    my_maps=new maps();
+	std::shared_ptr<maps> mym(new maps(_io)); 
+	    my_maps=mym;
 
-	my_pan=new panels(pk,my_maps,my_or);
+    std::shared_ptr<panels> pp(new panels(_io,pk,my_maps,my_or));
+    my_pan=pp;
 	datas->set_orients(my_or);
-		my_wind=new windows(my_pan);
+	std::shared_ptr<windows> myw(new windows(my_pan));
+	my_wind=myw;
 
 	int beg[8],end[8],init[8];
     for(int i=0; i< 8; i++){
@@ -108,8 +124,11 @@ setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-posi
      modeLabel = new QLabel(mouse_lab, this);
   	statusBar()->addWidget(modeLabel);
    create_mouse_funcs();
-    pos=new position((hypercube*)datas->return_dat(0)->return_grid(),init,beg,end,2);
- 	serv=new orientation_server(pos);
+   std::shared_ptr<position> ps(new position(std::static_pointer_cast<hypercube>(datas->return_dat(0)->return_grid()),init,beg,end,2));
+   pos=ps;
+    std::shared_ptr<orientation_server> s2(new orientation_server(pos));
+    
+ 	serv=s2;;
         pk->set_server(serv);
   pk->set_position(pos);
  	create_panels();
@@ -119,31 +138,41 @@ setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-posi
      QWidget *widget = new QWidget;
      setCentralWidget(widget);
 
-     my_window_panel = new window_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
+     std::shared_ptr<window_panel> myw22(new window_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+     my_window_panel = myw22;
      my_window_panel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
      my_window_panel->setMaximumHeight(75);
 
 
-     my_panel_panel = new panel_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
+     std::shared_ptr<panel_panel> pp22(new panel_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+     my_panel_panel = pp22;
      my_panel_panel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
      QVBoxLayout *layout = new QVBoxLayout;
      layout->setMargin(5);
-     layout->addWidget(my_window_panel);
-     layout->addWidget(my_panel_panel);
+     layout->addWidget(my_window_panel.get());
+     layout->addWidget(my_panel_panel.get());
    //  layout->addWidget(bottomFiller);
      widget->setLayout(layout);
-     my_data_panel=new data_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
+     std::shared_ptr<data_panel> myp(new data_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+     
+     my_data_panel=myp;
 
      createActions();
      createMenus();
-
-     my_color_panel=new color_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
-     my_help_panel=new help_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
+      
+      
+     std::shared_ptr<color_panel> cp2(new color_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+     my_color_panel=cp2;
+      std::shared_ptr<help_panel> hp2 (new help_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+       std::shared_ptr<ano_panel> ap2(new ano_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+        std::shared_ptr<pick_panel> pp3(new pick_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps));
+     my_help_panel=hp2;
      my_help_panel->setMinimumSize(200,200);
-     my_ano_panel=new ano_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
-     my_pick_panel=new pick_panel(pos,my_wind,my_pan,datas,pk,colort,my_maps);
-     my_hist=new history();
+     my_ano_panel=ap2;
+     my_pick_panel=pp3 ;
+     std::shared_ptr<history> hs(new history());
+     my_hist=hs;
 
      mouse_lab=funcs["zoom"]->status;     
      
@@ -179,16 +208,16 @@ setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-posi
  void MainWindow::connect_it(){
 
  
-   connect(my_pan, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-   connect(my_panel_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-   connect(my_pan, SIGNAL(windows_update()), my_wind, SLOT(update_all()));
-   connect(my_window_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-   connect(my_wind, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-   connect(my_hist, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-    connect(my_ano_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-    connect(my_color_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-     connect(my_pick_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
-     connect(my_data_panel, SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(my_pan.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(my_panel_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(my_pan.get(), SIGNAL(windows_update()), my_wind.get(), SLOT(update_all()));
+   connect(my_window_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(my_wind.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+   connect(my_hist.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+    connect(my_ano_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+    connect(my_color_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+     connect(my_pick_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
+     connect(my_data_panel.get(), SIGNAL(actionDetected(std::vector<QString>)), this, SLOT(actionRespond(std::vector<QString>)));
 
  }
   void MainWindow::secondaryRespond(std::vector<QString> coms){
@@ -283,7 +312,7 @@ setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-posi
 
   }  
   else if(stat_view.contains("overlay")>0){
-      mouse_overlay *x=(mouse_overlay*) funcs["overlay"];
+      std::shared_ptr<mouse_overlay> x=std::static_pointer_cast<mouse_overlay>(funcs["overlay"]);
       modeLabel->setText(x->get_info());
   }
     else if(stat_view.contains("pick") >0) {
@@ -311,7 +340,7 @@ void MainWindow::newFile(){
 
   int in=my_pan->get_next_panel_num();
 
-  panel *x=my_pan->get_panel(0)->clone(in);
+  std::shared_ptr<panel> x=my_pan->get_panel(0)->clone(in);
 
   my_pan->add_panel(x);
 
@@ -322,10 +351,11 @@ void MainWindow::newFile(){
   coms.push_back(QString::number(in));
      my_panel_panel->update_menu(coms);
 
-     std::vector<panel*> pp; pp.push_back(x);
+     std::vector<std::shared_ptr<panel>> pp; pp.push_back(x);
 
 
-     my_wind->add_window(new DrawWindow(1,1,&pp,my_wind->size()));
+  std::shared_ptr<DrawWindow> dw(new DrawWindow(1,1,pp,my_wind->size()));
+     my_wind->add_window(dw);
                my_pan->set_window(in,my_wind->size()-1);
 
 
