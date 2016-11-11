@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
     QString nameq=QString(name.c_str());
     if(i==0 && type!=std::string("FILE")) pars->error("First type specified must be a file");
     if(type==std::string("FILE")){
-      std::string fileType=pars->getString(std::string("fileType"),defaultType);
+      std::string fileType=pars->getString(std::string("fileType")+std::to_string(i+1),defaultType);
         std::shared_ptr<fileIO> fileI(new fileIO(name,modes,fileType));
         iof=fileI;
         if(i==0)  grid=iof->return_hyper();

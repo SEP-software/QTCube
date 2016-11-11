@@ -43,7 +43,6 @@ std::vector<int> &nwio,std::vector<int> &fwio, int ndim ,std::vector<int> &nloop
    int iread=0;
    std::vector<int> fsend(8,0); ;fsend[0]=fwbuf[0];        fsend[1]=fwio[1];
    std::vector<io_store> fsave;
-   fprintf(stderr,"in read buffer \n");
    for(int i7=0; i7 < nloop[7];i7++){     fsend[7]=fwio[7]+i7;
     for(int i6=0; i6 < nloop[6];i6++){   fsend[6]=fwio[6]+i6;
      for(int i5=0; i5 < nloop[5];i5++){   fsend[5]=fwio[5]+i5;

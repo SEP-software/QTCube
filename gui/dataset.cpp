@@ -382,8 +382,8 @@ QString dataset::validate_view(QString nm, std::shared_ptr<orient_cube>pos){
  for(int i=0; i < 8; i++) order[i]=order[i]+1;
 
  pos->set_orders(order);
-
- return "FRONT";
+  
+ return QString("FRONT");
 }
 
   bool dataset::valid_display(int iax, int *order,std::vector<int> ns){

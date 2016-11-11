@@ -2,7 +2,6 @@
 
 fileIO::fileIO(std::string tag, std::shared_ptr<ioModes>modes,std::string fileType){
 
-  
   _io=modes->getIO(fileType);
   _file=_io->getRegFile(tag,usageIn);
   _dataType=_file->getDataType();

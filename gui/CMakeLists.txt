@@ -21,7 +21,7 @@ contour.h	      my_colors.h	    simple_color.h
 created_data.h       my_fonts.h	    single.h
 cube_cut.h	      navigate_panel.h	    slice.h
 cube.h		      nmoed.h		    slice_types.h
-data_panel.h	      nmo_semblance.h	    su_reg_io.h
+data_panel.h	      nmo_semblance.h	    
 dataset.h	      orientation_server.h  surface_data.h
 datasets.h	      orient_cube.h	    threeface.h
 display_panel.h       orient_map.h	    three_view.h
@@ -29,7 +29,7 @@ draw_other.h	      orient_panel.h	    trace_io.h
 drawwindow.h	      outcore_data.h	    util.h
 fileIO.h	      pairs_new.h	    view.h
 float_buffer.h       panel.h		    view_panel.h
-float_mmap_buffer.h  panel_panel.h	    view_types.h
+ panel_panel.h	    view_types.h
 help_panel.h	      panels.h		    widget_tools.h
 history.h	      partial_data.h	    wiggle.h
 incore_data.h	      part_semb_data.h	    window_panel.h
@@ -51,7 +51,7 @@ contour.cpp	       my_colors.cpp	       simple_color.cpp
 created_data.cpp      my_fonts.cpp	       single.cpp
 cube.cpp	       navigate_panel.cpp      slice.cpp
 cube_cut.cpp	       nmoed.cpp	       slice_types.cpp
-data_panel.cpp	       nmo_semblance.cpp       su_reg_io.cpp
+data_panel.cpp	       nmo_semblance.cpp       
 dataset.cpp	       orientation_server.cpp  surface_data.cpp
 datasets.cpp	       orient_cube.cpp	       threeface.cpp
 display_panel.cpp      orient_map.cpp	       three_view.cpp
@@ -59,7 +59,7 @@ draw_other.cpp        orient_panel.cpp        trace_io.cpp
 drawwindow.cpp	       outcore_data.cpp       util.cpp
 fileIO.cpp	       pairs_new.cpp	       view.cpp
 float_buffer.cpp       panel.cpp	       view_panel.cpp
-float_mmap_buffer.cpp  panel_panel.cpp	       view_types.cpp
+panel_panel.cpp	       view_types.cpp
 help_panel.cpp	       panels.cpp	       widget_tools.cpp
 history.cpp	       partial_data.cpp       wiggle.cpp
 incore_data.cpp        part_semb_data.cpp      window_panel.cpp

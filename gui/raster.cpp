@@ -1,4 +1,8 @@
 #include<raster.h>
+#include <tbb/tbb.h>
+#include <tbb/blocked_range.h>
+#include <tbb/parallel_reduce.h>
+#include <tbb/parallel_for.h>
 
 QImage *raster::makeImage(unsigned char * uc,const  int nx,const  int ny, const int xsize, const int ysize)
 {
@@ -9,37 +13,44 @@ QImage *raster::makeImage(unsigned char * uc,const  int nx,const  int ny, const 
   
   int jx=nx/xsize;
   int jy=ny/ysize;
-  
   if(jx >1 || jy>1){
     nxuse=nx/std::max(jx,1);
     nyuse=ny/std::max(jy,1);
-    int *space=new int[std::max(nx,ny)*2];
+   
     resized=true;
     ucuse=new unsigned char[nxuse*nyuse];
-    unsigned char *tmp=new unsigned char[nyuse*nx];
+    unsigned char *tmp=new unsigned char[nyuse*nx];   
+
     if(jy>1){
-       for(int i2=0; i2 < nx ;i2++){
-         resampleBand(uc,i2*ny,1,nx,tmp,i2*nyuse,1,nyuse,jy,space);
-       }
+     tbb::parallel_for(tbb::blocked_range<int>(0,nx),[&](
+  const tbb::blocked_range<int>&r){
+   int *space=new int[std::max(nx,ny)*2];
+  for(int i2=r.begin(); i2!=r.end(); ++i2)
+        
+         resampleBand(uc,i2*ny,1,ny,tmp,i2*nyuse,1,nyuse,jy,space);
+       delete []space;  
+       });
+       
     }
     else memcpy(tmp,uc,nyuse*nx);
     if(jx>1){
-      for(int i1=0; i1 < nyuse; i1++){
-        resampleBand(tmp,i1,nyuse,nx,ucuse,i1,nyuse,nxuse,jx,space);
-      }
+         tbb::parallel_for(tbb::blocked_range<int>(0,nyuse),[&](
+  const tbb::blocked_range<int>&r){
+       int *space=new int[std::max(nx,ny)*2];
+
+ for(int  i1=r.begin(); i1!=r.end(); ++i1)
+         resampleBand(tmp,i1,nyuse,nx,ucuse,i1,nyuse,nxuse,jx,space);
+      delete [] space;
+      });
     }
     else memcpy(ucuse,tmp,nxuse*nyuse);
 
-    delete [] tmp;
-    delete [] space;
   }
 	
 	
 	
 	
-	
 	QImage *image = new QImage(nxuse, nyuse, QImage::Format_Indexed8);
-
 
 
 
@@ -57,11 +68,9 @@ QImage *raster::makeImage(unsigned char * uc,const  int nx,const  int ny, const 
 	 memcpy((void*)image->scanLine(iy),(const void*)uc_tmp,nxuse);
 	}
 	delete []uc_tmp;
-	
     if(resized) delete [] ucuse;
 
 	image->setColorTable(scale);
-
 	
 	return image;
 }
@@ -72,14 +81,19 @@ unsigned char *out, const int fout, const int jout, const int nout, const int re
   int *sp2=&space[nin];
   int jw2=jw*jw;
   sp1[0]=jw*in[fin];
-  for(int i=1; i < jw; i++) sp1[i]=in[fin+jin*i]-in[fin]+sp1[i-1];
-  for(int i=jw; i < nin; i++) sp1[i]=in[fin+jin*i]-in[fin+jin*(i-jw)]+sp1[i-1];
+  for(int i=1; i < jw; i++) sp1[i]=(int)in[fin+jin*i]-(int)in[fin]+sp1[i-1];
+  for(int i=jw; i < nin; i++) {
+     sp1[i]=(int)in[fin+jin*i]-(int)in[fin+jin*(i-jw)]+sp1[i-1];
+   }
   sp2[nin-1]=sp1[nin-1]*jw;
   for(int i=1; i < jw; i++)  sp2[nin-1-i]=sp2[nin-i]+sp1[nin-i-1]-sp1[nin-1];
-  for(int i=jw; i < nin; i++) sp2[nin-1-i]=sp2[nin-i]+sp1[nin-i-1]-sp1[nin-i-1+jw];
+  for(int i=jw; i < nin; i++){
+     sp2[nin-1-i]=sp2[nin-i]+sp1[nin-i-1]-sp1[nin-i-1+jw];
+      }
   for(int i=0; i < nout; i++){
     out[fout+jout*i]=  (unsigned char) (sp2[i*resamp]/jw2);
  }
+  // if(fin==0) assert(1==2);
 
 }
 void raster::set_bcolor(QString col){
