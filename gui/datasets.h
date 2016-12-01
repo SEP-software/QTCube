@@ -15,7 +15,7 @@ class datasets: public QObject{
    void set_orients(std::shared_ptr<orients>my){my_or=my;}
    void clean_dats();
    void update_data(std::vector<QString> coms);
-
+   void afterInitialization();
    void add_dat(std::shared_ptr<dataset >dat);
    std::shared_ptr<dataset >return_dat(int i);
    std::shared_ptr<dataset>return_dat(QString nm);

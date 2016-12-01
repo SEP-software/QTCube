@@ -14,14 +14,13 @@ myt=["SEP","SEGY","SEISPAK","SU"]
 
 
 #YOU NEED TO EDIT THIS LIKE
-sepbin="/opt/SEP/SEP8.0/bin"
 debug=0
 
 #YOU NEED TO EDIT THIS LIKE
 
-binary="%s/qt_cube"%sepbin
-binary="/users/bob/cpp/qt_cube/qt_cube.app/Contents/MacOS/qt_cube"
+binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
 if os.environ.has_key("QTCUBE"): binary=os.environ["QTCUBE"]
+binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
 
 
 
@@ -38,9 +37,9 @@ data="DATA PARAMETERS\n   The size and sampling of the input data sets is specif
 data+="  SEP datasets this information is read from the history file.\n"
 data+="  All datasets must exist in the same space and interpolated to the defined grid\n\n"
 io="IO PARAMETERS\n   A dataset can be stored internally in several formats.\n"
-io+="   They can be read in and stored as floats or bytes (storex=IN_FLOAT storex=IN_BYTE).\n"
+io+="   They can be read in and stored as floats or bytes (storagex=IN_FLOAT storagex=IN_BYTE).\n"
 io+="   They can be treated as an out of core dataset where the first three axes in the \n"
-io+="   current view order are read in and store (storex=OUT_FLOAT storex=OUT_BYTE).\n"
+io+="   current view order are read in and store (storagex=OUT_FLOAT storagex=OUT_BYTE).\n"
 io+="   Or you can specify that the data exists only in a subset of the defined grid space,\n"
 io+="   for example displaying a finely sampled migrated cube and angle gathers (PART_BYTE/PART_FLOAT)\n\n"
 view="VIEW PARAMTERS\n  Each view can arrange the data axes in a different order.\n"
@@ -101,37 +100,37 @@ def find_files(args,eqs):
       fnd=sufR.search(arg)
       if not fnd:
         if not eqs.has_key("type%d"%count):
-          err("Couldn't find suffix for %s must specify type%d=X where X must be either:%s"%(
+          err("Couldn't find suffix for %s must specify fileTypee%d=X where X must be either:%s"%(
             arg,count,string.join(myt,",")))
         else:
           for suf,typ in sufixes.items():
-            if typ==eqs["type%d"%count]:
+            if typ==eqs["fileType%d"%count]:
               aa="aaa.%s"%typ
               fnd=sufR.search(aa);
       for suf,typ in sufixes.items():
         if fnd.group(1) == suf:
-          eqs["type%d"%count]=typ
-      if not eqs.has_key("type%d"%count):
-          err("Don't recognize suffix for %s must specify type%d=X where X must be either:%s"%(
+          eqs["fileType%d"%count]=typ
+      if not eqs.has_key("fileType%d"%count):
+          err("Don't recognize suffix for %s must specify fileType%d=X where X must be either:%s"%(
             arg,count,string.join(myt,",")))
-      if not eqs.has_key("store%d"%count):
-        eqs["store%d"%count]="IN_BYTE"
-      if eqs["type%d"%count]=="SEP":
+      if not eqs.has_key("storage%d"%count):
+        eqs["storage%d"%count]="IN_BYTE"
+      if eqs["fileType%d"%count]=="SEP":
         if not pars_exist("g",eqs):
           get_sep_params(arg,eqs,"g")
-      elif eqs["type%d"%count]=="SEISPAK":
+      elif eqs["fileType%d"%count]=="SEISPAK":
         get_seispak_params(arg,eqs,count)
         if not pars_exist("g",eqs):
           eqs=copy_pars(eqs,"0","g");
-      elif eqs["type%d"%count]=="SEGY":
+      elif eqs["fileType%d"%count]=="SEGY":
         get_segy_params(arg,eqs,count,3600)
         if not pars_exist("g",eqs):
           eqs=copy_pars(eqs,"0","g");
-      elif eqs["type%d"%count]=="SU":
+      elif eqs["fileType%d"%count]=="SU":
         get_segy_params(arg,eqs,count,0)
         if not pars_exist("g",eqs):
           eqs=copy_pars(eqs,"0","g");
-      elif eqs["type%d"%count]=="SEISPAK":
+      elif eqs["fileType%d"%count]=="SEISPAK":
         get_seispak_params(arg,eqs,count)
         if not pars_exist("g",eqs):
           eqs=copy_pars(eqs,"0","g");
@@ -145,15 +144,16 @@ def find_files(args,eqs):
             err("Must specify data size")
         
       eqs["data%d"%count]=arg
+      eqs["type%d"%count]="FILE"
       count+=1
   eqs["ndata"]=count
   return count,eqs      
 def get_sep_params(file,par,o):
  for i in range(8):
-   stat1,out1=commands.getstatusoutput("%s/Get parform=no <%s n%d"%(sepbin,file,i+1))
-   stat2,out2=commands.getstatusoutput("%s/Get parform=no <%s o%d"%(sepbin,file,i+1))
-   stat3,out3=commands.getstatusoutput("%s/Get parform=no <%s d%d"%(sepbin,file,i+1))
-   stat4,out4=commands.getstatusoutput("%s/Get parform=no <%s label%d"%(sepbin,file,i+1))
+   stat1,out1=commands.getstatusoutput("Get parform=no <%s n%d"%(file,i+1))
+   stat2,out2=commands.getstatusoutput("Get parform=no <%s o%d"%(file,i+1))
+   stat3,out3=commands.getstatusoutput("Get parform=no <%s d%d"%(file,i+1))
+   stat4,out4=commands.getstatusoutput("Get parform=no <%s label%d"%(file,i+1))
    if stat1:
      err("Trouble reading parameters from %s"%file)
    if len(out1)==0:out1="1"
@@ -173,13 +173,14 @@ def get_seispak_params(file,par,o):
   array_f=array.array("f");
   array_f.fromfile(f,13)
   if array_i[11]==4:
-    par["type%s"%o]="SEISPAKF"
+    par["fileType%s"%o]="SEISPAKF"
   elif array_i[11]==2:
-    par["type%s"%o]="SEISPAKS"
+    par["fileType%s"%o]="SEISPAKS"
   if not par.has_key("n%s_1"%o):  par["n%s_1"%o]=array_i[5];
   if not par.has_key("d%s_1"%o): par["d%s_1"%o]=array_f[6];
   if not par.has_key("n%s_2"%o): par["n%s_2"%o]=int(array_f[7]);
   if not par.has_key("n%s_3"%o): par["n%s_3"%o]=int(array_f[8]);
+
   return par
 def get_segy_params(file,par,o,off):
   f=open(file,"rb");
@@ -359,9 +360,9 @@ def velan_params(args,ndat):
   args["ng_6"]=args["nv"]
   args["og_6"]=args["v0"]
   args["dg_6"]=args["dv"]
-  args["store0"]="PART_BYTE"
-  args["store1"]="CREATED_FLOAT"
-  args["store2"]="CREATED_FLOAT"
+  args["storage0"]="PART_BYTE"
+  args["storage1"]="CREATED_FLOAT"
+  args["storage2"]="CREATED_FLOAT"
   args["type1"]="NMOED"
   args["type2"]="SEMBLANCE"
   if not args.has_key("i_t"): args["i_t"]=1;

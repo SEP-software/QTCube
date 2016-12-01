@@ -59,7 +59,7 @@ std::shared_ptr<maps> mym) {
    first=true;  //Whether or not this is the initial creation
 
    //Sets the initial view to THREE and create it
-   this->myv=view_by_name(pars->getString(std::string("view")+std::to_string(iview),std::string("FRONT")));
+   this->myv=view_by_name(pars->getString(std::string("view")+std::to_string(iview),std::string("THREE")));
    //Sets the initial data color to grey.
    std::string col=pars->getString(std::string("color")+std::to_string(iview),"grey");
    this->fact=ct->return_color_table(col);

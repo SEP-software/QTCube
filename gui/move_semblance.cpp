@@ -31,8 +31,13 @@ int imes, std::shared_ptr<paramObj>pars, std::shared_ptr<pick_draw>_pk, QString 
   num=new float[axes[i_t].n*axes[i_mes].n];
   den=new float[axes[i_t].n*axes[i_mes].n];
  col1=a; col2=b;
+ 
+ 
+
  pks=_pk;
- pks->ignore_axis(ioff);
+}
+void move_semblance::moveSemblanceAfterInitialization(){
+ pks->ignore_axis(i_off);
 }
 
   

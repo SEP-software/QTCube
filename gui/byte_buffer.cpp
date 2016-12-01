@@ -87,7 +87,7 @@ std::vector<int> &nwio,std::vector<int> &fwio, int ndim ,std::vector<int> &nloop
  }
 if(tflt!=0) delete [] tflt;
  calc_histo();
-// fprintf(stderr,"CHECK THIS %f %f \n",bclip,eclip);
+
  io->return_clips(&bclip,&eclip);
 }
 unsigned char *byte_buffer::get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1,
@@ -139,6 +139,7 @@ float *byte_buffer::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, in
       pos->set_no_rotate();
    }
    int n1=abs(e1-f1), n2=abs(e2-f2);
+   fprintf(stderr,"CEHCK axis %d %d \n",iax1,iax2);
    long long *index=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
    float *out=get_float_data(n1*n2,index);
    return out;

@@ -107,7 +107,10 @@ class pick_draw{
    void add_multi_picks(std::vector<long long> locs);
    void delete_multi_picks(std::vector<long long> locs);
    void set_pick_text(QString t){ active_txt=t; fprintf(stderr,"Setting text %s \n",active_txt.toAscii().constData());}
-   void ignore_axis(int i){ buck->ignore_axis(i);}
+   void ignore_axis(int i){
+     if(buck) fprintf(stderr,"see axis \n");
+     else fprintf(stderr,"Can not see bucket \n");
+    buck->ignore_axis(i);}
    void set_move(int im){ bulk=im;}
    int get_move(){return bulk;}
    void check_create_oc(std::shared_ptr<orient_cube>pos);

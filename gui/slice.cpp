@@ -794,6 +794,7 @@ std::vector<float> slice::optimal_with_font(int axis_size, int mn,int mx,std::ve
 std::vector<float> slice::optimal_with_font(int axis_size,float min, float max){
    
   
+  if(min==max) max=min+1;
     int nf,nc;
   float axis_f=(float) axis_size;
  

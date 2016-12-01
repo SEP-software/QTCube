@@ -77,6 +77,7 @@ std::shared_ptr<buffer>created_data_float::create_buffer(std::shared_ptr<orient_
     std::shared_ptr<float_buffer>b(new float_buffer(par,grid,io,inum,nw,fw));
    // b->set_hold(hold);
    
+   fprintf(stderr,"in create data float \n");
 
    return b;
 }
@@ -104,6 +105,7 @@ std::shared_ptr<buffer>created_data_byte::create_buffer(std::shared_ptr<orient_c
        fw[i]=0;
      }
    }
+   fprintf(stderr,"in create data byre \n");
    if(iax1==0 && iax2==0 && pos==0);
     std::shared_ptr<byte_buffer>b(new byte_buffer(par,grid,io,inum,nw,fw));
    //   b->set_hold(hold);

@@ -1,21 +1,41 @@
 #include "nmoed.h"
 #include <math.h>
 #include "interval_pick.h"
-nmoed::nmoed(std::shared_ptr<hypercube >grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes, std::shared_ptr<paramObj>pars, 
- std::shared_ptr<pick_draw>_pk, QString col1, QString col2){
+nmoed::nmoed(std::shared_ptr<hypercube >grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
+ std::shared_ptr<paramObj>pars, 
+ std::shared_ptr<pick_draw>pk, QString col1, QString col2){
+ fprintf(stderr,"FAIL 1 \n");
     std::shared_ptr<util> pp(new util(pars));
   par=pp;
-  set_moveout_basics(grid,dat,it,ioff,imes,par,_pk,col1,col2);
+  fprintf(stderr,"FAIL2 \n");
+  _grid=grid;
+  _dat=dat;
+  _it=it;
+  _ioff=ioff;
+  _imes=imes;
+  _pk=pk;
+  _col1=col1;
+  _col2=col2;
+    this->set_moveout_basics(_grid,_dat,_it,_ioff,_imes,par,_pk,_col1,_col2);
+
   smute=pars->getFloat("smute",1.5);
   
 }
+void nmoed::afterInitialization(){
+  this->moveoutAfterInitialization();
 
 
-void nmoed::move_it(int *f,float *nmo){
+
+}
+
+
+void nmoed::move_it(std::vector<int>&f,float *nmo){
  int it,i2;
  float offset,offovs,tnmute;
  float tn,ti;
 
+
+fprintf(stderr,"IN MOVE IT\n");
  axis taxis=grid->getAxis(i_t+1);
  axis oaxis=grid->getAxis(i_off+1);
  axis maxis=grid->getAxis(i_mes+1);

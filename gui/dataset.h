@@ -52,7 +52,7 @@ class dataset: public QObject{
     void  snap_location(float *floc, int single, QString stype);
     int check_load_buffer(std::shared_ptr<orient_cube>pos, int iax1,  int iax2);
     int find_buffer(std::shared_ptr<orient_cube>pos);
-    
+    virtual void afterInitialization(){;}
     virtual std::shared_ptr<buffer> create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2){
       if(pos==0 || iax1==0 || iax2==0) {;};
       return 0;

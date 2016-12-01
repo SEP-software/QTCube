@@ -3,6 +3,7 @@
 #include "percentile.h"
 float percentile::find_abs(float *x, long long n, long long q)
 {
+fprintf(stderr,"XX n=%d q=%d \n",n,q);
         register float *i, *j, ak;
         float *low, *hi, buf, *k;
         for (low=x, hi=x+n-1, k=x+q; low<hi;)

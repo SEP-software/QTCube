@@ -4,6 +4,8 @@
 
 nmo_semblance::nmo_semblance(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
        std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pk1, QString col1, QString col2){
+ fprintf(stderr,"before moveout basics \n");
+ 
  
  this->set_moveout_basics(grid,dat,it,ioff,imes,pars,pk1,col1,col2); 
  no_sem=pars->getInt("no_sem",0);

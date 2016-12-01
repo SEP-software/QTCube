@@ -152,7 +152,8 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
     for(int i=0; i< (int)rot_maps.size();i++) delete rot_maps[i];
       rot_maps.clear();
       map_order.clear();
-      orient_num=serv->get_new_num(orient_num,rot_ax,ax_rot,ang,rot_cen);
+
+     if(serv) orient_num=serv->get_new_num(orient_num,rot_ax,ax_rot,ang,rot_cen);
   }
   float get_oversamp(int iax){
      if(iax==0 && one_shift.size()>0) return oversamp;

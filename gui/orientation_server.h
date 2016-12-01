@@ -29,7 +29,7 @@ class converter{
 class orientation_server{
   public:
   orientation_server(std::shared_ptr<position >pos);
-  int get_new_num(){ num+=1; active_list.insert(num);return num;}
+  int get_new_num(){  num+=1; active_list.insert(num);return num;}
    int get_new_inst(){inst+=1; return inst;}
   int get_new_num(int iold,int *in, std::vector<axis>ax, float a, float *cen);
    std::shared_ptr<pick_new >convert_pick(int oc,std::shared_ptr<pick_new>pk);

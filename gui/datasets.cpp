@@ -19,6 +19,12 @@ std::shared_ptr<dataset> datasets::return_dat(int idat){
   return dats[idat];
 
 }
+void datasets::afterInitialization(){
+
+   for(int i=0; i < (int)dats.size(); i++){  
+      dats[i]->afterInitialization();
+  }
+}
 void datasets::update_data(std::vector<QString> command){
   int idat=command[0].toInt();
 

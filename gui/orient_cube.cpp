@@ -40,20 +40,30 @@ orient_cube::orient_cube(std::shared_ptr<position>pos,std::vector<int> o,std::sh
    block[0]=1;
    serv=s;
     for(int i=0; i < 8; i++){
-       this->set_axis(i,h->getAxis(i+1));
+         axis a=h->getAxis(i+1);
+       this->set_axis(i,a);
            if(i>0) block[i]=block[i-1]*getAxis(i-1).n;
-}
+           this->order[i]=i;
+           this->reverse[i]=false;
+           this->beg[i]=0;
+           this->end[i]=a.n;
+           if(i==0) ax_rot.push_back(a);
+           if(i==1) ax_rot.push_back(a);
+        }
+
   //  reg_to_rot_1=0;
     rot_to_reg_1=0;
 //    reg_to_rot_2=0;
     rot_to_reg_2=0;
     set_no_rotate();
-  rot_ax[0]=1; rot_ax[1]=2;
   get_locs(rot_pt);
      init_map_1d();
   init=false;
-      orient_num=serv->get_new_num(orient_num,rot_ax,ax_rot,ang,rot_cen);
-
+  rot_ax[0]=0;rot_ax[1]=1;
+ 
+  
+     if(s)     orient_num=serv->get_new_num(orient_num,rot_ax,ax_rot,ang,rot_cen);
+  
  }
  orient_cube::orient_cube(std::shared_ptr<orient_cube>ori) {
    init=true;
@@ -124,6 +134,8 @@ void  orient_cube::orient_data_loc(int iax1, int iax2, int *iloc){
 
 }
 int orient_cube::form_map_name(int iax1,int iax2,int idelta,int *i3,int *i3v){
+
+fprintf(stderr,"CHEK  %d %d %d %d \n",order[0],order[1],iax1,iax2);
      if(order[0]==iax1 && order[1]==iax2) *i3=order[2];
      else if(order[0]==iax2 && order[1]==iax2) *i3=order[2];
      else if(order[0]==iax1 && order[1]==iax2) *i3=order[1];
@@ -131,7 +143,6 @@ int orient_cube::form_map_name(int iax1,int iax2,int idelta,int *i3,int *i3v){
      else {
        *i3=order[0];
        }
-// fprintf(stderr,"MAP %d  %d %d  %d\n",*i3,loc[*i3],getAxis(*i3).n,idelta);
      *i3v= std::max(0,std::min(getAxis(*i3).n-1,idelta+loc[*i3]));
     // fprintf(stderr,"GOOG %d \n",(*i3v)*100+iax1+iax2*10);
   return (*i3v)*100+iax1+iax2*10;
@@ -398,6 +409,9 @@ void orient_cube::set_no_shift(){
      delete [] rot_to_reg_2;
      rot_to_reg_2=0;
    }
+
+
+
    rotation_change();
  }
  axis orient_cube::get_rot_axis(int iax){

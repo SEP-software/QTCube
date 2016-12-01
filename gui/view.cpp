@@ -64,7 +64,7 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, std::shared_ptr<ras
 
    int yshift=0;
    if(draw_title && title_bot) yshift+=(int)(1.5*ph);
-  
+
   painter->setPen(*pen);
   //Make the bar
   unsigned char *uc=new unsigned char[256];
@@ -80,7 +80,9 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, std::shared_ptr<ras
   painter->drawPixmap(bbar,ey-5*ph-yshift,t2);
   delete img;
   //Make the histogram
+
   float *histo=cur_dat->buf[0]->return_histo();
+
    QPolygon histarray;
    int ix,iy;
    for(int i=0; i < 256; i++){
@@ -88,14 +90,18 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, std::shared_ptr<ras
        iy=(int)(ey-3*ph-histo[i]*2.*ph-yshift);
       histarray.putPoints(i,1,ix,iy);
    }
+
    	painter->drawPolyline(histarray);
+
   //Make the axis
   float minv=cur_dat->get_minval(),maxv=cur_dat->get_maxval();
   std::vector<float> tics=slices[0]->optimal_with_font(rbar,minv,maxv);
+
   float pct;
   QString ab;
   int tic_len=fm->height()/3;
   int xb;
+
   for(int i=0; i< (int)tics.size(); i++){
     pct=((float)(tics[i]-minv))/((float)(maxv-minv));
     xb=(int)(bbar+pct*rbar);
@@ -104,13 +110,16 @@ void view::draw_bar( int xshift,QPainter *painter,QPen *pen, std::shared_ptr<ras
     pw = fm->width( aa );
     painter->drawText((int)(xb-pw/2),(int)(ey-ph*1.5)-yshift,aa);
   }
+
     QPolygon pointarray;
     pointarray.putPoints(0,5,bbar,ey-5*ph-yshift,bbar,ey-3*ph-yshift,
       ebar,ey-3*ph-yshift,ebar,ey-5*ph-yshift,bbar,ey-5*ph-yshift);
 		painter->drawPolyline(pointarray);
 
   //Make the title
+
   painter->drawText((bx+ex-pw)/2,ey-ph/2-yshift,title);
+
   delete [] histo;
 }
 void view::draw_title(int xshift,QPainter *painter,QPen *pen,QString title){

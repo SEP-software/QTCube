@@ -39,15 +39,17 @@ class buffer{
 void set_hold(bool *h);
   virtual  unsigned char *get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2){
-       _par->error("Get char data undefined");
+       _par->error("Get char data1 undefined");
        if(pos==0 && iax1==0 && f1==0 && e1==0 && iax2==0 && f2==0 && e2==0){;};
        return 0;   
    }
+   /*
      virtual  unsigned char *get_char_data(std::shared_ptr<orient_cube>pos, int n, long long *buf){
-       _par->error("Get char data undefined");
+       _par->error("Get char data2 undefined");
        if(n==0 && buf==0&&pos==0){;};
        return 0;   
    }
+   */
   virtual  float *get_float_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
       int f2, int e2){
        _par->error("Get float data undefined");

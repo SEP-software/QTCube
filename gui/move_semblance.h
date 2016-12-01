@@ -12,7 +12,7 @@ class  move_semblance: public io_func{
    void set_moveout_basics(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat,int it, int ioff, int imes,
      std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pck,QString col1, QString col2);
 
-
+   void moveSemblanceAfterInitialization();
 
    virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
    virtual void read_block_byte(std::vector<int>&nw, std::vector<int>&fw, unsigned char *buf);

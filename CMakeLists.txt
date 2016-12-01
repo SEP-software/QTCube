@@ -15,61 +15,40 @@ else()
 endif()
 
 enable_language(CXX)
-
-
-
-find_path(SEPINCDIR seplib.h HINTS ENV SEP PATH_SUFFIXES PATHS  include /usr/local/SEP /usr/local/SEP/SEP8.0 /opt/SEP/opt/SEP/SEP8.0)
-find_library(LIBSEP sep HINTS ENV SEP PATH_SUFFIXES lib PATHS  /usr/local/SEP /usr/local/SEP/SEP8.0 /opt/SEP /opt/SEP/SEP8.0)
-find_path(RSFINCDIR rsf.h HINTS ENV RSF PATH_SUFFIXES include PATHS /opt/RSF/1.7 /opt/RSF)
-find_path(GENERICIOINCDIR genericIO.h ENV GENERICIO PATH_SUFFIXES include PATHS /sep/bob/genericIO)
-find_library(GENERICIOLIB genericCpp ENV GENERICIO PATH_SUFFIXES lib PATHS /sep/bob/genericIO REQUIRED)
-find_library(LIBSEP sep HINTS ENV SEP PATH_SUFFIXES lib PATHS  /usr/local/SEP/lib)
-find_library(LIBRSF rsf HINTS ENV RSF PATH_SUFFIXES lib PATHS  /opt/RSF/1.7/lib)
-find_library(LIBSEP3D sep3d HINTS ENV SEP PATH_SUFFIXES lib PATHS /usr/local/SEP/lib)
 find_library(LIBTBB tbb REQUIRED)
 
-if(LIBSEP3D)
-else(LIBSEP3D)
-  message(FATAL_ERROR "Could not find library sep3d")
-endif(LIBSEP3D)
-
-if(LIBSEP)
-else(LIBSEP)
-  message(FATAL_ERROR "Could not find library sep")
-endif(LIBSEP)
-
-if(LIBRSF)
-else(LIBRSF)
-  message(FATAL_ERROR "Could not find library rsf")
-endif(LIBRSF)
+FIND_PACKAGE(genericIO NO_MODULE REQUIRED)
+INCLUDE_DIRECTORIES(${genericIO_DIRNAME_include})
 
 
-if (RSFINCDIR)
-  message(STATUS "Compiling with RSF")
-  set(USE_RSF true)
-    include_directories(${RSFINCDIR})
+configure_file (
+  "${PROJECT_SOURCE_DIR}/Sep_cube.in"
+  "${PROJECT_BINARY_DIR}/Sep_cube"
+  )
 
-else(RSFINCDIR)
-  message(STATUS "Not Compiling with RSF")
-endif(RSFINCDIR)
-
-#!if (SEPINCDIR AND LIBSEP AND LIBSEP3D)
-if (SEPINCDIR)
-  message(STATUS "Compiling with SEPlib")
-  set(USE_SEP true)
-    include_directories(${SEPINCDIR})
-
-else(SEPINCDIR)
-  message(STATUS "Not Compiling with SEPlib")
-endif(SEPINCDIR)
-
-if(GENERICIO)
-  include_directories(${GENERICIO})
-else(GENERICIO)
-  message(FATAL_ERRROR "Could not find generic IO can't compile")
-endif(GENERICIO)
+install(PROGRAMS ${PROJECT_BINARY_DIR}/Sep_cube  
+ 
+ DESTINATION bin
+)
 
 add_subdirectory(base)
 add_subdirectory(gui)
-add_subdirectory(build)
 
+
+
+FIND_PACKAGE(Qt4 REQUIRED)
+INCLUDE(${QT_USE_FILE})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/base)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui)
+link_directories(${CURRENT_BINARY_DIR}/base ${CURRENT_BINARY_DIR}/gui)
+
+SET(QtApp_RCCS qt_cube.qrc)
+
+# generate rules for building source files from the resources
+QT4_ADD_RESOURCES(QtApp_RCC_SRCS ${QtApp_RCCS})
+
+
+ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
+TARGET_LINK_LIBRARIES(qt_cube gui)
+TARGET_LINK_LIBRARIES(qt_cube base)
+TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} ${LIBTBB})

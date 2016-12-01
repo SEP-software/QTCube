@@ -53,6 +53,7 @@ converter::converter(int *in,std::vector<axis> ax,float a,float *cen,std::vector
 
   int orientation_server::get_new_num(int iold,int *in, std::vector<axis>ax, float a, float *cen){
     for(std::set<int>:: iterator i=active_list.begin(); i!=active_list.end(); i++){
+    
        if(*i==iold) {
          active_list.erase(i); 
          if(converters.count(iold)==1) {

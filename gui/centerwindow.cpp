@@ -203,6 +203,7 @@ setStyleSheet("QGroupBox::title { background-color: transparent; subcontrol-posi
  coms[0]="-1";
  coms[1]="redraw";
  coms[2]="all";
+ datas->afterInitialization();
  actionRespond(coms);
  }
  void MainWindow::connect_it(){

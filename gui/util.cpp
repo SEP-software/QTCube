@@ -61,7 +61,7 @@ float *util::float_array_from_string(QString str){
     percentile p=percentile();
     int j=1;
     int nsmall;
-    int sub=7;
+    int sub=1;
     j=sub;
     nsmall=nelem/sub;
     while(nsmall>10000000) {
@@ -75,6 +75,7 @@ float *util::float_array_from_string(QString str){
     float *tempf=new float[nsmall];
      int ii=0,i=0;
      for(i=0; i< nelem && ii < nsmall; i+=j,ii++) tempf[ii]=buf[i];
+     fprintf(stderr,"FILLED IN TO %d %d \n",i,ii);
 //    memcpy((void*)tempf,(const void*) buf,sizeof(float)*nelem);
           
     if(swap==1) swap_float_bytes(nsmall,tempf);

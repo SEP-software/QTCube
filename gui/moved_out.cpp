@@ -29,10 +29,11 @@ void moved_out::set_moveout_basics(std::shared_ptr<hypercube>g, std::shared_ptr<
   std::shared_ptr<orient_cube> oo(new orient_cube(grid));
   dumb=oo;
 
-
-  
 }
+void moved_out::moveoutAfterInitialization(){
 
+
+}
   
   
 
@@ -43,7 +44,10 @@ void moved_out::read_block_float(std::vector<int>&nw, std::vector<int>&fw, float
   if(nw[i_t]!=grid->getAxis(i_t+1).n ||
     nw[i_off]!=grid->getAxis(i_off+1).n)
      par->error("Internal error in measure");
+     
+     fprintf(stderr,"in read block float \n");
     move_it(fw,buf);
+    fprintf(stderr,"AFTER READ BLOCK FLOAT \n");
     changed=true;
  }  
 
@@ -51,8 +55,10 @@ void moved_out::read_block_byte(std::vector<int>&nw, std::vector<int>&fw, unsign
     if(nw[i_t]!=grid->getAxis(i_t+1).n ||
     nw[i_off]!=grid->getAxis(i_off+1).n)
      par->error("Internal error in measure");
+     fprintf(stderr,"IN READ BLOCK BYTE \n");
      float *tbuf=new float[nw[i_t]*nw[i_off]];
      read_block_float(nw,fw,tbuf);
+     fprintf(stderr,"CEHCK CLIP %d %d \n",nw[i_t]*nw[i_mes]);
      set_clip(tbuf,0,nw[i_t]*nw[i_mes]);
      convert_to_byte(tbuf,0,buf,0,nw[i_t]*nw[i_mes]);
      delete [] tbuf;

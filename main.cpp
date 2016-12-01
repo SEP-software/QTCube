@@ -23,15 +23,16 @@
 
 int main(int argc, char** argv) {
 	
-	
   std::shared_ptr<ioModes> modes(new ioModes(argc,argv));
-  
+
   std::shared_ptr<genericIO> defaultIO=modes->getDefaultIO();
   std::string defaultType=modes->getDefaultType();
-	
+
 
   QApplication app(argc, argv);
+
   std::shared_ptr<paramObj> pars(defaultIO->getParamObj());
+
   std::shared_ptr<pick_draw> pk(new pick_draw());
   std::shared_ptr<datasets> datas(new datasets(pars,pk));
   QString red="red", blue="blue";
@@ -40,13 +41,12 @@ int main(int argc, char** argv) {
   int ioff_axis=pars->getInt("off_axis",1);
   int imes_axis=pars->getInt("mes_axis",5);
   int imov=pars->getInt("moveout_data",0);
-  
   std::shared_ptr<hypercube> grid;
   for(int i=0; i < pars->getInt("ndata"); i++){
-    std::string type=pars->getString(std::string("type")+std::to_string(i+1),"FILE");
-    std::string name=pars->getString(std::string("data")+std::to_string(i+1));
-    std::string storage=pars->getString(std::string("storage")+std::to_string(i+1),"IN_BYTE");
-    std::string title=pars->getString(std::string("title")+std::to_string(i+1),name);
+    std::string type=pars->getString(std::string("type")+std::to_string(i),"FILE");
+    std::string name=pars->getString(std::string("data")+std::to_string(i));
+    std::string storage=pars->getString(std::string("storage")+std::to_string(i),"IN_BYTE");
+    std::string title=pars->getString(std::string("title")+std::to_string(i),name);
     std::shared_ptr<io_func> iof;
     QString nameq=QString(name.c_str());
     if(i==0 && type!=std::string("FILE")) pars->error("First type specified must be a file");
@@ -57,10 +57,12 @@ int main(int argc, char** argv) {
         if(i==0)  grid=iof->return_hyper();
     }
     else if(type==std::string("SEMBLANCE")){
+    fprintf(stderr,"IN SEMBLANCE \n");
         std::shared_ptr<nmo_semblance> se(new nmo_semblance(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
         iof=se;
     }
      else if(type== std::string("NMOED")){
+     fprintf(stderr,"IN NMO CREATAE \n");
         std::shared_ptr<nmoed>  nmo(new nmoed(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
         iof=nmo;
    }

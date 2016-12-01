@@ -51,7 +51,7 @@ float minv, maxv;
  }
  if(off >10000000) off=10000000;
  if(io->not_byte()){
-
+   fprintf(stderr,"CHECM ME =%d d=%d \n",inum,off);
    io->set_clip(fbuf,inum,off);
    io->return_clips(&bclip,&eclip);
   
