@@ -52,3 +52,7 @@ ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
 TARGET_LINK_LIBRARIES(qt_cube gui)
 TARGET_LINK_LIBRARIES(qt_cube base)
 TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} ${LIBTBB})
+
+target_link_libraries(qt_cube Qt4::QtGui Qt4::QtXml)
+TARGET_LINK_LIBRARIES(qt_cube ${LIBTBB})
+
