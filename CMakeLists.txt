@@ -5,7 +5,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pg -O3")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3")
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 if(COMPILER_SUPPORTS_CXX11)
@@ -49,6 +49,7 @@ QT4_ADD_RESOURCES(QtApp_RCC_SRCS ${QtApp_RCCS})
 
 
 ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
+set_property(TARGET qt_cube PROPERTY LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(qt_cube gui)
 TARGET_LINK_LIBRARIES(qt_cube base)
 TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} ${LIBTBB})
@@ -56,3 +57,7 @@ TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} ${LIBTBB})
 target_link_libraries(qt_cube Qt4::QtGui Qt4::QtXml)
 TARGET_LINK_LIBRARIES(qt_cube ${LIBTBB})
 
+install(TARGETS qt_cube  
+ 
+ DESTINATION bin
+)

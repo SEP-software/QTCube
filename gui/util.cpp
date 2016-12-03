@@ -75,7 +75,6 @@ float *util::float_array_from_string(QString str){
     float *tempf=new float[nsmall];
      int ii=0,i=0;
      for(i=0; i< nelem && ii < nsmall; i+=j,ii++) tempf[ii]=buf[i];
-     fprintf(stderr,"FILLED IN TO %d %d \n",i,ii);
 //    memcpy((void*)tempf,(const void*) buf,sizeof(float)*nelem);
           
     if(swap==1) swap_float_bytes(nsmall,tempf);
@@ -130,6 +129,5 @@ void util::convert_to_float(float *fbuf, long long foff, unsigned char *cbuf, lo
     for(long long i=0; i< nelem; i++){
       fbuf[i+foff]=cbuf[i+coff]*d+o;
     }
-    //fprintf(stderr,"READ CONVERSIOn %d %f \n",(int)cbuf[100+coff],fbuf[100+foff]);
   }
   

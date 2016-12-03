@@ -57,12 +57,10 @@ int main(int argc, char** argv) {
         if(i==0)  grid=iof->return_hyper();
     }
     else if(type==std::string("SEMBLANCE")){
-    fprintf(stderr,"IN SEMBLANCE \n");
         std::shared_ptr<nmo_semblance> se(new nmo_semblance(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
         iof=se;
     }
      else if(type== std::string("NMOED")){
-     fprintf(stderr,"IN NMO CREATAE \n");
         std::shared_ptr<nmoed>  nmo(new nmoed(grid,datas->return_dat(imov),it_axis,ioff_axis,5,pars,pk,red,blue));
         iof=nmo;
    }

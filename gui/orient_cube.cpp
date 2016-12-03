@@ -135,7 +135,6 @@ void  orient_cube::orient_data_loc(int iax1, int iax2, int *iloc){
 }
 int orient_cube::form_map_name(int iax1,int iax2,int idelta,int *i3,int *i3v){
 
-fprintf(stderr,"CHEK  %d %d %d %d \n",order[0],order[1],iax1,iax2);
      if(order[0]==iax1 && order[1]==iax2) *i3=order[2];
      else if(order[0]==iax2 && order[1]==iax2) *i3=order[2];
      else if(order[0]==iax1 && order[1]==iax2) *i3=order[1];

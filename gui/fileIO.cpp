@@ -32,7 +32,6 @@ void fileIO::read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *b
   long long n123=1;
  
    if(_dataType==dataFloat){
-      for(int i=0;i < nw.size();i++) fprintf(stderr,"read is %d %d %d \n",i,nw[i],fw[i]);
   
       _file->readFloatWindow(nw,fw,jw,buf);
     }

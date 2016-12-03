@@ -22,7 +22,7 @@ map_1::map_1(std::shared_ptr<genericIO> io,QString nm, const std::shared_ptr<hyp
      assert(sz==rfile->getHyper()->getN123()) ;
      hypercube_float buf=hypercube_float(h);
      ind.resize(sz);
-     rfile->readFloatStream(sz,&buf.vals[0]);
+     rfile->readFloatStream(&buf.vals[0],sz);
      long long i=0;
      for(long long i2=0; i2 < sz/(long long)ns[0]; i2++){
        for(int i1=0 ;   i1 < ns[0]; i1++,i++){

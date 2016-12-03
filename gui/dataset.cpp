@@ -111,18 +111,15 @@ void dataset::set_contains(){
 
 unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube>pos,int iax1,int iax2, 
 int n, long long *index){
-fprintf(stderr,"in dataset get char data %s \n",title.toStdString().c_str());
 std::vector<int> nloc=return_io_hyper()->returnNs();
    int ibuf=check_load_buffer(pos,iax1,iax2);
    unsigned char *cbuf=buf[ibuf]->get_char_data(pos,iax1,0,nloc[iax1],iax2,0,nloc[iax2]);
    
 //   n,index);
    
-fprintf(stderr,"afrter    data set get char data \n");
    for(int i=0; i <n; i++) {
       cbuf[i]=conv[cbuf[i]];
   }
-  fprintf(stderr,"WHAT THE IS GOING ON \n");
    return cbuf;
    
 }
@@ -131,9 +128,7 @@ unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube>pos, int iax1,
       int f2, int e2){
 
 
-   fprintf(stderr,"before check load \n");
    int ibuf=check_load_buffer(pos,iax1,iax2);
-  fprintf(stderr,"now before get char data \n");
    unsigned char *cbuf=buf[ibuf]->get_char_data(pos,iax1,f1,e1,iax2,f2,e2);
 
    for(int i=0; i < abs((e1-f1)*(e2-f2)); i++) cbuf[i]=conv[cbuf[i]];
@@ -207,10 +202,8 @@ int dataset::check_load_buffer(std::shared_ptr<orient_cube>pos, int iax1,  int i
    if(buf[i]->hold_slice(pos,iax1,iax2,data_contains)) return i;
  }
    if((int)buf.size() == nmax_buf) delete_dataset(pos,iax1,iax2);
-   fprintf(stderr,"in check load \n");
 
  buf.push_back(create_buffer(pos,iax1,iax2));
- fprintf(stderr,"OUT OF CHECK LOAD\n");
 
  std::vector<QString> com2; com2.push_back(QString::number(inum)); 
  com2.push_back("clip");
@@ -233,8 +226,6 @@ int dataset::find_buffer(std::shared_ptr<orient_cube>pos){
   for(int i=0; i < (int)buf.size(); i++){
     if(buf[i]->hold_point(loc,data_contains)) return i;
   }
-  fprintf(stderr,"BUFFER PROBLEM %d %s %d %d %d \n",inum,name.toAscii().constData(),
-    pos->loc[0],pos->loc[1],pos->loc[2]);
   par->error("Internal error finding point in buffer\n");
   return 0;
 }
