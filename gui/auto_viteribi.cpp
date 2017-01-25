@@ -1,6 +1,7 @@
 #include "auto_viteribi.h"
 #include "viterbi.h"
 #include "my_score.h"
+using namespace SEP;
 std::vector<path> auto_viteribi::return_path(std::vector<int> locs,std::shared_ptr<float_2d> sim){
 
  //Add in nails

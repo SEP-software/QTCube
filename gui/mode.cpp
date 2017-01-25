@@ -3,6 +3,7 @@
  *	The different modes allow the user to interact with the data differently and give the three mouse buttons
  *	different uses.
  */
+ using namespace SEP;
 mode::mode(QString init_mode){
  if(init_mode=="");
   modes.push_back("navigate");

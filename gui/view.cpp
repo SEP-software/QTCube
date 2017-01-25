@@ -2,6 +2,7 @@
 //Added by qt3to4:
 #include <QKeyEvent>
 #include "raster.h"
+using namespace SEP;
 void view::set_size(int b_x,int e_x, int b_y, int e_y){
   bx=b_x; ex=e_x;by=b_y;ey=e_y;
 

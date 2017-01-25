@@ -1,6 +1,6 @@
 #include "my_fonts.h"
 
-
+using namespace SEP;
 my_font::my_font(QString name){
     QString nm=name.section("-",0,0);
     int sz=name.section("-",1,1).toInt();

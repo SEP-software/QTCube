@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include "util.h"
-
+using namespace SEP;
 clip_bar::clip_bar(int id, QWidget* parent,  const char* name){
 	pm=QPixmap(100,100);
 	idat=QString::number(id);

@@ -41,15 +41,15 @@
  class QActionGroup;
  class QLabel;
  class QMenu;
-
+namespace SEP{
  class MainWindow : public QMainWindow
  {
      Q_OBJECT
 
  public:
-     MainWindow(std::shared_ptr<genericIO>io ,std::shared_ptr<datasets>d,std::shared_ptr<pick_draw> _pk,
-	  std::shared_ptr<slice_types> ct);
- std::shared_ptr<history> my_hist;
+     MainWindow(std::shared_ptr<SEP::genericIO>io ,std::shared_ptr<SEP::datasets>d,std::shared_ptr<SEP::pick_draw> _pk,
+	  std::shared_ptr<SEP::slice_types> ct);
+ std::shared_ptr<SEP::history> my_hist;
 
 
  private slots:
@@ -93,26 +93,26 @@
 
  private:
  void update_status_bar();
-  std::shared_ptr<window_panel>my_window_panel;
- std::shared_ptr<orientation_server>serv;
- std::shared_ptr<panel_panel>my_panel_panel;
- std::shared_ptr<data_panel>my_data_panel;
- std::shared_ptr<help_panel>my_help_panel;
- std::shared_ptr<ano_panel>my_ano_panel;
- std::shared_ptr<color_panel>my_color_panel;
- std::shared_ptr<pick_panel>my_pick_panel;
- std::shared_ptr<genericIO> _io;
-  std::shared_ptr<panels>my_pan;
-  std::shared_ptr<windows>my_wind;
-  std::shared_ptr<position>pos;
-  std::shared_ptr<maps>my_maps;
-	std::shared_ptr<pick_draw>pk;
-	     std::shared_ptr<paramObj>pars;
-     std::shared_ptr<util> pp;
-     std::shared_ptr<datasets>datas;
+  std::shared_ptr<SEP::window_panel>my_window_panel;
+ std::shared_ptr<SEP::orientation_server>serv;
+ std::shared_ptr<SEP::panel_panel>my_panel_panel;
+ std::shared_ptr<SEP::data_panel>my_data_panel;
+ std::shared_ptr<SEP::help_panel>my_help_panel;
+ std::shared_ptr<SEP::ano_panel>my_ano_panel;
+ std::shared_ptr<SEP::color_panel>my_color_panel;
+ std::shared_ptr<SEP::pick_panel>my_pick_panel;
+ std::shared_ptr<SEP::genericIO> _io;
+  std::shared_ptr<SEP::panels>my_pan;
+  std::shared_ptr<SEP::windows>my_wind;
+  std::shared_ptr<SEP::position>pos;
+  std::shared_ptr<SEP::maps>my_maps;
+	std::shared_ptr<SEP::pick_draw>pk;
+	     std::shared_ptr<SEP::paramObj>pars;
+     std::shared_ptr<SEP::util> pp;
+     std::shared_ptr<SEP::datasets>datas;
      QString stat_view;
-     std::shared_ptr<slice_types>colort;
-     	std::shared_ptr<orients>my_or;
+     std::shared_ptr<SEP::slice_types>colort;
+     	std::shared_ptr<SEP::orients>my_or;
 
      void createActions();
      void createMenus();
@@ -144,7 +144,7 @@
      QLabel *modeLabel;
      QString mouse_lab;
  };
-
+}
  #endif
 
 

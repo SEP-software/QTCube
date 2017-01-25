@@ -2,6 +2,7 @@
 #include "math.h"
 #include <stdlib.h>
 #include <QFileInfo>
+using namespace SEP;
 void dataset::set_basics(std::string titl,QString nm,std::shared_ptr<hypercube>g,
 std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
  if(titl==""){;}

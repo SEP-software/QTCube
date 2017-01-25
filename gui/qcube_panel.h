@@ -16,14 +16,14 @@
 #include<QComboBox>
 #include <QPushButton>
 #include <vector>
-
+namespace SEP{
 class qcube_panel{
  public:
    qcube_panel(){;}
-   void set_basics(std::shared_ptr<position>p,std::shared_ptr<windows>my_w, 
-   std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, 
-   std::shared_ptr<pick_draw>pk, std::shared_ptr<slice_types>c, 
-   std::shared_ptr<maps> m);
+   void set_basics(std::shared_ptr<SEP::position>p,std::shared_ptr<SEP::windows>my_w, 
+   std::shared_ptr<SEP::panels>my_p, std::shared_ptr<SEP::datasets>my_d, 
+   std::shared_ptr<SEP::pick_draw>pk, std::shared_ptr<SEP::slice_types>c, 
+   std::shared_ptr<SEP::maps> m);
    ~qcube_panel(){ delete_qcube_panel();}
     virtual void actionRespond(std::vector<QString>){;}
 
@@ -45,5 +45,7 @@ class qcube_panel{
 
 
 };
+
+}
 #endif
 

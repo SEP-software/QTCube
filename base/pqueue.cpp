@@ -1,7 +1,7 @@
 
 #include "pqueue.h"
 #include <stdio.h>
-
+using namespace SEP;
 pqueue::pqueue(int n){
   x=new float*[(n+1)];
   xn=x;

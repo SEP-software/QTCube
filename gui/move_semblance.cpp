@@ -1,6 +1,6 @@
 #include<nmo_semblance.h>
 #include "move_semblance.h"
-   
+using namespace SEP;
 void move_semblance::set_moveout_basics(std::shared_ptr<hypercube>g, std::shared_ptr<dataset>dat, int it,int ioff, 
 int imes, std::shared_ptr<paramObj>pars, std::shared_ptr<pick_draw>_pk, QString a, QString b){
   

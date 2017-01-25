@@ -1,6 +1,6 @@
 #include<simple_color.h>
 #include "my_colors.h"
-
+using namespace SEP;
 void simple_color::fill_it(int *red, int *green, int *blue,int alpha)
 {
   int r,g,b;

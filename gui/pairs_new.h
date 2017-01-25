@@ -2,6 +2,7 @@
 #include <QString>
 #ifndef PAIR_NEW_H
 #define PAIR_NEW_H 1
+namespace SEP{
 class pair_new{
   public:
    pair_new(int ix,int iy);
@@ -26,7 +27,8 @@ class pairs_new{
   void build_int_line(int f, int n, float *ar);
    std::vector<pair_new> vals;
 };
-bool comp1(pair_new x, pair_new y);
-bool comp2(pair_new x, pair_new y);
+}
+bool comp1(SEP::pair_new x, SEP::pair_new y);
+bool comp2(SEP::pair_new x, SEP::pair_new y);
 
 #endif

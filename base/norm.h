@@ -3,6 +3,7 @@
 #include<assert.h>
 #include "my_vector.h"
 #include <string.h>
+namespace SEP{
 class norm{
   public:
   norm(){strcpy(what,"default");};
@@ -21,4 +22,5 @@ class norm{
   bool rite;
 
 };
+}
 #endif

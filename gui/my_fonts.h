@@ -9,6 +9,7 @@
 #include <QFont>
 #include<qfontmetrics.h>
 #include<memory>
+namespace SEP{
 class my_font{
   public:
      my_font(){;}
@@ -39,6 +40,7 @@ class my_fonts{
    
 
 };
+}
 
 
 #endif

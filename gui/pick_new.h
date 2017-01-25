@@ -6,7 +6,7 @@
 #include <QString>
 #include "position.h"
 #include<memory>
-
+namespace SEP{
 class pick_new{
 
  public:
@@ -17,8 +17,8 @@ class pick_new{
   void print();
   ~pick_new(){pick_delete();}
   void pick_delete();
-  std::shared_ptr<pick_new> clone(){
-    std::shared_ptr <pick_new> y( new pick_new(iloc,pos,type,col,extra,txt));
+  std::shared_ptr<SEP::pick_new> clone(){
+    std::shared_ptr <SEP::pick_new> y( new pick_new(iloc,pos,type,col,extra,txt));
     return y;
   
   }
@@ -33,10 +33,10 @@ class pick_new{
 class picks_vec{
   public:
     picks_vec(){}
-    void add_pick(std::shared_ptr<pick_new>p){ picks.push_back(p);}
-    std::shared_ptr<pick_new> return_pick(int i){ return picks[i];}
+    void add_pick(std::shared_ptr<SEP::pick_new>p){ picks.push_back(p);}
+    std::shared_ptr<SEP::pick_new> return_pick(int i){ return picks[i];}
     int return_size(){return picks.size();}
-    std::vector<std::shared_ptr<pick_new>> picks;
+    std::vector<std::shared_ptr<SEP::pick_new>> picks;
     
 
 };
@@ -48,7 +48,7 @@ class picks_new{
   std::shared_ptr<pick_new>add_pick(int *iloc,long long p,int te, QString col,int ex,QString t);
   void del_pick(long long p, QString col);
   std::shared_ptr<picks_vec >get_parse_picks(QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
-  void get_parse_picks(std::shared_ptr<picks_vec>picks, QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
+  void get_parse_picks(std::shared_ptr<SEP::picks_vec>picks, QString col="None",int type=TYPE_DEFAULT,int extra=EXTRA_DEFAULT,QString txt="None");
   void delete_pick_type(int typ);
   std::shared_ptr<pick_new>return_pick(int i){ return bucket[i];}
   int return_size(){return bucket.size();}
@@ -58,11 +58,11 @@ class picks_new{
   private:
      std::shared_ptr<position>myp;
      int setit;
-     std::vector<std::shared_ptr<pick_new>> bucket;
+     std::vector<std::shared_ptr<SEP::pick_new>> bucket;
 
 };
 
- 
+ }
 
 
 

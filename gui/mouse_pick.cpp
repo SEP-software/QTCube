@@ -1,5 +1,5 @@
 #include "mouse_pick.h"
-
+using namespace SEP;
 mouse_pick::mouse_pick(){
 
 status="Pick: L-add pick M-delete pick R-move pick";

@@ -1,5 +1,6 @@
 #include "pick_plane_new.h"
 #include <assert.h>
+using namespace SEP;
 pick_plane_new::pick_plane_new(int *loc, std::shared_ptr<picks_vec>pks){
  memcpy(iloc,loc,sizeof(int)*8);
  for(int i=0; i < pks->return_size(); i++)

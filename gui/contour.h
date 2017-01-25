@@ -9,6 +9,7 @@
 #include "slice.h"
 #ifndef contour_H
 #define contour_H 1
+namespace SEP{
 class box{
   public:
    box(){};
@@ -57,5 +58,7 @@ class contour: public slice
   std::vector<box> boxes;
 
 };
+
+}
 #endif
 

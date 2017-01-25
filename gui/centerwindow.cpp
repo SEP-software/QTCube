@@ -26,7 +26,7 @@
 #include "panels.h"
 
 
-
+using namespace SEP;
 
 void MainWindow::create_panels(){
 

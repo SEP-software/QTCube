@@ -2,6 +2,7 @@
 #define MY_SCORE_H 1
 #include<math.h>
 #include <stdlib.h>
+namespace SEP{
 class my_score{
   public:
   my_score(){};
@@ -18,7 +19,7 @@ class my_score{
 class semb_score: public my_score{
  public:
   semb_score(){};
-  semb_score(axis time, axis vel, float p, float mv=1.4, float mx=5.1){
+  semb_score(SEP::axis time, axis vel, float p, float mv=1.4, float mx=5.1){
     ot=time.o; dt=time.d; ov=vel.o; pen=p;dv=vel.d;
     minv=mv*mv; maxv=mx*mx;
    
@@ -39,6 +40,8 @@ class semb_score: public my_score{
     
   
   };
+  
+  }
   
   
 #endif

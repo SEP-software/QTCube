@@ -1,6 +1,7 @@
 #include <nmo_semblance.h>
 #include <math.h>
 #include "interval_pick.h"
+using namespace SEP;
 
 nmo_semblance::nmo_semblance(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it,int ioff, int imes,
        std::shared_ptr<paramObj>pars,std::shared_ptr<pick_draw>pk1, QString col1, QString col2){

@@ -30,7 +30,7 @@
 #include "anno.h"
 #include "panel.h"
 
-
+namespace SEP{
 
 
 class DrawWindow : public QWidget
@@ -38,7 +38,7 @@ class DrawWindow : public QWidget
 	Q_OBJECT
 
     public:
-      DrawWindow(int ngrid1, int ngrid, std::vector<std::shared_ptr<panel>> panels,int in);
+      DrawWindow(int ngrid1, int ngrid, std::vector<std::shared_ptr<SEP::panel>> panels,int in);
       
       void pdf_save(QString sz,QString name);
       void scale();
@@ -84,12 +84,12 @@ class DrawWindow : public QWidget
      void set_grid2(int n);
      int return_grid1(){return ngrid1;}
      int return_grid2(){return ngrid2;}
-     void add_panel(std::shared_ptr<panel>p);
+     void add_panel(std::shared_ptr<SEP::panel>p);
      int get_inum(){return inum;}
  
-     std::shared_ptr<panel>return_panel(int i){ return panels[i];}
-     std::shared_ptr<panel>remove_last_panel(){
-        std::shared_ptr<panel>x=panels[panels.size()-1];
+     std::shared_ptr<SEP::panel>return_panel(int i){ return panels[i];}
+     std::shared_ptr<SEP::panel>remove_last_panel(){
+        std::shared_ptr<SEP::panel>x=panels[panels.size()-1];
         panels.erase(panels.begin()+panels.size()-1);
         return x;
      }
@@ -108,7 +108,7 @@ class DrawWindow : public QWidget
       int ngrid1,ngrid2;  //Number of panels 
       int bound_thick;  //Thickness of boundary
       float *port1,*port2;  //Portions along each axis
-      std::vector<std::shared_ptr<panel>> panels;  //Array of panels
+      std::vector<std::shared_ptr<SEP::panel>> panels;  //Array of panels
       annotate *ano;  //Annotation
       QImage *image;  //Image
 	  QPixmap	pm;
@@ -123,5 +123,5 @@ class DrawWindow : public QWidget
       QColor back_c; //background color
       int inum;
  };
-
+}
 #endif

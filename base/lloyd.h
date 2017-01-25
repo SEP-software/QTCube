@@ -1,5 +1,6 @@
 #ifndef LLOYD_H
 #define LLOYD_H 1
+namespace SEP{
 class lloyd{
 
 public:
@@ -26,4 +27,5 @@ public:
 
 
 };
+}
 #endif

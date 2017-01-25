@@ -2,7 +2,7 @@
 #include "float_buffer.h"
 #include "byte_buffer.h"
 #include <iostream>
-
+using namespace SEP;
 created_data_float::created_data_float(std::string title,QString nm,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, std::shared_ptr<paramObj>p, int in,int im){
   set_basics(title,nm,g,i,p,in,im);
  

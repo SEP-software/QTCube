@@ -1,6 +1,7 @@
 #include "datasets.h"
 #include "surface_data.h"
 #include "incore_data.h"
+using namespace SEP;
 datasets::datasets(std::shared_ptr<paramObj >p,std::shared_ptr<pick_draw >pk){
   par=p;
   std::shared_ptr<util> u(new util(par));

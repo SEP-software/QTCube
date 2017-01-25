@@ -4,10 +4,11 @@
 #include "panels.h"
 #include <map>
 #include <QObject>
+namespace SEP{
 class windows:public QObject{
   Q_OBJECT
   public:
-    windows(std::shared_ptr<panels >m){ my_pan=m; active_num=0;}
+    windows(std::shared_ptr<SEP::panels >m){ my_pan=m; active_num=0;}
          signals:
     void actionDetected(std::vector<QString> text);
     public:
@@ -33,14 +34,14 @@ class windows:public QObject{
 
   private:
    void delete_windows();
-   std::shared_ptr<panels> my_pan;
+   std::shared_ptr<SEP::panels> my_pan;
    int active_num;
      private slots:
     void actionRespond(std::vector< QString> text);
     void update_all();
 
 };
-  
+}
    
     
   

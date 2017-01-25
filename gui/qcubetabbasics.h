@@ -13,6 +13,7 @@
 #include "qcube_panel.h"
 #include <map>
 #include <vector>
+namespace SEP{
 class qcubeTabBasic: public QTabWidget, public qcube_panel{
   Q_OBJECT
   public: 
@@ -27,6 +28,6 @@ class qcubeTabBasic: public QTabWidget, public qcube_panel{
 
 };
 
-
+}
 
 #endif

@@ -2,7 +2,7 @@
 #include<ctime>
 #include "util.h"
 
-
+using namespace SEP;
 
 multi_face::multi_face(QString view,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw> _pks,std::shared_ptr<draw_other> dr,
 int g1, int g2, int j ){ 

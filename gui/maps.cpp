@@ -1,6 +1,7 @@
 #include "maps.h"
 #include <QFileInfo>
 #include "hypercube_float.h"
+using namespace SEP;
 map_1::map_1(std::shared_ptr<genericIO> io,QString nm, const std::shared_ptr<hypercube> h,float over){
   oversamp=over;
   _io=io;

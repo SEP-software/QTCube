@@ -1,6 +1,6 @@
 #include "mouse_func.h"
 #include "util.h"
-
+using namespace SEP;
 void  mouse_func::do_noth( std::vector<std::shared_ptr<slice>> slices,int islice,int ix, int iy,std::shared_ptr<orient_cube>pos, std::vector<QString> *com, std::shared_ptr<draw_other>draw_o){
   if((int)slices.size()==0 && islice==0 && ix==0 && iy==0 && pos==0 && draw_o==0){;}
   com->at(1)="none";

@@ -2,6 +2,7 @@
 #include "wiggle.h"
 #include "contour.h"
 #include "autopick.h"
+using namespace SEP;
 panels::panels(std::shared_ptr<genericIO> io,std::shared_ptr<pick_draw>p,std::shared_ptr<maps>mym,std::shared_ptr<orients>oo){
 pan_num=0;locked=false; pk=p; my_maps=mym;
    my_or=oo;

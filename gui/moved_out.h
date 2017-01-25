@@ -4,12 +4,13 @@
 #include<string>
 #include "datasets.h"
 #include "pick_draw.h"
+namespace SEP{
 class moved_out: public io_func{
 
   public:
      moved_out(){};
-     void set_moveout_basics(std::shared_ptr<hypercube>grid, std::shared_ptr<dataset>dat, int it, int ioff,
-       int imes, std::shared_ptr<util>pars,std::shared_ptr<pick_draw>_pk, QString col1, QString col2);
+     void set_moveout_basics(std::shared_ptr<hypercube>grid, std::shared_ptr<SEP::dataset>dat, int it, int ioff,
+       int imes, std::shared_ptr<SEP::util>pars,std::shared_ptr<SEP::pick_draw>_pk, QString col1, QString col2);
      virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
      virtual void read_block_byte(std::vector<int>&nw, std::vector<int>&fw, unsigned char *buf);
      virtual void move_it(std::vector<int>&f,float *nmo){
@@ -26,4 +27,5 @@ class moved_out: public io_func{
      std::shared_ptr<hypercube>grid;
      
  };
+ }
 #endif

@@ -1,5 +1,6 @@
 #include<cube_cut.h>
 #include<ctime>
+using namespace SEP;
 cube_cut::cube_cut(QString view,std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks,std::shared_ptr<draw_other>dr,std::vector<float>prop){ 
  pct_top=.4; pct_front=.6;fm=f_m;
  set_basics(_pks,dr);

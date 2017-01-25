@@ -3,7 +3,7 @@
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/parallel_for.h>
-
+using namespace SEP;
 QImage *raster::makeImage(unsigned char * uc,const  int nx,const  int ny, const int xsize, const int ysize)
 {
   int nxuse=nx,nyuse=ny;

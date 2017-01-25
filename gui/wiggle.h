@@ -9,6 +9,7 @@
 #include "slice.h"
 #ifndef WIGGLE_H
 #define WIGGLE_H 1
+namespace SEP{
 class wiggle: public slice
 {
   
@@ -18,7 +19,7 @@ class wiggle: public slice
  
  	void PaintWiggles(int n2, int n1, QPainter *painter, unsigned char *buf);
 
-  virtual void draw_slice(QPainter *painter,std::shared_ptr<dataset>dat,QPen *pen,
+  virtual void draw_slice(QPainter *painter,std::shared_ptr<SEP::dataset>dat,QPen *pen,
   std::shared_ptr<orient_cube>pos,  bool ov,bool draw_grid);
   std::shared_ptr<slice>clone();
   
@@ -33,5 +34,6 @@ class wiggle: public slice
   QColor wiggleColor,posColor,negColor;
 
 };
+}
 #endif
 

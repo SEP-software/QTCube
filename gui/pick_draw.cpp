@@ -1,7 +1,7 @@
 #include "pick_draw.h"
 #include "pairs_new.h"
 #include "pick_plane_new.h"
-
+using namespace SEP;
 pick_orient::pick_orient(std::shared_ptr<position >pos,int o){
         std::shared_ptr<pick_planes_new> pl(new pick_planes_new());
         std::shared_ptr<pick_bucket> pb(new pick_bucket (pos));

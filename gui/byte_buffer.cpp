@@ -1,5 +1,5 @@
 #include "byte_buffer.h"
-
+using namespace SEP;
 //Initialize and read in buffer
 byte_buffer::byte_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,std::vector<int>&nwbuf, std::vector<int>&fwbuf){
  

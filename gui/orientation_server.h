@@ -9,19 +9,19 @@
 #ifndef ORIENTSERVER_H
 #define ORIENTSERVER_H 1
 #define MAX_MAPS 100
-
+namespace SEP{
 class converter{
   public:
-  converter(int *in,std::vector<axis> ax,float a,float *cen,std::vector<axis>una);
+  converter(int *in,std::vector<SEP::axis> ax,float a,float *cen,std::vector<SEP::axis>una);
   std::shared_ptr<pick_new >convert_pick( std::shared_ptr<pick_new >in);
   std::shared_ptr<pick_new >convert_back_pick( std::shared_ptr<pick_new >in);
   void rotate_pt_back(float x1, float x2, float *y1, float *y2);
 
   void rotate_pt(float x1, float x2, float *y1, float *y2);
   private:
-    axis a1,a2;
+    SEP::axis a1,a2;
     int rot_ax[2];
-    std::vector<axis> ax_rot;
+    std::vector<SEP::axis> ax_rot;
     float rot_cen[2];
     float ang;
 };
@@ -31,7 +31,7 @@ class orientation_server{
   orientation_server(std::shared_ptr<position >pos);
   int get_new_num(){  num+=1; active_list.insert(num);return num;}
    int get_new_inst(){inst+=1; return inst;}
-  int get_new_num(int iold,int *in, std::vector<axis>ax, float a, float *cen);
+  int get_new_num(int iold,int *in, std::vector<SEP::axis>ax, float a, float *cen);
    std::shared_ptr<pick_new >convert_pick(int oc,std::shared_ptr<pick_new>pk);
    std::shared_ptr<pick_new >convert_back_pick(int oc,std::shared_ptr<pick_new >pk);
 
@@ -43,5 +43,6 @@ class orientation_server{
   int num;
   int inst;
 };
+}
 
 #endif

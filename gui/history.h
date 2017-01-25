@@ -3,6 +3,7 @@
 #include<QString>
 #include <vector>
 #include <QObject>
+namespace SEP{
 class history: public QObject{
   Q_OBJECT
   signals:
@@ -22,4 +23,5 @@ class history: public QObject{
 
 
 };
+}
 #endif

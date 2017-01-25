@@ -3,7 +3,7 @@
 #include <utility>
 #include <string.h>
 #include "assert.h"
-
+using namespace SEP;
 
 
 orient_map::orient_map( bool rot, int i_ax1,  int i_ax2, int *rotax,  std::vector<axis> axrot, 

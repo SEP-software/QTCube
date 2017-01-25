@@ -2,12 +2,12 @@
 #define FILE_IO_H 1
 #include "io_func.h"
 #include "ioModes.h"
-
+namespace SEP{
 class fileIO: public io_func{
 
 
   public:
-     fileIO(std::string fileName,std::shared_ptr< ioModes>io,std::string fileType);
+     fileIO(std::string fileName,std::shared_ptr< SEP::ioModes>io,std::string fileType);
 
 
     virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
@@ -17,9 +17,9 @@ class fileIO: public io_func{
     std::shared_ptr<genericIO> _io;
     std::shared_ptr<paramObj> _par;
     std::vector<int> _ns;    
-    dataType _dataType;
+    SEP::dataType _dataType;
     std::shared_ptr<util> _util;
 };
-
+}
 
 #endif

@@ -5,7 +5,7 @@
 #include <QPixmap>
 #include "my_colors.h"
 
-
+using namespace SEP;
 
 void contour::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen, 
  std::shared_ptr<orient_cube>pos,bool ov,bool draw_grid){

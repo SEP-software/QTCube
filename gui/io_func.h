@@ -7,7 +7,7 @@
  #include <qobject.h>
 
 
-
+namespace SEP{
 class io_func: public QObject{
   Q_OBJECT
 
@@ -15,7 +15,7 @@ class io_func: public QObject{
 	    void actionDetected(std::vector< QString> text);
   public:
     io_func(){hyper=0;};
-    void set_basics(std::shared_ptr<util>pars, std::shared_ptr<hypercube>h);
+    void set_basics(std::shared_ptr<util>pars, std::shared_ptr<SEP::hypercube>h);
     
   
     
@@ -26,7 +26,7 @@ class io_func: public QObject{
       *b=bclip; *e=eclip;
     }
     virtual void read_headers(){};
-    std::shared_ptr<hypercube> return_hyper();
+    std::shared_ptr<SEP::hypercube> return_hyper();
     bool not_byte(){ return non_byte;}
     bool io_changed(){return changed;}
     void set_clip(float *dat,int inum, long long nelem,int swap=0){
@@ -72,7 +72,7 @@ class io_func: public QObject{
   virtual void del_pt_action(int *iloc){if(iloc==0){;};}
      bool am_region(){return isregion;}
     
-    std::shared_ptr<hypercube>hyper;
+    std::shared_ptr<SEP::hypercube>hyper;
     std::shared_ptr<util>par;
     float bclip,eclip;
     bool non_byte;
@@ -84,4 +84,5 @@ class io_func: public QObject{
 
 
 };
+}
 #endif

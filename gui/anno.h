@@ -5,6 +5,7 @@
 #include "my_fonts.h"
 #include "my_colors.h"
 #include "assert.h"
+namespace SEP{
 class anno{
   public:
     anno(){;}
@@ -99,15 +100,15 @@ class annotate{
 
 
   private:
-    std::vector<std::shared_ptr<anno>> annos;
+    std::vector<std::shared_ptr<SEP::anno>> annos;
     QString cur_col,cur_font,cur_text,cur_shape;
     int cur_thick;
     bool in_progress;
-    std::shared_ptr<my_fonts> fonts;
-    std::shared_ptr<my_colors> colors;
+    std::shared_ptr<SEP::my_fonts> fonts;
+    std::shared_ptr<SEP::my_colors> colors;
     int active_anno;
     float bxh,exh,byh,eyh;
 
 };
-
+}
 #endif

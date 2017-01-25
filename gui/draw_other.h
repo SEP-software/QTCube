@@ -2,7 +2,7 @@
 #define DRAW_OTHER 1
 #include <QPen>
 #include <QPainter>
-
+namespace SEP{
 class draw_object{
   public:
   draw_object(){};
@@ -86,7 +86,8 @@ class draw_other{
     }
    void reset(){ objs.clear();}
   QPen *pen;
-  std::vector<draw_object*> objs;
+  std::vector<SEP::draw_object*> objs;
 };
+}
 #endif
 

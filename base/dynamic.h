@@ -3,24 +3,26 @@
 #include<float_2d.h>
 #include <path.h>
 #include<memory>
+namespace SEP{
 class dynamic{
 
   public:
     dynamic(){sim=0; score=0;};
-    dynamic(float_2d *buf, float jump_pen);
-    void add_to_sim(float_2d *s);
+    dynamic(SEP::float_2d *buf, float jump_pen);
+    void add_to_sim(SEP::float_2d *s);
     virtual void calc_score();
-    virtual std::vector<path> return_path();
+    virtual std::vector<SEP::path> return_path();
  
     virtual ~dynamic(){delete_ar();}
 
     void delete_ar(){
     
     }
-   std::shared_ptr<float_2d>sim,score;
+   std::shared_ptr<SEP::float_2d>sim,score;
    float jump;
    int maxloc[2];
   
 };
+}
 
 #endif

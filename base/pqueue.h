@@ -8,6 +8,7 @@
  */
 #ifndef PQUEUE_H
 #define PQUEUE_H 1
+namespace SEP{
 class pqueue{
   public:
     pqueue(){}
@@ -18,4 +19,5 @@ class pqueue{
     float *pqueue_extract();
     float **x,**xn,**x1;
 };
+}
 #endif

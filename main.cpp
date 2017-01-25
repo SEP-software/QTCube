@@ -20,7 +20,7 @@
 #include "part_semb_data.h"
 #include "pick_draw.h"
 #include<ioModes.h>
-
+using namespace SEP;
 int main(int argc, char** argv) {
 	
   std::shared_ptr<ioModes> modes(new ioModes(argc,argv));

@@ -4,6 +4,7 @@
 #include "norm.h"
 #include<assert.h>
 #include<my_vector.h>
+namespace SEP{
 class l2_norm: public norm{
   public:
   l2_norm(){ strcpy(what,"l2 norm");};
@@ -11,9 +12,11 @@ class l2_norm: public norm{
   virtual ~l2_norm(){};
 
 
-  virtual void calc_coefs(my_vector *res,my_vector *x,my_vector *co, my_vector *c1,my_vector *c2);
+  virtual void calc_coefs(SEP::my_vector *res,SEP::my_vector *x,SEP::my_vector *co, SEP::my_vector *c1,SEP::my_vector *c2);
     
 
 
 };
+
+}
 #endif

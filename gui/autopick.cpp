@@ -2,7 +2,7 @@
 #include "auto_viteribi.h"
 #include "auto_brown.h"
 #include "lloyd_1d.h"
-
+using namespace SEP;
 autopick::autopick(std::shared_ptr<pick_draw>_pks){
   ncor=20;
   nsearch=20;

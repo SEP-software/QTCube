@@ -6,6 +6,7 @@
 #include "fastmarch.h"
 #include <math.h>
 #include <stdio.h>
+using namespace SEP;
 int fastmarch::grid (int i, int n)
 {
   if (i >=0 && i < n) return i;

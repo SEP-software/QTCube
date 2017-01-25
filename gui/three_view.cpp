@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include "util.h"
 
-
+using namespace SEP;
 void three_view::resize_view_beg(int ix,int iy){
   int cx,cy;
   this->get_corner_loc(&cx,&cy);

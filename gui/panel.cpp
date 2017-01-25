@@ -6,7 +6,7 @@
 #include "cube_cut.h"
 #include "threeface.h"
 #include "view_types.h"
-
+using namespace SEP;
 
 panel::panel(int inum, std::shared_ptr<paramObj>pr,std::shared_ptr<position>p,
 std::shared_ptr<pick_draw>_pks, std::shared_ptr<datasets>ds, int idata,  std::shared_ptr<slice_types>ct,  

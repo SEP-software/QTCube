@@ -5,6 +5,7 @@
 #include "widget_tools.h"
 
 #include <vector>
+namespace SEP{
 class orient_panel: public qcubeWidgetBasic{
   Q_OBJECT
   public: 
@@ -53,7 +54,7 @@ class orient_panel: public qcubeWidgetBasic{
       void false_prop();
       
 };
-
+}
 
 
 #endif

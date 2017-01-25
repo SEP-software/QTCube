@@ -7,13 +7,13 @@
 #include <vector>
 
 
-
+namespace SEP{
 class color_bar2: public QWidget{
 	Q_OBJECT
   signals:
     void emitit(std::vector<QString> com);
   public:
-    color_bar2(  std::shared_ptr<user_color>col);
+    color_bar2(  std::shared_ptr<SEP::user_color>col);
     
     void extract_draw(QString color, QPainter *painter);
     void draw_bar();
@@ -85,4 +85,5 @@ class color_panel: public qcubeWidgetBasic{
 
  
 };
+}
 #endif

@@ -6,6 +6,7 @@
 #include "my_colors.h"
 #ifndef ORIENT_MAP_H
 #define ORIENT_MAP_H 1
+namespace SEP{
 class pick_holder{
   public:
     pick_holder(){;}
@@ -19,7 +20,7 @@ class pick_holder{
 };
 class orient_map{
  public:
-  orient_map(bool rot, int iax1,  int iax2,int *rot_ax,  std::vector<axis> ax_rot, 
+  orient_map(bool rot, int iax1,  int iax2,int *rot_ax,  std::vector<SEP::axis> ax_rot, 
      int **rot_to_reg_1,  int **rot_to_reg_2, int *beg,
      int *iloc, int *end,int *ns,bool r1, bool r2,std::vector<int> m1d,int sax,int bs, int es);
 
@@ -50,7 +51,7 @@ class orient_map{
   std::map<QString,pick_holder>  picks;
    int **rot_to_reg_1,**rot_to_reg_2;
    int beg[8],end[8],ns[8];
-   axis ax_rot[2];
+   SEP::axis ax_rot[2];
    int rot_ax[2];
    int iax1, iax2;
    int iloc[8];
@@ -67,5 +68,5 @@ class orient_map{
 
 };
 
-
+}
 #endif

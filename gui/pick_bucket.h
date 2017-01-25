@@ -8,6 +8,7 @@
 #include "position.h"
 #include "pick_new.h"
 #include "my_colors.h"
+namespace SEP{
 class pick_bucket{
   public:
    pick_bucket(){ setit=6;}
@@ -33,9 +34,9 @@ void index_to_loc(long long ind,int *iloc){
  void print();
  std::shared_ptr<picks_vec  >return_pick_plane(int *iloc, QString col="None");
    void delete_bucket();
-   std::shared_ptr<pick_new >get_pick(long long p, QString col);
-   std::shared_ptr<picks_vec >picks_from_vec(std::vector<int> *bs, QString col);
-   std::shared_ptr<picks_vec  >get_pick_type(int typ,QString col);
+   std::shared_ptr<SEP::pick_new >get_pick(long long p, QString col);
+   std::shared_ptr<SEP::picks_vec >picks_from_vec(std::vector<int> *bs, QString col);
+   std::shared_ptr<SEP::picks_vec  >get_pick_type(int typ,QString col);
    void del_pick(long long p, QString col);
    long long find_nearest(long long p, int iax1, int iax2,QString col);
    inline int bucket_num(long long p);
@@ -62,4 +63,6 @@ void index_to_loc(long long ind,int *iloc){
     int setit;
 
 };
+
+}
 #endif

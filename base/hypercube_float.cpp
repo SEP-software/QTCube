@@ -6,7 +6,7 @@
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/parallel_for.h>
-
+using namespace SEP;
 #define MIN(a,b) ( ((a)<(b)) ? (a):(b) )
 extern "C"{
  extern void vec_scale_add(int *,float *,float *,float *,float*);

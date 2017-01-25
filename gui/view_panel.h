@@ -6,6 +6,7 @@
 #include <QTabWidget>
 
 #include <vector>
+namespace SEP{
 class view_panel: public qcubeWidgetBasic{
   Q_OBJECT
   public: 
@@ -89,7 +90,7 @@ class view_panel: public qcubeWidgetBasic{
 
      
 };
-
+}
 
 
 #endif

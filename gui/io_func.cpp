@@ -1,5 +1,6 @@
 #include "io_func.h"
 #include "iostream"
+using namespace SEP;
 void io_func::set_basics(std::shared_ptr<util>pars, std::shared_ptr<hypercube>h){
      par=pars;
    

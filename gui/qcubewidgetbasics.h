@@ -17,7 +17,7 @@
 #include <QPushButton>
 #include "qcube_panel.h"
 #include <vector>
-
+namespace SEP{
 class qcubeWidgetBasic: public QWidget,public qcube_panel{
   Q_OBJECT
   public: 
@@ -29,7 +29,7 @@ class qcubeWidgetBasic: public QWidget,public qcube_panel{
      void clean_basic();
 
 };
-
+}
 
 
 #endif

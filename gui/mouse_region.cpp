@@ -1,5 +1,5 @@
 #include "mouse_region.h"
-
+using namespace SEP;
 mouse_region::mouse_region(){
 
 status="Pick: L-add region M-navigate R-delete region";

@@ -5,7 +5,7 @@
 #include <QPolygon>
 #include <QMouseEvent>
 #include <QKeyEvent>
-
+using namespace SEP;
 
 single::single(QString view,int iv1, int iv2, std::shared_ptr<QFontMetrics >f_m,std::shared_ptr<pick_draw>_pks, std::shared_ptr<draw_other>dr,std::vector<float >prop){ 
   fm=f_m; i_v1=iv1; i_v2=iv2; this->zero_bufs();

@@ -1,7 +1,7 @@
 #include<position.h>
 #include<math.h>
 
-
+using namespace SEP;
 position::position(std::shared_ptr<hypercube>dims, int *c, int *b, int *e,int m_ax)
 {
  block[0]=1;

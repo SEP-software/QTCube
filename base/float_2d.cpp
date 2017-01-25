@@ -1,6 +1,6 @@
 #include<float_2d.h>
 
-
+using namespace SEP;
 float_2d::float_2d(const axis a1, const axis a2)
 {
   base_init_2df(a1,a2);

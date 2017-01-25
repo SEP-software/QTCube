@@ -8,8 +8,8 @@
 #include"percentile.h"
 #include "norm_vector.h"
 
-
-class hypercube_float: public hypercube, public norm_vector{
+namespace SEP{
+class hypercube_float: public SEP::hypercube, public norm_vector{
 
   public:
     hypercube_float()
@@ -22,10 +22,10 @@ class hypercube_float: public hypercube, public norm_vector{
     double dot( const my_vector *other) const;
     virtual void scale_add(const double mes,  const my_vector *vec, const double other);
     void add( const my_vector *other);
-    hypercube_float( const std::vector<axis> axes, const bool alloc=true);
-    hypercube_float( const std::vector<axis> axes,  const float *vals);
-    hypercube_float( const hypercube *d);
-    hypercube_float( const std::shared_ptr<hypercube>d);
+    hypercube_float( const std::vector<SEP::axis> axes, const bool alloc=true);
+    hypercube_float( const std::vector<SEP::axis> axes,  const float *vals);
+    hypercube_float( const SEP::hypercube *d);
+    hypercube_float( const std::shared_ptr<SEP::hypercube>d);
 
     virtual void random();
          virtual void scale( const double r){for(long long i=0; i< getN123(); i++) vals[i]=vals[i]*r;}
@@ -47,7 +47,7 @@ class hypercube_float: public hypercube, public norm_vector{
     virtual void allocate(){
       vals.resize(this->getN123());
      }
-     void init_ndf( const std::vector<axis> ax){ initNd(ax); allocate();}
+     void init_ndf( const std::vector<SEP::axis> ax){ initNd(ax); allocate();}
      void  resample( const hypercube_float *in);
      
     
@@ -75,9 +75,9 @@ class hypercube_float: public hypercube, public norm_vector{
     
     
     private:
-      void axis_resample( const axis ain, const axis aout,  int *i,   float *f);
+      void axis_resample( const SEP::axis ain, const SEP::axis aout,  int *i,   float *f);
  };
- 
+ }
  #endif
  
 

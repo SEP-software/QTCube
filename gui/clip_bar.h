@@ -9,7 +9,7 @@
 #include "bar_pt.h"
 #ifndef CLIP_BAR_H
 #define CLIP_BAR_H 1
-
+namespace SEP{
 
 class clip_bar: public QWidget
 {
@@ -47,11 +47,12 @@ class clip_bar: public QWidget
     public:
     int ipt_down;
     QString idat;
-    std::vector<bar_pt> pts;
+    std::vector<SEP::bar_pt> pts;
     std::vector<float> histo;
 	  int W,H;
 		QPixmap	pm;
 		bool symmetric;
     QPixmap	pmScaled,pmScaledCopy;
 };
+}
 #endif

@@ -1,6 +1,6 @@
 #include<lloyd_1d.h>
 #include<math.h>
-
+using namespace SEP;
 void lloyd_1d::find_bound(){
 
   for(int i=0; i < center.size()-1; i++) bound[i]=(center[i]+center[i+1])/2.;

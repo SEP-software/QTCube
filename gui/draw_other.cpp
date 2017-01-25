@@ -1,5 +1,6 @@
 #include "draw_other.h"
 #include <math.h>
+using namespace SEP;
 
 draw_box::draw_box(int bx, int  by, int ex, int ey){
     set_basic();

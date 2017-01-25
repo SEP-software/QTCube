@@ -2,6 +2,7 @@
 #include "float_buffer.h"
 #include "float_mmap_buffer.h"
 #include "byte_buffer.h"
+using namespace SEP;
 incore_data_float::incore_data_float(std::string title,QString nm,std::shared_ptr<hypercube >g,std::shared_ptr<io_func >i, std::shared_ptr<paramObj >p, int in,int
 mmap,int im){
     mmap_it=mmap;

@@ -3,6 +3,8 @@
 #include<qnamespace.h>
 #include <QPolygon>
 #include <QPixmap>
+using namespace SEP;
+
 /*
 	Sets the parameters for drawing the slice.
 */

@@ -12,6 +12,7 @@ C++ Bob
 #ifndef FASTMARCH_H
 #define FASTMARCH_H 1
 #include "pqueue.h"
+namespace SEP{
 class fastmarch{
   public:
     fastmarch(){mask=0;myq=0;};
@@ -42,4 +43,6 @@ class fastmarch{
      int nm,order;
      
   };
+  
+  }
   #endif

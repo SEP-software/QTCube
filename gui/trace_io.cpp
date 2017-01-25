@@ -1,5 +1,5 @@
 #include "trace_io.h"
-
+using namespace SEP;
 void trace_io::set_trace_basics( QString fl, std::shared_ptr<hypercube>d, int reel_h,int head, bool sw, std::shared_ptr<util>p,int i){
 
   set_basics(p,d);

@@ -6,7 +6,7 @@
 #include "slice.h"
 #ifndef RASTER_H
 #define RASTER_H 1
-
+namespace SEP{
 class raster: public slice{
 
  public:
@@ -20,13 +20,14 @@ unsigned char *out, const int fout, const int jout, const int nout, const int re
   QString get_bcolor(){ return bcolor;}
   QString get_ecolor(){ return ecolor;}
   QString bcolor,ecolor;
-  virtual void draw_slice(QPainter *painter,std::shared_ptr<dataset>dat,QPen *pen,
-  std::shared_ptr<orient_cube>pos,  bool ov,bool draw_grid);
+  virtual void draw_slice(QPainter *painter,std::shared_ptr<SEP::dataset>dat,QPen *pen,
+  std::shared_ptr<SEP::orient_cube>pos,  bool ov,bool draw_grid);
   void change_map(int i,QString col);
   virtual std::shared_ptr<slice> clone();
   virtual std::shared_ptr<slice>clone_alpha(int alpha);
 
 
 };
+}
 #endif
 

@@ -4,10 +4,11 @@
 #include "paramObj.h"
 #include<vector>
 #include<memory>
+namespace SEP{
 class util{
 
 public:
-  util(std::shared_ptr<paramObj> pars){ par=pars;}
+  util(std::shared_ptr<SEP::paramObj> pars){ par=pars;}
   static QString string_from_int_array(int n,int *ar);
   static QString string_from_float_array(int n,float *ar);
   static int *int_array_from_string(QString str);
@@ -26,7 +27,8 @@ public:
     long long nelem, float bclip, float eclip);
 
 private:
-  std::shared_ptr<paramObj> par;
+  std::shared_ptr<SEP::paramObj> par;
 
 };
+}
 #endif

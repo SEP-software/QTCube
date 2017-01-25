@@ -11,13 +11,13 @@
 #define ORIENT_H 1
 
   
-
+namespace SEP{
 class orient_cube: public position{
   public:
     orient_cube();
     orient_cube(std::shared_ptr<position>p, std::vector<int>o,std::shared_ptr<orientation_server>s=nullptr);
     orient_cube(std::shared_ptr<orient_cube> ori);
-    orient_cube(std::shared_ptr<hypercube>h,std::shared_ptr<orientation_server>s=nullptr);
+    orient_cube(std::shared_ptr<SEP::hypercube>h,std::shared_ptr<orientation_server>s=nullptr);
     ~orient_cube(){delete_all();}
     void delete_all();
    void delete_maps();
@@ -77,7 +77,7 @@ class orient_cube: public position{
    void set_no_rotate();
    void set_no_shift();
    void get_rot_axes(int *a1, int *a2){ *a1=rot_ax[0]; *a2=rot_ax[1];}
-   axis get_orient_axis(int iax){
+   SEP::axis get_orient_axis(int iax){
       if(!rotate) return getAxis(iax);
       if(iax==rot_ax[0]) return ax_rot[0];
       if(iax==rot_ax[1]) return ax_rot[1];
@@ -120,7 +120,7 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
      for(int i=0; i < in->return_size();i++) out->add_pick(convert_pick(in->return_pick(i)));
    }
    inline std::shared_ptr<pick_new> convert_pick(std::shared_ptr<pick_new>in){
-      axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
+      SEP::axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
       float xin=in->iloc[rot_ax[0]]*a1.d+a1.o,yin=a2.o+a2.d*in->iloc[rot_ax[1]],xout,yout;
       rotate_pt(xin,yin,&xout,&yout);
       std::shared_ptr<pick_new> out=in->clone();
@@ -132,7 +132,7 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
       return out;
    }
   void rotate_loc(int *iloc){
-      axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
+      SEP::axis a1=getAxis(rot_ax[0]),a2=getAxis(rot_ax[1]);
       float xin=iloc[rot_ax[0]]*a1.d+a1.o,yin=a2.o+a2.d*iloc[rot_ax[1]],xout,yout;
       rotate_pt(xin,yin,&xout,&yout);
       iloc[rot_ax[0]]=std::max(0,std::min(ax_rot[0].n-1,(int)(0.5+(xout-ax_rot[0].o)/ax_rot[0].d)));
@@ -143,7 +143,7 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
      std::vector<QString> *phash);
   
    void form_maps();
-   axis get_rot_axis(int iax);
+   SEP::axis get_rot_axis(int iax);
    inline void rotate_pt_back(float x1, float x2, float *y1, float *y2){
     *y1=(x1-rot_cen[0])*cos(-ang)+sin(-ang)*(x2-rot_cen[1])+rot_cen[0];
     *y2=-(x1-rot_cen[0])*sin(-ang)+cos(-ang)*(x2-rot_cen[1])+rot_cen[1];
@@ -171,7 +171,7 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
   std::map<long long, int> *get_rot_map(int iax1, int iax2, int *n1);
    bool get_rotate(){return rotate;}
        int rot_ax[2];
-    std::vector<axis> ax_rot;
+    std::vector<SEP::axis> ax_rot;
     int **rot_to_reg_1;
     int **rot_to_reg_2;
   private:
@@ -210,4 +210,5 @@ class orients{
     std::map<int,std::shared_ptr<orient_cube>> my_or;
     int active_pan;
 };
+}
 #endif

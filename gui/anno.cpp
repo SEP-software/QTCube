@@ -2,6 +2,7 @@
 #include<qpainter.h>
 #include "qfontmetrics.h"
 #include "math.h"
+using namespace SEP;
 annotate::annotate(){
   cur_thick=2;
   cur_font="Arial-12-Normal";

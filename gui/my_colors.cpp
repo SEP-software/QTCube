@@ -1,5 +1,7 @@
 #include "my_colors.h"
 /* Defines the colors in the color map*/
+using namespace SEP;
+
  my_colors::my_colors(){
    cvec.push_back("red"); cmap["red"]=Qt::red; cnum["red"]=8; 
    cvec.push_back("cyan"); cmap["cyan"]=Qt::cyan; cnum["cyan"]=24;

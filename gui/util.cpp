@@ -3,7 +3,7 @@
 #include<vector>
 #include<string>
 #include "percentile.h"
-
+using namespace SEP;
 QString util::string_from_int_array(int n,int *ar){
    QString st=QString::number(ar[0]);
    for(int i=1; i<n;i++) st=st+":"+QString::number(ar[i]);

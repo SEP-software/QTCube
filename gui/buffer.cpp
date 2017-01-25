@@ -1,6 +1,6 @@
 #include "buffer.h"
 #include <stdlib.h>
-
+using namespace SEP;
 void buffer::set_basics(std::shared_ptr<paramObj>p,std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in){
   _par=p;
   std::shared_ptr<util> x(new util(p));

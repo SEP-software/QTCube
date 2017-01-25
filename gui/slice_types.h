@@ -7,6 +7,7 @@
 #include<simple_color.h>
 #ifndef SLICE_TYPES_H
 #define SLICE_TYPES_H 1
+namespace SEP{
 class slice_types
 {
   public:
@@ -37,5 +38,5 @@ class slice_types
 
 
 };
-
+}
 #endif

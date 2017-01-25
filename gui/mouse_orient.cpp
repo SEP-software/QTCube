@@ -1,5 +1,5 @@
 #include "mouse_orient.h"
-
+using namespace SEP;
 mouse_orient::mouse_orient(){
 
 status="Navigate: L-navigate M-Zoom R-Add pick";

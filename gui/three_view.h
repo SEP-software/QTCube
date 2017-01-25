@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 #ifndef THREE_VIEW_H
 #define THREE_VIEW_H 1
+namespace SEP{
 class three_view: public multiple
 {
 
@@ -23,9 +24,9 @@ public:
   }
   //Left 
 
-  virtual std::vector<QString> left_mouse_down(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
-  virtual std::vector<QString> left_mouse_move(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
-  virtual std::vector<QString> left_mouse_release(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
+  virtual std::vector<QString> left_mouse_down(float x, float y, std::shared_ptr<SEP::orient_cube>pos, std::shared_ptr<SEP::mouse_func>func);
+  virtual std::vector<QString> left_mouse_move(float x, float y, std::shared_ptr<SEP::orient_cube>pos, std::shared_ptr<SEP::mouse_func>func);
+  virtual std::vector<QString> left_mouse_release(float x, float y, std::shared_ptr<SEP::orient_cube>pos, std::shared_ptr<SEP::mouse_func>func);
 
     //std::vector<QString> l_mouse_m(float x, float y, std::shared_ptr<orient_cube>pos, std::shared_ptr<mouse_func>func);
 
@@ -50,4 +51,5 @@ public:
 
 
 };
+}
 #endif

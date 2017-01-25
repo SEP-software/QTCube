@@ -1,5 +1,6 @@
 
 #include "dynamic.h"
+using namespace SEP;
 dynamic::dynamic(float_2d *s, float jump_pen){
 
 

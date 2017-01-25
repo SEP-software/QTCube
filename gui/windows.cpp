@@ -1,5 +1,5 @@
 #include "windows.h"
-
+using namespace SEP;
 void windows::add_window(std::shared_ptr<DrawWindow>um){
   my_winds.push_back(um);
   connect_it(my_winds.size()-1);

@@ -9,7 +9,7 @@
 #include <vector>
 #include "pick_new.h"
 #include "pairs_new.h"
-
+namespace SEP{
 class slice{
   
  public:
@@ -78,7 +78,7 @@ bool get_shifted_image_pos_from_sample(int ix, int iy, int *id1, int *id2);
    int i3_axis;
    float ox,oy,dx,dy;
    float sx,sy;
-   axis axes[2];
+   SEP::axis axes[2];
    std::shared_ptr<QFontMetrics >fm;
    int b_1,b_2,e_1,e_2,boundary;
    bool reverse1,reverse2;
@@ -111,7 +111,7 @@ bool get_shifted_image_pos_from_sample(int ix, int iy, int *id1, int *id2);
   int offset;
 
 };
-
+}
 
 
 #endif

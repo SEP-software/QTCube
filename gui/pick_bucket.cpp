@@ -2,6 +2,7 @@
  #include <assert.h>
  #include <math.h>
  #define BUCKET_SIZE 20
+ using namespace SEP;
  pick_bucket::pick_bucket(std::shared_ptr<position>pos){
    int n123=1;
    block[0]=1;

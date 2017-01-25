@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "contour.h"
 #include "util.h"
+using namespace SEP;
 slice_types::slice_types()
 {
    

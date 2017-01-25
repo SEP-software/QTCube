@@ -1,6 +1,7 @@
 #ifndef COLOR_TABLE_H
 #define COLOR_TABLE_H 1
 #include "raster.h"
+namespace SEP{
 class simple_color: public raster
 {
   public:
@@ -127,5 +128,5 @@ class user_color: public simple_color{
     void set_green(int *green);
     void set_blue(int *blue);
 };
-
+}
 #endif

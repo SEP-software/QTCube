@@ -1,5 +1,5 @@
 #include "fileIO.h"
-
+using namespace SEP;
 fileIO::fileIO(std::string tag, std::shared_ptr<ioModes>modes,std::string fileType){
 
   _io=modes->getIO(fileType);

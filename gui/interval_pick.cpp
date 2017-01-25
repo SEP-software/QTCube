@@ -1,6 +1,6 @@
 #include "interval_pick.h"
 #include <math.h>
-
+using namespace SEP;
 bool interval_pick::form_interval_vel(std::shared_ptr<orient_cube>pos, std::shared_ptr<hypercube>grid, float *ds,
 std::shared_ptr<pick_draw>pks,QString rms, QString interval,int i_mes,int i_t,int i_off){
  

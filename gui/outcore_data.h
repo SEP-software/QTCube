@@ -1,6 +1,8 @@
 #ifndef OUTCORE_DATA_H
 #define OUTCORE_DATA_H 1
 #include "dataset.h"
+namespace SEP{
+
 class outcore_data:public dataset{
   
    public:
@@ -38,5 +40,5 @@ class outcore_data_byte: public outcore_data{
    }
   std::shared_ptr<buffer>create_buffer(std::shared_ptr<orient_cube>pos, int iax1, int iax2);
 };
-
+}
 #endif

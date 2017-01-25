@@ -1,5 +1,5 @@
 #include "view_types.h"
-
+namespace SEP{
 view_types::view_types(){
 
 
@@ -12,3 +12,4 @@ view_types::view_types(){
 
 }
 
+}

@@ -1,4 +1,5 @@
 #include "orient_panel.h"
+using namespace SEP;
 
 orient_panel:: orient_panel(std::shared_ptr<position>p,
 std::shared_ptr<windows>my_w, std::shared_ptr<panels>my_p, std::shared_ptr<datasets>my_d, 

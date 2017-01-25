@@ -11,15 +11,15 @@
  #include <QTreeWidgetItem>
 #include <iostream>
 
-
+namespace SEP{
 class dataset: public QObject{
   Q_OBJECT
   signals:
 	    void actionDetected(std::vector< QString> text);
   public:
     dataset(){}
-    void set_basics(std::string titl,QString name,std::shared_ptr<hypercube>g,std::shared_ptr<io_func>i, 
-    std::shared_ptr<paramObj> p,int in,int im=1);
+    void set_basics(std::string titl,QString name,std::shared_ptr<SEP::hypercube>g,std::shared_ptr<io_func>i, 
+    std::shared_ptr<SEP::paramObj> p,int in,int im=1);
      virtual ~dataset(){ 
         clean_bufs();
      }
@@ -28,7 +28,7 @@ class dataset: public QObject{
       buf.clear();
     }
 
-    virtual std::shared_ptr<hypercube> return_io_hyper(){return io->return_hyper();}
+    virtual std::shared_ptr<SEP::hypercube> return_io_hyper(){return io->return_hyper();}
     virtual unsigned char *get_char_data(std::shared_ptr<orient_cube>pos, int iax1, int f1, 
     int e1, int iax2,
       int f2, int e2);
@@ -58,10 +58,10 @@ class dataset: public QObject{
       return 0;
     }
     QString validate_view(QString name, orient_cube pos);
-    axis get_grid_axis(int iax){
+    SEP::axis get_grid_axis(int iax){
       return grid->getAxis(iax);
     }
-    axis get_io_axis(int iax){
+    SEP::axis get_io_axis(int iax){
       return io->return_hyper()->getAxis(iax);
     }
    QString get_bcolor(){
@@ -91,7 +91,7 @@ class dataset: public QObject{
     QString return_clip();
     QString data_updated(){ return "none";}
     QString get_name(){return name;}
-    std::shared_ptr<hypercube>return_grid(){return grid;}
+    std::shared_ptr<SEP::hypercube>return_grid(){return grid;}
     virtual float get_minval(){return buf[0]->bclip;}
     virtual float get_maxval(){return buf[0]->eclip;}
     QString get_values(){return QString(values.c_str());}
@@ -109,11 +109,11 @@ class dataset: public QObject{
     virtual bool am_region(){ return io->am_region();}
     QString set_pts(float *pcts);
     void clear_pts();
-    std::shared_ptr<hypercube> grid;
+    std::shared_ptr<SEP::hypercube> grid;
     std::vector<std::shared_ptr<buffer>> buf;
     bool data_contains[8],display_axis[8];
     std::shared_ptr<io_func> io;
-    std::shared_ptr<paramObj> par;
+    std::shared_ptr<SEP::paramObj> par;
     int nmax_buf,inum;
     unsigned char conv[256];
     std::vector<bar_pt>  clip;
@@ -134,6 +134,6 @@ class dataset: public QObject{
 
 };
 
-
+}
 
 #endif

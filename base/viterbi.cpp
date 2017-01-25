@@ -1,4 +1,5 @@
 #include "viterbi.h"
+using namespace SEP;
 viterbi::viterbi(std::shared_ptr<my_score> s2,std::shared_ptr<float_2d> s, int ns,int floc){
 
  sc=s2;

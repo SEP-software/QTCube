@@ -1,7 +1,7 @@
 #include "outcore_data.h"
 #include "float_buffer.h"
 #include "byte_buffer.h"
-
+using namespace SEP;
 void outcore_data::hold_pattern(std::shared_ptr<orient_cube>pos, int iax1, int iax2, bool *hold){
 
  for(int i=0; i < 8; i++) hold[i]=false;

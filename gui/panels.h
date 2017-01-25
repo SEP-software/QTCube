@@ -9,12 +9,12 @@
 #include "maps.h"
 #include "orient_cube.h"
 #include <QObject>
-
+namespace SEP{
 class panels: public QObject{
  Q_OBJECT
 
  public:
-    panels(std::shared_ptr<genericIO> io,std::shared_ptr<pick_draw> p,std::shared_ptr<maps>my_maps,std::shared_ptr<orients> my_o);
+    panels(std::shared_ptr<SEP::genericIO> io,std::shared_ptr<pick_draw> p,std::shared_ptr<maps>my_maps,std::shared_ptr<orients> my_o);
      signals:
     void actionDetected(std::vector<QString> text);
     void secondaryDetected(std::vector<QString> text);
@@ -71,7 +71,7 @@ class panels: public QObject{
     std::shared_ptr<maps> my_maps;
     QTimer *movie_timer;
     std::shared_ptr<autopick> autop;
-    std::shared_ptr<genericIO> _io;
+    std::shared_ptr<SEP::genericIO> _io;
     std::map<int,int> panel_to_window;
   int movie_delay;
     int active_num;
@@ -81,4 +81,5 @@ class panels: public QObject{
    std::map<int,std::shared_ptr<panel>> my_pan;
    int pan_num;
 };
+}
 #endif

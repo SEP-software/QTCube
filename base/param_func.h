@@ -3,7 +3,7 @@
 #include<string>
 #include<stdbool.h>
 #include<string.h>
-
+namespace SEP{
 
 class param_func {
   public:
@@ -44,5 +44,6 @@ class param_func {
     virtual void error(const std::string aa) const {if(aa==""){;};}
     virtual ~param_func(){};
  };
+ }
 #endif
 

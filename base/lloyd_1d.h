@@ -2,6 +2,7 @@
 #define LLOYD_1D_H 1
 #include<vector>
 #include<lloyd.h>
+namespace SEP{
 class lloyd_1d: public lloyd{
 
   public:
@@ -88,4 +89,5 @@ class lloyd_1d_p: public lloyd_1d{
     bool writeit;
     
 };
+}
 #endif

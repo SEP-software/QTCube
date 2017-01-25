@@ -1,6 +1,6 @@
 #include "pick_new.h"
 
-
+using namespace SEP;
 pick_new::pick_new(int *loc,long long p, int te, QString c, int ex,QString t){
   pos=p;
   type=te;

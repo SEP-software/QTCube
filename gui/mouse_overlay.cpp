@@ -1,5 +1,5 @@
 #include "mouse_overlay.h"
-
+using namespace SEP;
 mouse_overlay::mouse_overlay(){
 
 status="Pick: L-draw line M-navigate R-draw hyperbola";

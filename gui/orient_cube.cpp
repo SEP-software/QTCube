@@ -2,7 +2,7 @@
 #include <math.h>
 #include<assert.h>
 #include <utility>
-
+using namespace SEP;
 orient_cube::orient_cube(std::shared_ptr<position>pos,std::vector<int> o,std::shared_ptr<orientation_server>s){
   init=true;
   block[0]=1;

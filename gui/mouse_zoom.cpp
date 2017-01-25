@@ -1,5 +1,5 @@
 #include "mouse_zoom.h"
-
+using namespace SEP;
 mouse_zoom::mouse_zoom(){
 
 status="Zoom: L-zoom(reset) M-navigate R-add pick";

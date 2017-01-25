@@ -1,7 +1,7 @@
 #include "history.h"
 #include <stdio.h>
 
-
+using namespace SEP;
 history::history(){
 
 

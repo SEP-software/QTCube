@@ -5,6 +5,7 @@
 #include <qstring.h>
 #include  <map>
 #include <vector>
+namespace SEP{
 class my_colors{
   public:
     my_colors();
@@ -22,5 +23,5 @@ class my_colors{
 
 
 };
-
+}
 #endif

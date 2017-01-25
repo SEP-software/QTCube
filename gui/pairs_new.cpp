@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdio.h>
 
+using namespace SEP;
 
 bool compx(pair_new x1, pair_new x2){
   return x1.x < x2.x;

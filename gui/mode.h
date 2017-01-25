@@ -2,7 +2,7 @@
 #define MODE_H 1
 #include<qstring.h>
 #include<vector>
-
+namespace SEP{
 class mode{
   public:
     mode(QString init_mode);
@@ -14,5 +14,5 @@ class mode{
     QString cur_mode;
 };
 
-
+}
 #endif

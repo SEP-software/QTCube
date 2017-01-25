@@ -1,5 +1,5 @@
 #include "surface_data.h"
-
+using namespace SEP;
 surface_data::surface_data(std::shared_ptr<hypercube>g, QString nm, QString typ, std::shared_ptr<dataset>dt,std::shared_ptr<paramObj>p,
   std::shared_ptr<pick_draw>picks, QString col,int in){
 

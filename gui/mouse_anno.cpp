@@ -1,5 +1,5 @@
 #include "mouse_anno.h"
-
+using namespace SEP;
 mouse_anno::mouse_anno(){
 
 status="Annotate: L-Add annotation M-Move annotation R-Deleta annotation";

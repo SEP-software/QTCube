@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QObject>
+namespace SEP{
 class basicComboBox{
   public:
     basicComboBox(QString name, QString tool, std::vector<QString>);
@@ -122,7 +123,7 @@ class basicSliderBox{
     QHBoxLayout *my_lay;
 
 };
-
+}
 #endif
 
 

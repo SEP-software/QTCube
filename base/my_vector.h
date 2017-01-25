@@ -3,6 +3,7 @@
 #include <string>
 #include <stdio.h>
 #include <assert.h>
+namespace SEP{
 class my_vector{
 
   public:
@@ -60,4 +61,5 @@ class my_vector{
 
 
 };
+}
 #endif

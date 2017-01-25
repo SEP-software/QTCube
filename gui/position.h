@@ -4,11 +4,12 @@
 #define POSITION_H 1
 #include <memory>
 #include <QString>
+namespace SEP{
 class position
 {
   public:
     position(){};
-    position(std::shared_ptr<hypercube> dims, int *start, int *beg, int *end,int movie_dir);
+    position(std::shared_ptr<SEP::hypercube> dims, int *start, int *beg, int *end,int movie_dir);
     virtual ~position(){delete_position();}
    void update_position(int iax1, int iax2, int iloc1, int iloc2);
    void update_range(int iax1, int iax2, int beg1, int end1, int beg2, int end2);
@@ -37,13 +38,13 @@ class position
      for(int i=0; i<8;i++) set_loc(i,iloc[i]);
     }
    
-   axis getAxis(int iax){return axes[iax];}
+   SEP::axis getAxis(int iax){return axes[iax];}
    int get_movie_axis(){return movie_ax;}
    int get_movie_dir(){return dir;}
-   void increment(int iax,int inc,std::shared_ptr<hypercube >h);
+   void increment(int iax,int inc,std::shared_ptr<SEP::hypercube >h);
    QString return_pos_label();
    void set_movie_dir(int iax,int d){movie_ax=iax;dir=d;}
-   void set_axis(int iax, axis ax) { 
+   void set_axis(int iax, SEP::axis ax) { 
      axes[iax]=ax;
       beg[iax]=0;
       end[iax]=ax.n;
@@ -55,11 +56,11 @@ class position
      fprintf(stderr,"\n");
    
    }
-   void update_movie_pos(std::shared_ptr<hypercube> hyper,int delta=1){increment(movie_ax,dir*delta,hyper);}
+   void update_movie_pos(std::shared_ptr<SEP::hypercube> hyper,int delta=1){increment(movie_ax,dir*delta,hyper);}
    void get_locs(int *iloc){for(int i=0; i<8;i++) iloc[i]=loc[i];}
    void get_begs(int *iloc){for(int i=0; i<8;i++) iloc[i]=beg[i];}
    void get_ends(int *iloc){for(int i=0; i<8;i++) iloc[i]=end[i];}
-   void get_axes(axis *ax){for(int i=0; i<8;i++) ax[i]=axes[i];}
+   void get_axes(SEP::axis *ax){for(int i=0; i<8;i++) ax[i]=axes[i];}
    void set_begs(int *iloc){for(int i=0; i<8;i++) beg[i]=iloc[i]; update_extents();}
   void set_ends(int *iloc){for(int i=0; i<8;i++) end[i]=iloc[i]; update_extents();}    
    void fix_min(int imin);
@@ -83,7 +84,7 @@ class position
       ind[2]=loc/block[2]; loc-=ind[2]*block[2];
       ind[1]=loc/block[1]; ind[0]=loc-ind[1]*block[1];
     }
-    axis axes[8];
+    SEP::axis axes[8];
     int loc[8];
     int beg[8];
     long long block[8];
@@ -94,6 +95,6 @@ class position
     void delete_position();
 
 };
-
+}
 #endif
 

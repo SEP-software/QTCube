@@ -1,5 +1,5 @@
 #include "moved_out.h"
-   
+using namespace SEP;
 void moved_out::set_moveout_basics(std::shared_ptr<hypercube>g, std::shared_ptr<dataset>dat, int it,int ioff, int imes, 
  std::shared_ptr<util>pars,   std::shared_ptr<pick_draw>_pk, QString c1, QString c2){
   par=pars;

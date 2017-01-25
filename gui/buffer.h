@@ -4,6 +4,7 @@
 #include "io_func.h"
 #include "orient_cube.h"
 #include "util.h"
+namespace SEP{
 class io_store{
   public:
   io_store(int *f){
@@ -19,7 +20,7 @@ class buffer{
     
     void set_null();
   
-    void set_basics(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in);
+    void set_basics(std::shared_ptr<SEP::paramObj>p, std::shared_ptr<SEP::hypercube>h,std::shared_ptr<io_func>i,int in);
     virtual ~buffer(){
        clean_up();
     }
@@ -30,7 +31,7 @@ class buffer{
       if(fw==0 || nw==0){;};
       _par->error("Read hyper unimplemented");
     }
-  void buffer_basics(paramObj *p);
+  void buffer_basics(SEP::paramObj *p);
   //long long *form_index_map(std::shared_ptr<orient_cube>pos, int iax1, int f1, int e1, int iax2,
    // int f2, int e2);
       long long *form_index_map(std::shared_ptr<orient_cube>pos, int iax1, int iax2,
@@ -57,7 +58,7 @@ void set_hold(bool *h);
        return 0;
   }
  
-  void build_axis_map(axis ain, axis aout, int iax);
+  void build_axis_map(SEP::axis ain, SEP::axis aout, int iax);
   void calc_read_loop(std::vector<int>&nwin, std::vector<int>&fwin,std::vector<int> &nwout,
    std::vector<int> &fwout, std::vector<int> &nloop, int&ndim);
   virtual void read_buffer(int *nwin, int *fwin,int *nwout, int *fwout,int ndim, int *nloop){ 
@@ -81,10 +82,10 @@ void set_hold(bool *h);
   void calc_resize(std::vector<int> &fio, std::vector<int> &nio, std::vector<int> &fbuf, 
   std::vector<int> &nbuf);
 
-  std::shared_ptr<hypercube>hyper_io,hyper_buf;
+  std::shared_ptr<SEP::hypercube>hyper_io,hyper_buf;
   std::shared_ptr<io_func>io;
   std::shared_ptr<util>_util;
-  std::shared_ptr<paramObj> _par;
+  std::shared_ptr<SEP::paramObj> _par;
   bool hold[8];
   bool resamp_1;
   long long skip[8];
@@ -95,9 +96,10 @@ void set_hold(bool *h);
   float histo[256];
   long long n123_view,n123_buf;
   float bclip,eclip;
-   std::vector<axis> aios ,abufs;
+   std::vector<SEP::axis> aios ,abufs;
 
 
 
 };
+}
 #endif

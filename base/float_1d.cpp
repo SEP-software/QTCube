@@ -1,5 +1,5 @@
 #include<float_1d.h>
-
+using namespace SEP;
 float_1d::float_1d(const axis &a1)
 {
   base_init_1df(a1);

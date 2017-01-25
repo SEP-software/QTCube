@@ -1,4 +1,5 @@
 #include "orientation_server.h"
+using namespace SEP;
 converter::converter(int *in,std::vector<axis> ax,float a,float *cen,std::vector<axis >una){
     rot_ax[0]=in[0]; rot_ax[1]=in[1];
     ax_rot.resize(2);

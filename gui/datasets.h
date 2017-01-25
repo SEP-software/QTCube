@@ -5,11 +5,11 @@
 #include "pick_draw.h"
 #include "orient_cube.h"
 #include <QObject>
-
+namespace SEP{
 class datasets: public QObject{
  Q_OBJECT
   public:
-   datasets(std::shared_ptr<paramObj>p,std::shared_ptr<pick_draw >pk);
+   datasets(std::shared_ptr<SEP::paramObj>p,std::shared_ptr<pick_draw >pk);
    datasets(){}
    ~datasets(){ clean_dats();}
    void set_orients(std::shared_ptr<orients>my){my_or=my;}
@@ -25,11 +25,12 @@ class datasets: public QObject{
     void actionDetected(std::vector<QString> text);
   private:
     std::vector<std::shared_ptr<dataset>> dats;
-    std::shared_ptr<paramObj >par;
+    std::shared_ptr<SEP::paramObj >par;
     std::shared_ptr<util >my_util;
     std::shared_ptr<pick_draw >my_pk;
     std::shared_ptr<orients>my_or;
     private slots:
     void actionRespond(std::vector< QString> text);
 };
+}
 #endif

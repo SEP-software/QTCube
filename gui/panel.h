@@ -30,11 +30,12 @@
 #include "my_fonts.h"
 #include "anno.h"
 #include<QWidget>
+namespace SEP{
 class panel: public QWidget{
     Q_OBJECT
 
   public:
-     panel(int inum, std::shared_ptr<paramObj>pars, std::shared_ptr<position> pos, 
+     panel(int inum, std::shared_ptr<SEP::paramObj>pars, std::shared_ptr<position> pos, 
         std::shared_ptr<pick_draw>_pks, std::shared_ptr<datasets>ds, int idat, 
         std::shared_ptr<slice_types>ct, std::shared_ptr<mouse_func>f,
         std::shared_ptr<orientation_server>s, std::shared_ptr<orients>oo,std::shared_ptr<maps> mp);
@@ -204,7 +205,7 @@ private:
    std::shared_ptr<datasets  >datas;  //The collections of datasets that exist
    std::shared_ptr<draw_other >draw_o;  //What do draw in a given view
    std::shared_ptr<orient_cube >pos;  //Returns info on what to display
-   std::shared_ptr<paramObj>pars;  //Grab parameters from the command line
+   std::shared_ptr<SEP::paramObj>pars;  //Grab parameters from the command line
    std::vector<float> proportions; //The ratios of the various axes we will use 
    int jplane,grid1,grid2; //When displaying multiple slices 
    bool first; //First time through
@@ -240,5 +241,5 @@ private:
 
 
 };
-
+}
 #endif

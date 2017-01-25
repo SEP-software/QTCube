@@ -4,7 +4,7 @@
 #include <QKeyEvent>
 #include <QPolygon>
 
-
+using namespace SEP;
 int multiple::in_slice(int ix, int iy){
   for(int i=0;i < (int)slices.size(); i++){
     if (slices[i]->in_slice(ix,iy)) return i;

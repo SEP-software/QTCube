@@ -1,6 +1,6 @@
 #ifndef PERCENTILE_H
 #define PERCENTILE_H 1
-
+namespace SEP{
 class percentile{
 
   public:
@@ -9,4 +9,5 @@ class percentile{
   float find_abs(float *buf, long long nelem, long long ielem);
 
 };
+}
 #endif

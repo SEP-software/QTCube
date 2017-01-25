@@ -1,6 +1,7 @@
 #include<math.h>
 #include <stdio.h>
 #include "percentile.h"
+using namespace SEP;
 float percentile::find_abs(float *x, long long n, long long q)
 {
         register float *i, *j, ak;

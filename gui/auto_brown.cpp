@@ -2,7 +2,7 @@
 #include "fastmarch.h"
 #include "viterbi.h"
 #include "my_score.h"
-
+using namespace SEP;
 std::vector<path> auto_brown::return_path(std::vector<int> locs,float_2d *array){
 
   int imid=(array->getAxis(1).n-1)/2;

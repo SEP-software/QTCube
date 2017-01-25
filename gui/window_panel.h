@@ -6,6 +6,7 @@
 #include "widget_tools.h"
 
 #include <vector>
+namespace SEP{
 class window_panel: public qcubeTabBasic{
   Q_OBJECT
   public: 
@@ -53,6 +54,6 @@ class sub_window_panel: public qcubeWidgetBasic{
  
 };
 
-
+}
 
 #endif

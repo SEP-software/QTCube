@@ -1,5 +1,5 @@
 #include "widget_tools.h"
-
+using namespace SEP;
 basicComboBox::basicComboBox(QString name, QString tool, std::vector<QString> options){
 
  my_box=new QGroupBox(name);

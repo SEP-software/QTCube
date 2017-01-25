@@ -27,6 +27,7 @@
 #include "cube_cut.h"
 #include "cube.h"
 #include "qprinter.h"
+using namespace SEP;
 
 DrawWindow::DrawWindow(int ng1, int ng2, std::vector<std::shared_ptr<panel>> pan,int in){
   ngrid1=ng1; ngrid2=ng2; //Grid size of panels to display
