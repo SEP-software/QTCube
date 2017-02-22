@@ -112,7 +112,7 @@ void dataset::set_contains(){
 
 unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube>pos,int iax1,int iax2, 
 int n, long long *index){
-std::vector<int> nloc=return_io_hyper()->returnNs();
+std::vector<int> nloc=return_io_hyper()->getNs();
    int ibuf=check_load_buffer(pos,iax1,iax2);
    unsigned char *cbuf=buf[ibuf]->get_char_data(pos,iax1,0,nloc[iax1],iax2,0,nloc[iax2]);
    
@@ -345,7 +345,7 @@ QString dataset::validate_view(QString nm, std::shared_ptr<orient_cube>pos){
 
 
 // pos->get_axes(as);
- std::vector<int> n=return_io_hyper()->returnNs();
+ std::vector<int> n=return_io_hyper()->getNs();
  
  int order[8]; pos->get_orders(order);
  bool valid[8];

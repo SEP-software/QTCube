@@ -149,7 +149,6 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
     *y2=-(x1-rot_cen[0])*sin(-ang)+cos(-ang)*(x2-rot_cen[1])+rot_cen[1];
    }
   void rotation_change(){
-    for(int i=0; i< (int)rot_maps.size();i++) delete rot_maps[i];
       rot_maps.clear();
       map_order.clear();
 
@@ -190,7 +189,7 @@ void del_pick(int iax1, int iax2, int idelta,QString col, long long index){
     int *begs,*ends;
   //  int  **map_1d;
     float rot_cen[2];
-    std::map<int,orient_map*> rot_maps;
+    std::map<int,std::shared_ptr<orient_map>> rot_maps;
     bool rev1,rev2,init;
     std::shared_ptr<orientation_server>serv;
     int orient_num;

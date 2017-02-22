@@ -323,8 +323,10 @@ void panels::perform_navigate(std::vector<QString> command){
     int beg[8],end[8];
     pos->get_ends(end);
     pos->get_begs(beg);
+    
     std::vector<int> myp=util::int_vector_from_string(command[3]);
     for(int i=0;i<8;i++){ beg[i]=myp[i]; end[i]=myp[i+8];}
+
     pos->set_begs(beg); pos->set_ends(end);
     pos->set_loc(myp[16],(int)((beg[myp[16]]+end[myp[16]])/2.));
     pos->set_loc(myp[17],(int)((beg[myp[17]]+end[myp[17]])/2.));

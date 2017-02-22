@@ -176,7 +176,11 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen
    }
    else { bb2=f2; ee2=f2+n2;}
 
-   unsigned char *buf=     dat->get_char_data(pos,iax1,iax2,abs((ee1-bb1)*(ee2-bb2)),slice_to_grid_map);
+  // unsigned char *buf=     
+   //  dat->get_char_data(pos,iax1,iax2,abs((ee1-bb1)*(ee2-bb2)),slice_to_grid_map);
+
+
+   unsigned char *buf=     dat->get_char_data(pos,iax1,bb1,ee1,iax2,bb2,ee2);
 
 
 
@@ -184,6 +188,7 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset>dat,QPen *pen
   b_2=f2;
   e_1=b_1+n1;
   e_2=b_2+n2;
+  
   int it;
 //  if(rev_1){ it=e_1;e_1=b_1; b_1=it;}
  // if(rev_2){ it=e_2;e_2=b_2; b_2=it;}

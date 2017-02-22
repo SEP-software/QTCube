@@ -168,9 +168,9 @@ void orient_cube::form_index_map(int iax1, int iax2, bool rev1, bool rev2){
    //     fprintf(stderr,"setting up axis range1 as %d %d %d %d\n",bs[0],es[0],b_s,e_s);
 
      }
-     rot_maps[ibig]=
+     rot_maps[ibig].reset(
        new orient_map(rotate,iax1,iax2,rot_ax,ax_rot,rot_to_reg_1,rot_to_reg_2,
-       bs,iloc,es,ns,rev1,rev2,one_shift,shift_ax,b_s,e_s);
+       bs,iloc,es,ns,rev1,rev2,one_shift,shift_ax,b_s,e_s));
      update_map_order(ibig,true);
     }
     else update_map_order(ibig,false);
@@ -233,7 +233,7 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1, in
      }
      iloc[i3a]=i3v;
 
-      rot_maps[ibig]=new 
+      rot_maps[ibig].reset(new 
        orient_map(rotate,iax1,iax2,rot_ax,ax_rot,rot_to_reg_1,rot_to_reg_2,
        
        bs,
@@ -245,7 +245,7 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1, in
        one_shift,
        shift_ax,
        b_s,
-       e_s);
+       e_s));
        update_map_order(ibig,true);
 
                  long long *tmp=rot_maps[ibig]->get_index_map_ptr();

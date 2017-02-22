@@ -12,7 +12,6 @@ class pick_panel: public qcubeWidgetBasic{
     pick_panel(std::shared_ptr<SEP::position>p,std::shared_ptr<SEP::windows>my_w, std::shared_ptr<SEP::panels>my_p, std::shared_ptr<SEP::datasets>my_d, std::shared_ptr<pick_draw>pk, std::shared_ptr<SEP::slice_types>c,std::shared_ptr<SEP::maps>mym);
 
      virtual void actionRespond(std::vector<QString>){;}
-     ~pick_panel(){ delete_row_1();delete_row_2(); delete_row_3(); delete layMain;}
           void update_menu(std::vector<QString>);
    signals:
      void actionDetected(std::vector<QString> coms);
@@ -23,24 +22,24 @@ class pick_panel: public qcubeWidgetBasic{
      void delete_row_3();
           void delete_row_4();
 
-     QWidget *build_row_1();
-     QWidget * build_row_2();
-     QWidget * build_row_3();
-          QWidget * build_row_4();
+     std::shared_ptr<QWidget> build_row_1();
+     std::shared_ptr<QWidget> build_row_2();
+     std::shared_ptr<QWidget>build_row_3();
+     std::shared_ptr<QWidget>build_row_4();
 
-     basicComboBox *group,*view,*single;
-     basicRadioBox *display;
-     basicButtonBox *loadsave;
-     basicSliderBox *distance;
-     basicComboBox *extra;
-     basicButtonBox *pksize;
-     basicLineEditBox *pkText;
-     basicButtonBox *auto2d;
-     basicComboBox *method,*direction;
-     basicComboBox *autoType,*autoLen,*autoMax,*autoError;
-     QVBoxLayout *layMain;
-     QHBoxLayout *lay1,*lay2,*lay3,*lay4;
-     QWidget *row1,*row2,*row3,*row4;
+     std::shared_ptr<basicComboBox> group,view,single;
+     std::shared_ptr<basicRadioBox>  display;
+     std::shared_ptr<basicButtonBox>  loadsave;
+     std::shared_ptr<basicSliderBox>  distance;
+     std::shared_ptr<basicComboBox>  extra;
+     std::shared_ptr<basicButtonBox>  pksize;
+     std::shared_ptr<basicLineEditBox>  pkText;
+     std::shared_ptr<basicButtonBox>  auto2d;
+     std::shared_ptr<basicComboBox>  method,direction;
+     std::shared_ptr<basicComboBox>autoType,autoLen,autoMax,autoError;
+     std::shared_ptr<QVBoxLayout> layMain;
+     std::shared_ptr<QHBoxLayout> lay1,lay2,lay3,lay4;
+     std::shared_ptr<QWidget> row1,row2,row3,row4;
      
      private slots:
      

@@ -1,4 +1,6 @@
 #include "byte_buffer.h"
+#include<seplib.h>
+#include<cassert>
 using namespace SEP;
 //Initialize and read in buffer
 byte_buffer::byte_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube>h,std::shared_ptr<io_func>i,int in,std::vector<int>&nwbuf, std::vector<int>&fwbuf){
@@ -104,7 +106,17 @@ int e1,
    }
    int n1=abs(e1-f1), n2=abs(e2-f2);
    long long *index=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
+   if(iax1==0 && iax2==1){
+     int i=0;
+     for(int i2=f2; i2 < e2; i2++){
+       for(int i1=f1; i1 < e1; i1++,i++){
+        // fprintf(stderr,"map setup %d %d %d %d\n",i1,i2,index[i]%194,index[i]/194-28*292);
+       }
+    }
+  }
+     
    unsigned char *out=get_char_data(pos,n1*n2,index);
+   
    return out;
 }
 
@@ -119,6 +131,7 @@ unsigned char *byte_buffer::get_char_data(std::shared_ptr<orient_cube>pos,int n,
          out[i]=0;
       }
       else{
+      
         out[i]=cbuf[index[i]];
       }
    }
@@ -139,7 +152,6 @@ float *byte_buffer::get_float_data(std::shared_ptr<orient_cube>pos, int iax1, in
       pos->set_no_rotate();
    }
    int n1=abs(e1-f1), n2=abs(e2-f2);
-   fprintf(stderr,"CEHCK axis %d %d \n",iax1,iax2);
    long long *index=pos->get_index_map_ptr(iax1,iax2,f1,e1,f2,e2,0);
    float *out=get_float_data(n1*n2,index);
    return out;
