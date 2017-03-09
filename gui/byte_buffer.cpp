@@ -1,5 +1,4 @@
 #include "byte_buffer.h"
-#include<seplib.h>
 #include<cassert>
 using namespace SEP;
 //Initialize and read in buffer
