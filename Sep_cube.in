@@ -5,7 +5,7 @@ import array
 import os
 
 #link suffixes to file type
-sufixes={"H" : "SEP", "T" :"SEP", "h": "SEP", "t": "SEP", "RSF": "SEP", "HH": "SEP",
+sufixes={"H" : "SEP", "T" :"SEP", "json":"JSON","h": "SEP", "t": "SEP", "RSF": "SEP", "HH": "SEP",
       "rsf":"SEP","SU":"SU","su":"SU", "SEGY": "SEGY", "SGY": "SEGY",
        "segy": "SEGY", "sgy":"SEGY", "sp": "SEISPAK","SP": "SEISPAK"}
 
@@ -118,6 +118,8 @@ def find_files(args,eqs):
       if eqs["fileType%d"%count]=="SEP":
         if not pars_exist("g",eqs):
           get_sep_params(arg,eqs,"g")
+      elif eqs["fileType%d"%count]=="JSON":
+        get_json_params(arg,eqs,count)
       elif eqs["fileType%d"%count]=="SEISPAK":
         get_seispak_params(arg,eqs,count)
         if not pars_exist("g",eqs):
@@ -146,8 +148,38 @@ def find_files(args,eqs):
       eqs["data%d"%count]=arg
       eqs["type%d"%count]="FILE"
       count+=1
-  eqs["ndata"]=count
+  eqs["ndata"]=str(count)
   return count,eqs      
+def getJsonParam(file,par):
+   stat,out=commands.getstatusoutput("grep %s %s"%(par,file))    
+   if not stat: 
+    return ""
+   else:
+     x=re.compile('"\S+"\s*:\s*(\d+)') 
+     m=x.search(out)
+     if m: 
+       return m.group(1)
+     x=re.compile('"\S+"\s*:\s*"(\S+)"') 
+     m=x.search(out)
+     if m: 
+       return m.group(1)
+     return ""
+
+def get_json_params(file,par,o):
+ for i in range(8):
+   out1=getJsonParam(file,"n%d"%i)
+   out2=getJsonParam(file,"o%d"%i)
+   out3=getJsonParam(file,"d%d"%i)
+   out4=getJsonParam(file,"label%d"%i)
+   if len(out1)==0:out1="1"
+   if len(out2)==0:out2="0"
+   if len(out3)==0:out3="1"
+   if len(out4)==0:out4=" "
+   if not par.has_key("n%s_%d"%(o,i+1)): par["n%s_%d"%(o,i+1)]=out1
+   if not par.has_key("o%s_%d"%(o,i+1)): par["o%s_%d"%(o,i+1)]=out2
+   if not par.has_key("d%s_%d"%(o,i+0)): par["d%s_%d"%(o,i+1)]=out3
+   if not par.has_key("label%s_%d"%(o,i+1)): par["label%s_%d"%(o,i+1)]=out4
+ return par
 def get_sep_params(file,par,o):
  for i in range(8):
    stat1,out1=commands.getstatusoutput("Get parform=no <%s n%d"%(file,i+1))
@@ -377,6 +409,19 @@ def velan_params(args,ndat):
   args["single"]=6
   return ndat,args
 
+def isFloat(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+def isInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 def basic_run(eq_args,args):
   if len (sys.argv)==1:
@@ -387,8 +432,29 @@ def basic_run(eq_args,args):
   args,hist=set_initial_state(ndat,args)
   if args.has_key("valgrind"): command="valgrind --leak-check=full  %s"%binary
   else: command=binary
-  for key,val in args.items():
-    command+=" %s='%s'"%(key,val)
+  if  "json" in args.keys():
+     f=open("junk.json","w")
+     f.write("{\n")
+     first=1;
+     noth=re.compile("\s*");
+     for key,val in args.items():
+       nothing=noth.search(val)
+       if first==0:
+         f.write(",\n");
+       else:
+         first=0
+       if isInt(val):
+         f.write('"%s":%d'%(key,int(val)))
+       elif isFloat(val):
+         f.write('"%s":%f'%(key,float(val)))
+       else:
+         f.write('"%s":"%s"'%(key,val))
+     f.write("\n}\n")
+     f.close()
+     command+=" json=junk.json";
+  else:
+    for key,val in args.items():
+      command+=" %s='%s'"%(key,val)
   print command
   os.system(command)
   if hist:
