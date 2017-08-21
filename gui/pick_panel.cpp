@@ -111,7 +111,7 @@ std::shared_ptr<QWidget>pick_panel::build_row_3(){
 
 
 
-      std::shared_ptr<basicButtonBox> auto2d(
+      auto2d.reset(
         new basicButtonBox("2-D autopicking","pick","Perform autopicking",false));
       auto2d->addButton("accept","Accept the last autopicking",false);
       auto2d->addButton("decline","Decline the last autopicking",false);
