@@ -17,6 +17,8 @@ endif()
 enable_language(CXX)
 find_library(LIBTBB tbb REQUIRED)
 
+FIND_PACKAGE(hypercube NO_MODULE REQUIRED)
+INCLUDE_DIRECTORIES(${hypercube_DIRNAME_include})
 FIND_PACKAGE(genericIO NO_MODULE REQUIRED)
 INCLUDE_DIRECTORIES(${genericIO_DIRNAME_include})
 
@@ -52,7 +54,7 @@ ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
 set_property(TARGET qt_cube PROPERTY LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(qt_cube gui)
 TARGET_LINK_LIBRARIES(qt_cube base)
-TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} ${LIBTBB})
+TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} hypercube ${LIBTBB})
 
 target_link_libraries(qt_cube Qt4::QtGui Qt4::QtXml)
 TARGET_LINK_LIBRARIES(qt_cube ${LIBTBB})
