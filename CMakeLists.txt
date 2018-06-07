@@ -17,10 +17,29 @@ endif()
 enable_language(CXX)
 find_library(LIBTBB tbb REQUIRED)
 
-FIND_PACKAGE(hypercube NO_MODULE REQUIRED)
-INCLUDE_DIRECTORIES(${hypercube_DIRNAME_include})
-FIND_PACKAGE(genericIO NO_MODULE REQUIRED)
-INCLUDE_DIRECTORIES(${genericIO_DIRNAME_include})
+FIND_PACKAGE(genericIO)
+if(genericIO_FOUND)
+  message("Found genericIO")
+  INCLUDE_DIRECTORIES(${hypercube_DIRNAME_include})
+  INCLUDE_DIRECTORIES(${genericIO_DIRNAME_include})
+  INCLUDE_DIRECTORIES(${sepVector_DIRNAME_include})
+else(genericIO_FOUND)
+   message("Unable to find genericIO")
+
+    # we have a submodule setup for foo, assume it is under external/foo
+    # now we need to clone this submodule
+    execute_process(COMMAND git submodule update --init --recursive  -- external/genericIO
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+    add_subdirectory(external/genericIO)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/cpp)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/lib)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/external/hypercube/lib)
+
+endif(genericIO_FOUND)
+
+
+
 
 
 configure_file (

@@ -1,0 +1,3 @@
+[submodule "external/genericIO"]
+	path = external/genericIO
+	url = git@zapad.Stanford.EDU:bob/genericIO.git
