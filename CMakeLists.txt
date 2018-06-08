@@ -3,7 +3,10 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 
-
+set(qtcube_MAJOR_VERSION 1)
+set(qtcube_MINOR_VERSION 2)
+set(qtcube_VERSION_STRING
+  ${qtcuber_MAJOR_VERSION}.${qtcube_MINOR_VERSION})
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3")
 include(CheckCXXCompilerFlag)
@@ -82,3 +85,15 @@ install(TARGETS qt_cube
  
  DESTINATION bin
 )
+
+
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${qtcube_MAJOR_VERSION}")
+set(CPACK_PACKAGE_VERSION_MINOR "${qtcube_MINOR_VERSION}")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_NAME "qtcube")
+set(CPACK_PACKAGE_CONTACT "Robert Clapp")
+include(CPack)
+
