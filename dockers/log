@@ -1,0 +1,237 @@
+Sending build context to Docker daemon   21.5kB
+Step 1/8 : From centos:7
+ ---> 49f7960eb7e4
+Step 2/8 : MAINTAINER Bob Clapp <bob@sep.stanford.edu>
+ ---> Using cache
+ ---> 350dffe7c6a9
+Step 3/8 : RUN yum -y  install  cmake tbb-devel qt-devel gcc-c++ git install make libX11-devel libXt-devel gcc wget; yum -y clean all
+ ---> Using cache
+ ---> 5f1dcb4c56f2
+Step 4/8 : RUN yum -y install gcc gcc-c++ epel-release make git cmake  &&     yum -y install https://centos7.iuscommunity.org/ius-release.rpm &&     yum -y install  boost-devel boost-filesystem python36u-devel python36u-pip  python36u-pytest cmake3  &&    yum -y clean all
+ ---> Using cache
+ ---> 2f47d51cf585
+Step 5/8 : RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
+ ---> Using cache
+ ---> 6667172fac91
+Step 6/8 : RUN mkdir -p /opt/qtcube/build
+ ---> Using cache
+ ---> b7ede2608b83
+Step 7/8 : RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+ ---> Using cache
+ ---> e42ce517f483
+Step 8/8 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube    ../src  &&    make install &&   rm -rf /opt/qtcube/build
+ ---> Running in d5ea7307dc08
+Cloning into '/opt/qtcube/src'...
+-- The C compiler identification is GNU 4.8.5
+-- The CXX compiler identification is GNU 4.8.5
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test COMPILER_SUPPORTS_CXX11
+-- Performing Test COMPILER_SUPPORTS_CXX11 - Success
+[91mCMake Warning at CMakeLists.txt:23 (FIND_PACKAGE):
+  By not providing "FindgenericIO.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "genericIO", but CMake did not find one.
+
+  Could not find a package configuration file provided by "genericIO" with
+  any of the following names:
+
+    genericIOConfig.cmake
+    genericio-config.cmake
+
+  Add the installation prefix of "genericIO" to CMAKE_PREFIX_PATH or set
+  "genericIO_DIR" to a directory containing one of the above files.  If
+  "genericIO" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+Unable to find genericIO
+[0mSubmodule 'external/genericIO' (http://zapad.Stanford.EDU/bob/genericIO.git) registered for path 'external/genericIO'
+Cloning into 'external/genericIO'...
+Submodule path 'external/genericIO': checked out '6f4e3b3ae735a071052ec55ce189c0f2b6811a5a'
+Submodule 'external/sepVector' (http://zapad.Stanford.EDU/bob/sepVector.git) registered for path 'external/sepVector'
+Cloning into 'external/sepVector'...
+Submodule path 'external/genericIO/external/sepVector': checked out 'cdfd52d033e4a52733906db72c1ef7f5f0f68bc9'
+Submodule 'external/hypercube' (http://zapad.Stanford.EDU/bob/hypercube.git) registered for path 'external/hypercube'
+Cloning into 'external/hypercube'...
+Submodule path 'external/genericIO/external/sepVector/external/hypercube': checked out 'e8e88223b655c5ffe59f405041426906a422b164'
+[91mCMake Warning (dev) at external/genericIO/CMakeLists.txt:143:
+  Syntax Warning in cmake code at column 31
+
+  Argument not separated from preceding token by whitespace.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+[0m-- Found PythonInterp: /usr/bin/python (found version "3.6.5") 
+-- Found NumPy: /usr/lib/python3/dist-packages/numpy/core/include (found version "") 
+-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+-- Performing Test COMPILER_SUPPORTS_CXX0X
+-- Performing Test COMPILER_SUPPORTS_CXX0X - Success
+-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+[91mCMake Warning at external/genericIO/CMakeLists.txt:44 (FIND_PACKAGE):
+  By not providing "FindsepVector.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "sepVector", but CMake did not find one.
+
+  Could not find a package configuration file provided by "sepVector" with
+  any of the following names:
+
+    sepVectorConfig.cmake
+    sepvector-config.cmake
+
+  Add the installation prefix of "sepVector" to CMAKE_PREFIX_PATH or set
+  "sepVector_DIR" to a directory containing one of the above files.  If
+  "sepVector" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mUnable to find sepVector[0m[91m
+[0m[91mCMake Warning at external/genericIO/external/sepVector/CMakeLists.txt:20 (FIND_PACKAGE):
+  By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "hypercube", but CMake did not find one.
+
+  Could not find a package configuration file provided by "hypercube" with
+  any of the following names:
+
+    hypercubeConfig.cmake
+    hypercube-config.cmake
+
+  Add the installation prefix of "hypercube" to CMAKE_PREFIX_PATH or set
+  "hypercube_DIR" to a directory containing one of the above files.  If
+  "hypercube" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mUnable to find hypercube
+[0m[91mbefore add subdirectory
+[0m-- Found PythonInterp: /usr/bin/python (found suitable version "3.6.5", minimum required is "3") 
+[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/CMakeLists.txt:17 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/python/CMakeLists.txt:7 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+[91mCMake Warning at external/genericIO/external/sepVector/python/CMakeLists.txt:9 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mDid not find pybid11
+[0m[91mZFP_INCLUDE_DIR-NOTFOUNDZFP_LIBRARY-NOTFOUNDZFP
+[0m[91mInstalling with SEP VECTOR
+[0m[91mNOT INSTALLING WITH RSF[0m[91m
+[0m[91mNOT INSTALLING WITH SEPlib
+[0m[91mHYPERCUBE DIRNAME sepVectorhypercube 
+[0m[91mCMake Warning at external/genericIO/python/CMakeLists.txt:8 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mDid not find pybid11[0m[91m
+[0m[91mCMake Warning (dev) at external/genericIO/util/CMakeLists.txt:6 (link_directories):
+  This command specifies the relative path
+
+    ;
+
+  as a link directory.
+
+  Policy CMP0015 is not set: link_directories() treats paths relative to the
+  source dir.  Run "cmake --help-policy CMP0015" for policy details.  Use the
+  cmake_policy command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+[0m[91m/opt/qtcube/includeZFP_LIBRARY-NOTFOUNDZFP
+[0m[91mCompress CHECK FOUYND NO BVB
+[0m[91mDecompress CHECK FOUYND NO BVB[0m[91m
+[0m-- Looking for Q_WS_X11
+-- Looking for Q_WS_X11 - found
+-- Looking for Q_WS_WIN
+-- Looking for Q_WS_WIN - not found
+-- Looking for Q_WS_QWS
+-- Looking for Q_WS_QWS - not found
+-- Looking for Q_WS_MAC
+-- Looking for Q_WS_MAC - not found
+-- Found Qt4: /usr/bin/qmake-qt4 (found version "4.8.7") 
+[91mCMake Error at /usr/share/cmake3/Modules/CPack.cmake:441 (message):
+  CPack license resource file: "/opt/qtcube/src/LICENSE" could not be found.
+Call Stack (most recent call first):
+  /usr/share/cmake3/Modules/CPack.cmake:446 (cpack_check_file_exists)
+  CMakeLists.txt:98 (include)
+
+
+[0m-- Configuring incomplete, errors occurred!
+See also "/opt/qtcube/build/CMakeFiles/CMakeOutput.log".
+See also "/opt/qtcube/build/CMakeFiles/CMakeError.log".
+The command '/bin/sh -c git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube    ../src  &&    make install &&   rm -rf /opt/qtcube/build' returned a non-zero code: 1

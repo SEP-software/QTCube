@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys,re,os,string
 import commands
 import array
@@ -64,7 +64,7 @@ def msg(strng):
   """Print out a message to the screen, do a flush to guarantee immediate action"""
   lines=strng.split('\n')
   for line in lines:
-    print  "     %s"%line 
+    print  ("     %s"%line) 
   sys.stdout.flush()
  
 class error(Exception):
@@ -376,11 +376,11 @@ def set_initial_state(ndat,args):
     return args,1
   return args,None
 def self_doc():
-  print basic_com
-  print basics
-  print grid
-  print io
-  print view
+  print (basic_com)
+  print (basics)
+  print (grid)
+  print (io)
+  print (view)
 
 def velan_params(args,ndat):
   if ndat !=1: err("velocity analysis currently works with 1 file")
@@ -388,7 +388,7 @@ def velan_params(args,ndat):
   if not args.has_key("dv"): err("must provide dv, sampling in velocity")
   if not args.has_key("nv"): err("must provide nv, number of velocites")
   ndat=3;
-  print "Warning currently only support incore mode for NMO"
+  print() "Warning currently only support incore mode for NMO")
   args["ng_6"]=args["nv"]
   args["og_6"]=args["v0"]
   args["dg_6"]=args["dv"]
@@ -455,7 +455,7 @@ def basic_run(eq_args,args):
   else:
     for key,val in args.items():
       command+=" %s='%s'"%(key,val)
-  print command
+  print (command)
   os.system(command)
   if hist:
     commands.getstatusoutput("rm my_hist")
