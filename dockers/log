@@ -1,26 +1,152 @@
-Sending build context to Docker daemon   21.5kB
-Step 1/8 : From centos:7
+Sending build context to Docker daemon  22.02kB
+Step 1/10 : From centos:7
  ---> 49f7960eb7e4
-Step 2/8 : MAINTAINER Bob Clapp <bob@sep.stanford.edu>
+Step 2/10 : MAINTAINER Bob Clapp <bob@sep.stanford.edu>
  ---> Using cache
  ---> 350dffe7c6a9
-Step 3/8 : RUN yum -y  install  cmake tbb-devel qt-devel gcc-c++ git install make libX11-devel libXt-devel gcc wget; yum -y clean all
+Step 3/10 : RUN yum -y  install  cmake tbb-devel qt-devel gcc-c++ git install make libX11-devel libXt-devel gcc wget; yum -y clean all
  ---> Using cache
  ---> 5f1dcb4c56f2
-Step 4/8 : RUN yum -y install gcc gcc-c++ epel-release make git cmake  &&     yum -y install https://centos7.iuscommunity.org/ius-release.rpm &&     yum -y install  boost-devel boost-filesystem python36u-devel python36u-pip  python36u-pytest cmake3  &&    yum -y clean all
+Step 4/10 : RUN yum -y install gcc gcc-c++ epel-release make git cmake  &&     yum -y install https://centos7.iuscommunity.org/ius-release.rpm &&     yum -y install  boost-devel boost-filesystem python36u-devel python36u-pip  python36u-pytest cmake3  &&    yum -y clean all
  ---> Using cache
  ---> 2f47d51cf585
-Step 5/8 : RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
+Step 5/10 : RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
  ---> Using cache
  ---> 6667172fac91
-Step 6/8 : RUN mkdir -p /opt/qtcube/build
+Step 6/10 : RUN mkdir -p /opt/qtcube/build
  ---> Using cache
  ---> b7ede2608b83
-Step 7/8 : RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+Step 7/10 : RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
  ---> Using cache
  ---> e42ce517f483
-Step 8/8 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube    ../src  &&    make install &&   rm -rf /opt/qtcube/build
- ---> Running in d5ea7307dc08
+Step 8/10 : RUN /usr/bin/python3.6 -m pip install pytest
+ ---> Running in 9644439fcd41
+Collecting pytest
+  Downloading https://files.pythonhosted.org/packages/d3/75/e79b66c9fe6166a90004bb8fb02bab06213c3348e93f3be41d7eaf625554/pytest-3.6.1-py2.py3-none-any.whl (194kB)
+Requirement already satisfied: setuptools in /usr/lib/python3.6/site-packages (from pytest)
+Collecting more-itertools>=4.0.0 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/85/40/90c3b0393e12b9827381004224de8814686e3d7182f9d4182477f600826d/more_itertools-4.2.0-py3-none-any.whl (45kB)
+Collecting py>=1.5.0 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/67/a5/f77982214dd4c8fd104b066f249adea2c49e25e8703d284382eb5e9ab35a/py-1.5.3-py2.py3-none-any.whl (84kB)
+Collecting pluggy<0.7,>=0.5 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/ba/65/ded3bc40bbf8d887f262f150fbe1ae6637765b5c9534bd55690ed2c0b0f7/pluggy-0.6.0-py3-none-any.whl
+Collecting atomicwrites>=1.0 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/0a/e8/cd6375e7a59664eeea9e1c77a766eeac0fc3083bb958c2b41ec46b95f29c/atomicwrites-1.1.5-py2.py3-none-any.whl
+Collecting attrs>=17.4.0 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/41/59/cedf87e91ed541be7957c501a92102f9cc6363c623a7666d69d51c78ac5b/attrs-18.1.0-py2.py3-none-any.whl
+Collecting six>=1.10.0 (from pytest)
+  Downloading https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Installing collected packages: six, more-itertools, py, pluggy, atomicwrites, attrs, pytest
+Successfully installed atomicwrites-1.1.5 attrs-18.1.0 more-itertools-4.2.0 pluggy-0.6.0 py-1.5.3 pytest-3.6.1 six-1.11.0
+[91mYou are using pip version 9.0.1, however version 10.0.1 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+[0mRemoving intermediate container 9644439fcd41
+ ---> a7888e8307c0
+Step 9/10 : RUN git clone https://github.com/pybind/pybind11.git /opt/pybind11/src &&   mkdir /opt/pybind11/build &&  cd /opt/pybind11/build &&   cmake3 -DCMAKE_INSTALL_PREFIX=/usr ../src  &&  make -j 4 install
+ ---> Running in 909e97036926
+Cloning into '/opt/pybind11/src'...
+-- The CXX compiler identification is GNU 4.8.5
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PythonInterp: /usr/bin/python3.6 (found version "3.6.5") 
+-- Found PythonLibs: /usr/lib64/libpython3.6m.so
+-- Performing Test HAS_CPP14_FLAG
+-- Performing Test HAS_CPP14_FLAG - Failed
+-- Performing Test HAS_CPP11_FLAG
+-- Performing Test HAS_CPP11_FLAG - Success
+-- Setting tests build type to MinSizeRel as none was specified
+-- Building tests WITHOUT Eigen
+-- Could NOT find Boost
+-- Performing Test HAS_FLTO
+-- Performing Test HAS_FLTO - Success
+-- LTO enabled
+-- Catch not detected. Interpreter tests will be skipped. Install Catch headers manually or use `cmake -DDOWNLOAD_CATCH=1` to fetch them automatically.
+-- pybind11 v2.3.dev0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/pybind11/build
+Scanning dependencies of target pybind11_cross_module_tests
+[  2%] Building CXX object tests/CMakeFiles/pybind11_cross_module_tests.dir/pybind11_cross_module_tests.cpp.o
+Scanning dependencies of target pybind11_tests
+[  5%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/pybind11_tests.cpp.o
+[  8%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_buffers.cpp.o
+[ 11%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_builtin_casters.cpp.o
+[ 13%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_call_policies.cpp.o
+[ 16%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_callbacks.cpp.o
+[ 19%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_chrono.cpp.o
+[ 22%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_class.cpp.o
+[ 25%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_constants_and_functions.cpp.o
+[ 27%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_copy_move.cpp.o
+[ 30%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_docstring_options.cpp.o
+[ 33%] Linking CXX shared module /opt/pybind11/src/tests/pybind11_cross_module_tests.cpython-36m-x86_64-linux-gnu.so
+[ 36%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_enum.cpp.o
+[ 38%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_eval.cpp.o
+[ 41%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_exceptions.cpp.o
+[ 44%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_factory_constructors.cpp.o
+[ 47%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_iostream.cpp.o
+[ 50%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_kwargs_and_defaults.cpp.o
+[ 52%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_local_bindings.cpp.o
+[ 52%] Built target pybind11_cross_module_tests
+[ 55%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_methods_and_attributes.cpp.o
+[ 58%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_modules.cpp.o
+[ 61%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_multiple_inheritance.cpp.o
+[ 63%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_numpy_array.cpp.o
+[ 66%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_numpy_dtypes.cpp.o
+[ 69%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_numpy_vectorize.cpp.o
+[ 72%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_opaque_types.cpp.o
+[ 75%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_operator_overloading.cpp.o
+[ 77%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_pickling.cpp.o
+[ 80%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_pytypes.cpp.o
+[ 83%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_sequences_and_iterators.cpp.o
+[ 86%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_smart_ptr.cpp.o
+[ 88%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_stl.cpp.o
+[ 91%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_stl_binders.cpp.o
+[ 94%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_tagbased_polymorphic.cpp.o
+[ 97%] Building CXX object tests/CMakeFiles/pybind11_tests.dir/test_virtual_functions.cpp.o
+[100%] Linking CXX shared module /opt/pybind11/src/tests/pybind11_tests.cpython-36m-x86_64-linux-gnu.so
+------ pybind11_tests.cpython-36m-x86_64-linux-gnu.so file size: 1945992
+[100%] Built target pybind11_tests
+Install the project...
+-- Install configuration: "MinSizeRel"
+-- Installing: /usr/include/pybind11
+-- Installing: /usr/include/pybind11/eval.h
+-- Installing: /usr/include/pybind11/functional.h
+-- Installing: /usr/include/pybind11/eigen.h
+-- Installing: /usr/include/pybind11/numpy.h
+-- Installing: /usr/include/pybind11/chrono.h
+-- Installing: /usr/include/pybind11/detail
+-- Installing: /usr/include/pybind11/detail/internals.h
+-- Installing: /usr/include/pybind11/detail/descr.h
+-- Installing: /usr/include/pybind11/detail/typeid.h
+-- Installing: /usr/include/pybind11/detail/init.h
+-- Installing: /usr/include/pybind11/detail/common.h
+-- Installing: /usr/include/pybind11/detail/class.h
+-- Installing: /usr/include/pybind11/embed.h
+-- Installing: /usr/include/pybind11/pybind11.h
+-- Installing: /usr/include/pybind11/complex.h
+-- Installing: /usr/include/pybind11/stl.h
+-- Installing: /usr/include/pybind11/attr.h
+-- Installing: /usr/include/pybind11/buffer_info.h
+-- Installing: /usr/include/pybind11/options.h
+-- Installing: /usr/include/pybind11/pytypes.h
+-- Installing: /usr/include/pybind11/common.h
+-- Installing: /usr/include/pybind11/iostream.h
+-- Installing: /usr/include/pybind11/operators.h
+-- Installing: /usr/include/pybind11/stl_bind.h
+-- Installing: /usr/include/pybind11/cast.h
+-- Installing: /usr/share/cmake/pybind11/pybind11Config.cmake
+-- Installing: /usr/share/cmake/pybind11/pybind11ConfigVersion.cmake
+-- Installing: /usr/share/cmake/pybind11/FindPythonLibsNew.cmake
+-- Installing: /usr/share/cmake/pybind11/pybind11Tools.cmake
+-- Installing: /usr/share/cmake/pybind11/pybind11Targets.cmake
+Removing intermediate container 909e97036926
+ ---> 9ff25fa93d4c
+Step 10/10 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube    ../src  &&    make install &&   rm -rf /opt/qtcube/build
+ ---> Running in 4e70163d89b5
 Cloning into '/opt/qtcube/src'...
 -- The C compiler identification is GNU 4.8.5
 -- The CXX compiler identification is GNU 4.8.5
@@ -100,7 +226,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   been installed.
 
 
-[0m[91mUnable to find sepVector[0m[91m
+Unable to find sepVector
 [0m[91mCMake Warning at external/genericIO/external/sepVector/CMakeLists.txt:20 (FIND_PACKAGE):
   By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
   has asked CMake to find a package configuration file provided by
@@ -118,88 +244,35 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   been installed.
 
 
-[0m[91mUnable to find hypercube
+Unable to find hypercube
 [0m[91mbefore add subdirectory
 [0m-- Found PythonInterp: /usr/bin/python (found suitable version "3.6.5", minimum required is "3") 
-[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/CMakeLists.txt:17 (find_package):
-  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
-  asked CMake to find a package configuration file provided by "pybind11",
-  but CMake did not find one.
-
-  Could not find a package configuration file provided by "pybind11" with any
-  of the following names:
-
-    pybind11Config.cmake
-    pybind11-config.cmake
-
-  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
-  "pybind11_DIR" to a directory containing one of the above files.  If
-  "pybind11" provides a separate development package or SDK, be sure it has
-  been installed.
-
-
-[0m[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/python/CMakeLists.txt:7 (find_package):
-  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
-  asked CMake to find a package configuration file provided by "pybind11",
-  but CMake did not find one.
-
-  Could not find a package configuration file provided by "pybind11" with any
-  of the following names:
-
-    pybind11Config.cmake
-    pybind11-config.cmake
-
-  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
-  "pybind11_DIR" to a directory containing one of the above files.  If
-  "pybind11" provides a separate development package or SDK, be sure it has
-  been installed.
-
-
+-- Found PythonInterp: /usr/bin/python (found version "3.6.5") 
+-- Found PythonLibs: /usr/lib64/libpython3.6m.so
+-- Performing Test HAS_CPP14_FLAG
+-- Performing Test HAS_CPP14_FLAG - Failed
+-- Performing Test HAS_CPP11_FLAG
+-- Performing Test HAS_CPP11_FLAG - Success
+-- Performing Test HAS_FLTO
+-- Performing Test HAS_FLTO - Success
+-- LTO enabled
+-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+[91mfound pybind
 [0m-- Boost version: 1.53.0
 -- Found the following Boost libraries:
 --   program_options
 --   unit_test_framework
-[91mCMake Warning at external/genericIO/external/sepVector/python/CMakeLists.txt:9 (find_package):
-  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
-  asked CMake to find a package configuration file provided by "pybind11",
-  but CMake did not find one.
-
-  Could not find a package configuration file provided by "pybind11" with any
-  of the following names:
-
-    pybind11Config.cmake
-    pybind11-config.cmake
-
-  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
-  "pybind11_DIR" to a directory containing one of the above files.  If
-  "pybind11" provides a separate development package or SDK, be sure it has
-  been installed.
-
-
-[0m[91mDid not find pybid11
-[0m[91mZFP_INCLUDE_DIR-NOTFOUNDZFP_LIBRARY-NOTFOUNDZFP
+[91mZFP_INCLUDE_DIR-NOTFOUNDZFP_LIBRARY-NOTFOUNDZFP
 [0m[91mInstalling with SEP VECTOR
-[0m[91mNOT INSTALLING WITH RSF[0m[91m
-[0m[91mNOT INSTALLING WITH SEPlib
-[0m[91mHYPERCUBE DIRNAME sepVectorhypercube 
-[0m[91mCMake Warning at external/genericIO/python/CMakeLists.txt:8 (find_package):
-  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
-  asked CMake to find a package configuration file provided by "pybind11",
-  but CMake did not find one.
-
-  Could not find a package configuration file provided by "pybind11" with any
-  of the following names:
-
-    pybind11Config.cmake
-    pybind11-config.cmake
-
-  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
-  "pybind11_DIR" to a directory containing one of the above files.  If
-  "pybind11" provides a separate development package or SDK, be sure it has
-  been installed.
-
-
-[0m[91mDid not find pybid11[0m[91m
+NOT INSTALLING WITH RSF
+NOT INSTALLING WITH SEPlib
+HYPERCUBE DIRNAME sepVectorhypercube 
+[0m[91mfound pybind11 building python interface
+[0m-- Could NOT find PythonLibs (missing: PYTHON_INCLUDE_DIRS) 
+[91mgenericCpphypercubesepVectorhypercube
 [0m[91mCMake Warning (dev) at external/genericIO/util/CMakeLists.txt:6 (link_directories):
   This command specifies the relative path
 
@@ -214,7 +287,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
 
 [0m[91m/opt/qtcube/includeZFP_LIBRARY-NOTFOUNDZFP
 [0m[91mCompress CHECK FOUYND NO BVB
-[0m[91mDecompress CHECK FOUYND NO BVB[0m[91m
+[0m[91mDecompress CHECK FOUYND NO BVB
 [0m-- Looking for Q_WS_X11
 -- Looking for Q_WS_X11 - found
 -- Looking for Q_WS_WIN

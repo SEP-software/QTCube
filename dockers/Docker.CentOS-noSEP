@@ -9,6 +9,12 @@ RUN yum -y install gcc gcc-c++ epel-release make git cmake  && \
 RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
 RUN mkdir -p /opt/qtcube/build
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+RUN /usr/bin/python3.6 -m pip install pytest
+RUN git clone https://github.com/pybind/pybind11.git /opt/pybind11/src && \
+  mkdir /opt/pybind11/build &&\
+  cd /opt/pybind11/build && \
+  cmake3 -DCMAKE_INSTALL_PREFIX=/usr ../src  &&\
+  make -j 4 install
 RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&\
    cd /opt/qtcube/build &&\
    cmake3  -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube    ../src  && \
