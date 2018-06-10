@@ -58,7 +58,7 @@ def err(m=""):
     msg( m)
     sys.exit(-1)
   else:
-    raise error,m
+    raise error(m)
 
 def msg(strng):
   """Print out a message to the screen, do a flush to guarantee immediate action"""
