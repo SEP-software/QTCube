@@ -26,9 +26,8 @@ if(genericIO_FOUND)
   INCLUDE_DIRECTORIES(${hypercube_DIRNAME_include})
   INCLUDE_DIRECTORIES(${genericIO_DIRNAME_include})
   INCLUDE_DIRECTORIES(${sepVector_DIRNAME_include})
-    link_directories(hypercube_DIRNAME_lib genericIO_DIRNAME_lib sepVector_DIRNAME_lib)
-
 else(genericIO_FOUND)
+   FIND_PACKAGE(hypercube)
    message("Unable to find genericIO")
 
     # we have a submodule setup for foo, assume it is under external/foo
