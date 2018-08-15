@@ -1,8 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env @PYTHON_EXECUTABLE@
 import sys,re,os,string
-import commands
 import array
 import os
+import subprocess
 
 #link suffixes to file type
 sufixes={"H" : "SEP", "T" :"SEP", "json":"JSON","h": "SEP", "t": "SEP", "RSF": "SEP", "HH": "SEP",
@@ -19,7 +19,7 @@ debug=0
 #YOU NEED TO EDIT THIS LIKE
 
 binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
-if os.environ.has_key("QTCUBE"): binary=os.environ["QTCUBE"]
+if "QTCUBE" in os.environ: binary=os.environ["QTCUBE"]
 binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
 
 
@@ -50,6 +50,16 @@ view+="   overlay color, etc.  I am getting tired of writing\n";
 view+="    You can define the size of the view size='1024x768' \n"
 view+="    You can set the font_size=sz, seminar=1 gives you some good defaults\n";
 
+
+def get_status_output(cmd,stdin):
+    if stdin:
+      fle=myinput = open(stdin)
+      p = subprocess.Popen(cmd.split(),stdin=fle,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      stdout, stderr = p.communicate(timeout=2)
+    else:
+      p = subprocess.Popen(cmd.split(),stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      stdout, stderr = p.communicate()
+    return p.returncode, stdout.decode('ascii').strip(), stderr.decode('ascii').strip()
 
 def err(m=""):
   """Quit with an error first printing out the string m"""
@@ -99,7 +109,7 @@ def find_files(args,eqs):
        err("%s is not a file. Expecting all arguments not of form a=b to be files to display"%arg)
       fnd=sufR.search(arg)
       if not fnd:
-        if not eqs.has_key("type%d"%count):
+        if not "type%d"%count in eqs:
           err("Couldn't find suffix for %s must specify fileTypee%d=X where X must be either:%s"%(
             arg,count,string.join(myt,",")))
         else:
@@ -110,10 +120,10 @@ def find_files(args,eqs):
       for suf,typ in sufixes.items():
         if fnd.group(1) == suf:
           eqs["fileType%d"%count]=typ
-      if not eqs.has_key("fileType%d"%count):
+      if not "fileType%d"%count in eqs:
           err("Don't recognize suffix for %s must specify fileType%d=X where X must be either:%s"%(
             arg,count,string.join(myt,",")))
-      if not eqs.has_key("storage%d"%count):
+      if not "storage%d"%count in eqs:
         eqs["storage%d"%count]="IN_BYTE"
       if eqs["fileType%d"%count]=="SEP":
         if not pars_exist("g",eqs):
@@ -151,7 +161,7 @@ def find_files(args,eqs):
   eqs["ndata"]=str(count)
   return count,eqs      
 def getJsonParam(file,par):
-   stat,out=commands.getstatusoutput("grep %s %s"%(par,file))    
+   stat,out,err=get_status_output("grep %s %s"%(par,file))    
    if not stat: 
     return ""
    else:
@@ -175,27 +185,27 @@ def get_json_params(file,par,o):
    if len(out2)==0:out2="0"
    if len(out3)==0:out3="1"
    if len(out4)==0:out4=" "
-   if not par.has_key("n%s_%d"%(o,i+1)): par["n%s_%d"%(o,i+1)]=out1
-   if not par.has_key("o%s_%d"%(o,i+1)): par["o%s_%d"%(o,i+1)]=out2
-   if not par.has_key("d%s_%d"%(o,i+0)): par["d%s_%d"%(o,i+1)]=out3
-   if not par.has_key("label%s_%d"%(o,i+1)): par["label%s_%d"%(o,i+1)]=out4
+   if not  "n%s_%d"%(o,i+1) in par: par["n%s_%d"%(o,i+1)]=out1
+   if not "o%s_%d"%(o,i+1) in par: par["o%s_%d"%(o,i+1)]=out2
+   if not "d%s_%d"%(o,i+0) in par: par["d%s_%d"%(o,i+1)]=out3
+   if not "label%s_%d"%(o,i+1) in oar: par["label%s_%d"%(o,i+1)]=out4
  return par
 def get_sep_params(file,par,o):
  for i in range(8):
-   stat1,out1=commands.getstatusoutput("Get parform=no <%s n%d"%(file,i+1))
-   stat2,out2=commands.getstatusoutput("Get parform=no <%s o%d"%(file,i+1))
-   stat3,out3=commands.getstatusoutput("Get parform=no <%s d%d"%(file,i+1))
-   stat4,out4=commands.getstatusoutput("Get parform=no <%s label%d"%(file,i+1))
+   stat1,out1,err1=get_status_output("Get parform=no  n%d"%(i+1),file)
+   stat2,out2,err2=get_status_output("Get parform=no  o%d"%(i+1),file)
+   stat3,out3,err3=get_status_output("Get parform=no  d%d"%(i+1),file)
+   stat4,out4,err4=get_status_output("Get parform=no  label%d"%(i+1),file)
    if stat1:
      err("Trouble reading parameters from %s"%file)
    if len(out1)==0:out1="1"
    if len(out2)==0:out2="0"
    if len(out3)==0:out3="1"
    if len(out4)==0:out4=" "
-   if not par.has_key("n%s_%d"%(o,i+1)): par["n%s_%d"%(o,i+1)]=out1
-   if not par.has_key("o%s_%d"%(o,i+1)): par["o%s_%d"%(o,i+1)]=out2
-   if not par.has_key("d%s_%d"%(o,i+1)): par["d%s_%d"%(o,i+1)]=out3
-   if not par.has_key("label%s_%d"%(o,i+1)): par["label%s_%d"%(o,i+1)]=out4
+   if not "n%s_%d"%(o,i+1) in par: par["n%s_%d"%(o,i+1)]=out1
+   if not "o%s_%d"%(o,i+1) in par: par["o%s_%d"%(o,i+1)]=out2
+   if not "d%s_%d"%(o,i+1) in par: par["d%s_%d"%(o,i+1)]=out3
+   if not "label%s_%d"%(o,i+1) in par: par["label%s_%d"%(o,i+1)]=out4
  return par
 def get_seispak_params(file,par,o):
   f=open(file,"rb");
@@ -208,10 +218,10 @@ def get_seispak_params(file,par,o):
     par["fileType%s"%o]="SEISPAKF"
   elif array_i[11]==2:
     par["fileType%s"%o]="SEISPAKS"
-  if not par.has_key("n%s_1"%o):  par["n%s_1"%o]=array_i[5];
-  if not par.has_key("d%s_1"%o): par["d%s_1"%o]=array_f[6];
-  if not par.has_key("n%s_2"%o): par["n%s_2"%o]=int(array_f[7]);
-  if not par.has_key("n%s_3"%o): par["n%s_3"%o]=int(array_f[8]);
+  if not "n%s_1"%o in par:   par["n%s_1"%o]=array_i[5];
+  if not "d%s_1"%o in par:  par["d%s_1"%o]=array_f[6];
+  if not "n%s_2"%o in par:  par["n%s_2"%o]=int(array_f[7]);
+  if not "n%s_3"%o in par: par["n%s_3"%o]=int(array_f[8]);
 
   return par
 def get_segy_params(file,par,o,off):
@@ -225,34 +235,34 @@ def get_segy_params(file,par,o,off):
   f.seek(off,0)
   array_f=array.array("f");
   array_f.fromfile(f,60)
-  if not par.has_key("n%s_1"%o):  par["n%s_1"%o]=int(array_h[57]);
-  if not par.has_key("d%s_1"%o): par["d%s_1"%o]=float(array_h[58])/1000000.;
-  if not par.has_key("n%s_2"%o): par["n%s_2"%o]=int(array_i[51]);
-  if not par.has_key("o%s_2"%o):  par["o%s_2"%o]=array_f[48];
-  if not par.has_key("d%s_2"%o): par["d%s_2"%o]=array_f[47];
+  if not "n%s_1"%o in par:  par["n%s_1"%o]=int(array_h[57]);
+  if not "d%s_1"%o in par: par["d%s_1"%o]=float(array_h[58])/1000000.;
+  if not "n%s_2"%o in par: par["n%s_2"%o]=int(array_i[51]);
+  if not "o%s_2"%o in par:  par["o%s_2"%o]=array_f[48];
+  if not "d%s_2"%o in par: par["d%s_2"%o]=array_f[47];
   return par
 
 
 def copy_pars(pars,fr,to):
   for i in range(8):
     f="n%s_%d"%(fr,i+1); t="n%s_%d"%(to,i+1)
-    if not pars.has_key(t) and  pars.has_key(f): pars[t]=pars[f]
+    if not t in pars and  f in pars: pars[t]=pars[f]
     f="o%s_%d"%(fr,i+1); t="o%s_%d"%(to,i+1)
-    if not pars.has_key(t) and  pars.has_key(f): pars[t]=pars[f]
+    if not t in pars and  f in pars: pars[t]=pars[f]
     f="d%s_%d"%(fr,i+1); t="d%s_%d"%(to,i+1)
-    if not pars.has_key(t) and  pars.has_key(f): pars[t]=pars[f]
+    if not t in pars and  f in pars: pars[t]=pars[f]
     f="label%s_%d"%(fr,i+1); t="label%s_%d"%(to,i+1)
-    if not pars.has_key(t) and  pars.has_key(f): pars[t]=pars[f]
+    if not t in pars and  f in pars: pars[t]=pars[f]
   return pars
     
     
 def pars_exist(ex,pars):
-  if not pars.has_key("n%s_1"%ex) or not pars.has_key("n%s_2"%ex):
+  if not "n%s_1"%ex in pars or not "n%s_2"%ex in pars:
     return None
   return 1
 def parse_position(args):
   hist=[]
-  if args.has_key("position"):
+  if "position" in args:
     order=args["position"].split(",")
     if len(order) < 2:
        err("position should be a comma seperated list")
@@ -329,28 +339,28 @@ def parse_range(rang):
   return vv
   
 def parse_view_state(ndat,idat,args,hist):
-  if args.has_key("order%d"%idat):
+  if "order%d"%idat in args:
     hist.extend(parse_order(idat,args["order%d"%idat]))
     del args["order%d"%idat]
-  if args.has_key("background%d"%idat):
+  if "background%d"%idat in args:
     hist.append(parse_backg(idat,args["background%d"%idat]))
     del args["background%d"%idat]
-  if args.has_key("overlay%d"%idat):
+  if "overlay%d"%idat in args:
      hist.append(parse_overlay(idat,args["overlay%d"%idat]))
      del args["overlay%d"%idat]
-  if args.has_key("colortable%d"%idat):
+  if "colortable%d"%idat in args:
     hist.append(parse_colortable(idat,args["colortable%d"%idat]))
     del args["colortable%d"%idat]
-  if args.has_key("view%d"%idat):
+  if "view%d"%idat in args:
     hist.append(parse_view(idat,args["view%d"%idat]))
     del args["view%d"%idat]
-  if args.has_key("idata%d"%idat):
+  if "idata%d"%idat in args:
     hist.append(parse_data(ndat,idat,args["idata%d"%idat]))
     del args["idata%d"%idat]
-  if args.has_key("single"): hist.append(parse_single(args["single"]))
-  if args.has_key("range"): hist.extend(parse_range(args["range"]))
-  if args.has_key("draw"): hist.append(parse_draw(args["draw"]))
-  if args.has_key("seminar"): hist.extend(seminar_params())
+  if "single" in args: hist.append(parse_single(args["single"]))
+  if "range" in args: hist.extend(parse_range(args["range"]))
+  if "draw" in args: hist.append(parse_draw(args["draw"]))
+  if "seminar" in args: hist.extend(seminar_params())
   return hist,args  
   
 def seminar_params():
@@ -361,7 +371,7 @@ def seminar_params():
        
 def set_initial_state(ndat,args):
   hist,args=parse_position(args)
-  if args.has_key("nviews"):
+  if "nviews" in args:
     nviews=int(args["nviews"])
   else:
      nviews=1
@@ -384,11 +394,11 @@ def self_doc():
 
 def velan_params(args,ndat):
   if ndat !=1: err("velocity analysis currently works with 1 file")
-  if not args.has_key("v0"): err("must provide v0, first velocity to scan for")
-  if not args.has_key("dv"): err("must provide dv, sampling in velocity")
-  if not args.has_key("nv"): err("must provide nv, number of velocites")
+  if not "v0" in args: err("must provide v0, first velocity to scan for")
+  if not "dv" in args: err("must provide dv, sampling in velocity")
+  if not "nv" in args: err("must provide nv, number of velocites")
   ndat=3;
-  print() "Warning currently only support incore mode for NMO")
+  print( "Warning currently only support incore mode for NMO")
   args["ng_6"]=args["nv"]
   args["og_6"]=args["v0"]
   args["dg_6"]=args["dv"]
@@ -397,9 +407,9 @@ def velan_params(args,ndat):
   args["storage2"]="CREATED_FLOAT"
   args["type1"]="NMOED"
   args["type2"]="SEMBLANCE"
-  if not args.has_key("i_t"): args["i_t"]=1;
+  if not "i_t" in args: args["i_t"]=1;
   args["i_t"]=int(args["i_t"])-1;
-  if not args.has_key("i_off"): args["i_off"]=2;
+  if not "i_off" in args: args["i_off"]=2;
   args["i_off"]=int(args["i_off"])-1;
   args["nview"]=3;
   args["ndata"]=3;
@@ -427,10 +437,10 @@ def basic_run(eq_args,args):
   if len (sys.argv)==1:
     err("")
   ndat,args=find_files(args,eq_args)
-  if args.has_key("nmo"):
+  if "nmo" in args:
    if args["nmo"]=="1":  ndat,args=velan_params(args,ndat)
   args,hist=set_initial_state(ndat,args)
-  if args.has_key("valgrind"): command="valgrind --leak-check=full  %s"%binary
+  if "valgrind" in args: command="valgrind --leak-check=full  %s"%binary
   else: command=binary
   if  "json" in args.keys():
      f=open("junk.json","w")
@@ -458,7 +468,7 @@ def basic_run(eq_args,args):
   print (command)
   os.system(command)
   if hist:
-    commands.getstatusoutput("rm my_hist")
+    get_status_output("rm my_hist")
 
 eq_args,args=parse_args(sys.argv[1:])
 basic_run(eq_args,args)
