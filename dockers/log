@@ -1,0 +1,2436 @@
+Sending build context to Docker daemon  20.99kB
+Step 1/12 : From centos:7
+ ---> 5182e96772bf
+Step 2/12 : MAINTAINER Bob Clapp <bob@sep.stanford.edu>
+ ---> Using cache
+ ---> da2c3ceac04f
+Step 3/12 : RUN yum -y install make libX11-devel libXt-devel gcc git; yum -y clean all
+ ---> Using cache
+ ---> 2f757f03f83d
+Step 4/12 : RUN yum -y install make automake autoconf libtool git libXt-devel    libX11-devel libXaw-devel gcc-c++  gcc gcc-gfortran fftw-libs-single fftw-devel flex cmake; yum -y clean all
+ ---> Using cache
+ ---> af1f9ccba64c
+Step 5/12 : RUN mkdir -p /opt/SEP/build
+ ---> Using cache
+ ---> 8c8422e86088
+Step 6/12 : RUN git clone http://zapad.stanford.edu/bob/SEPlib.git /opt/SEP/src &&   cd /opt/SEP/build &&   cmake -DCMAKE_INSTALL_PREFIX=/opt/SEP ../src &&   make &&   make install &&   rm -rf /opt/SEP/build
+ ---> Using cache
+ ---> f1737a7cb8dc
+Step 7/12 : RUN yum -y install gcc gcc-c++ epel-release make git cmake  &&     yum -y install https://centos7.iuscommunity.org/ius-release.rpm &&     yum -y install  boost-devel boost-filesystem python36u-devel python36u-pip  python36u-pytest cmake3  &&    yum -y clean all
+ ---> Using cache
+ ---> 7dd572f09a6f
+Step 8/12 : RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
+ ---> Using cache
+ ---> eb23cc3ec73d
+Step 9/12 : RUN mkdir -p /opt/qtcube/build
+ ---> Using cache
+ ---> 95b44bb7483c
+Step 10/12 : RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+ ---> Using cache
+ ---> c81cd4d02361
+Step 11/12 : RUN /usr/bin/python3.6 -m pip install pytest
+ ---> Using cache
+ ---> b760bc5c4fec
+Step 12/12 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6 -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube  -DCMAKE_CXX_FLAGS="-O3" -DCMAKE_PREFIX_PATH=/opt/SEP/cmake   ../src  &&    make install &&   rm -rf /opt/qtcube/build
+ ---> Running in 6a8d4f02d312
+Cloning into '/opt/qtcube/src'...
+-- The C compiler identification is GNU 4.8.5
+-- The CXX compiler identification is GNU 4.8.5
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found PythonInterp: /usr/bin/python3.6 (found suitable version "3.6.5", minimum required is "3") 
+-- Performing Test COMPILER_SUPPORTS_CXX11
+-- Performing Test COMPILER_SUPPORTS_CXX11 - Success
+-- Found TBB: /usr/include (found version "4.1")  
+[91mCMake Warning at CMakeLists.txt:26 (FIND_PACKAGE):
+  By not providing "FindgenericIO.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "genericIO", but CMake did not find one.
+
+  Could not find a package configuration file provided by "genericIO" with
+  any of the following names:
+
+    genericIOConfig.cmake
+    genericio-config.cmake
+
+  Add the installation prefix of "genericIO" to CMAKE_PREFIX_PATH or set
+  "genericIO_DIR" to a directory containing one of the above files.  If
+  "genericIO" provides a separate development package or SDK, be sure it has
+  been installed.
+
+[0m[91m
+[0m[91mCMake Warning at CMakeLists.txt:27 (FIND_PACKAGE):
+  By not providing "FindsepVector.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "sepVector", but CMake did not find one.
+
+  Could not find a package configuration file provided by "sepVector" with
+  any of the following names:
+
+    sepVectorConfig.cmake
+    sepvector-config.cmake
+
+  Add the installation prefix of "sepVector" to CMAKE_PREFIX_PATH or set
+  "sepVector_DIR" to a directory containing one of the above files.  If
+  "sepVector" provides a separate development package or SDK, be sure it has
+  been installed.
+
+[0m[91m
+[0m[91mCMake Warning at CMakeLists.txt:28 (FIND_PACKAGE):
+  By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "hypercube", but CMake did not find one.
+
+  Could not find a package configuration file provided by "hypercube" with
+  any of the following names:
+
+    hypercubeConfig.cmake
+    hypercube-config.cmake
+
+  Add the installation prefix of "hypercube" to CMAKE_PREFIX_PATH or set
+  "hypercube_DIR" to a directory containing one of the above files.  If
+  "hypercube" provides a separate development package or SDK, be sure it has
+  been installed.
+
+[0m[91m
+[0m[91mUnable to find genericIO[0m[91m
+[0mSubmodule 'external/genericIO' (http://zapad.Stanford.EDU/bob/genericIO.git) registered for path 'external/genericIO'
+Cloning into 'external/genericIO'...
+Submodule path 'external/genericIO': checked out '969cc2e6d6cdeee0b37a1ec5b52165d6fcfa49d8'
+Submodule 'external/sepVector' (http://zapad.Stanford.EDU/bob/sepVector.git) registered for path 'external/sepVector'
+Cloning into 'external/sepVector'...
+Submodule path 'external/genericIO/external/sepVector': checked out '96ad275ca7829d0a34ccbd39cdcf2d2c4a8f39a4'
+Submodule 'external/hypercube' (http://zapad.Stanford.EDU/bob/hypercube.git) registered for path 'external/hypercube'
+Cloning into 'external/hypercube'...
+Submodule path 'external/genericIO/external/sepVector/external/hypercube': checked out 'c5d84b92f785d90820f519d46ebb3afe82017fa0'
+[91mCMake Warning (dev) at external/genericIO/CMakeLists.txt:152:
+  Syntax Warning in cmake code at column 31
+
+  Argument not separated from preceding token by whitespace.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+[0m-- Found NumPy: /usr/lib/python3/dist-packages/numpy/core/include (found version "") 
+-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+-- Performing Test COMPILER_SUPPORTS_CXX0X
+-- Performing Test COMPILER_SUPPORTS_CXX0X - Success
+-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+[91mCMake Warning at external/genericIO/CMakeLists.txt:44 (FIND_PACKAGE):
+  By not providing "FindsepVector.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "sepVector", but CMake did not find one.
+
+  Could not find a package configuration file provided by "sepVector" with
+  any of the following names:
+
+    sepVectorConfig.cmake
+    sepvector-config.cmake
+
+  Add the installation prefix of "sepVector" to CMAKE_PREFIX_PATH or set
+  "sepVector_DIR" to a directory containing one of the above files.  If
+  "sepVector" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mCMake Warning at external/genericIO/CMakeLists.txt:45 (FIND_PACKAGE):
+  By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "hypercube", but CMake did not find one.
+
+  Could not find a package configuration file provided by "hypercube" with
+  any of the following names:
+
+    hypercubeConfig.cmake
+    hypercube-config.cmake
+
+  Add the installation prefix of "hypercube" to CMAKE_PREFIX_PATH or set
+  "hypercube_DIR" to a directory containing one of the above files.  If
+  "hypercube" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mUnable to find sepVector
+[0m[91mCMake Warning at external/genericIO/external/sepVector/CMakeLists.txt:20 (FIND_PACKAGE):
+  By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "hypercube", but CMake did not find one.
+
+  Could not find a package configuration file provided by "hypercube" with
+  any of the following names:
+
+    hypercubeConfig.cmake
+    hypercube-config.cmake
+
+  Add the installation prefix of "hypercube" to CMAKE_PREFIX_PATH or set
+  "hypercube_DIR" to a directory containing one of the above files.  If
+  "hypercube" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+Unable to find hypercube
+[0m[91mbefore add subdirectory
+[0m[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/python/CMakeLists.txt:7 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mDID not find pybind11
+[0m-- Boost version: 1.53.0
+-- Found the following Boost libraries:
+--   program_options
+--   unit_test_framework
+[91mCMake Warning at external/genericIO/external/sepVector/python/CMakeLists.txt:9 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mDid not find pybid11
+[0m[91mDid not find hypercube
+[0m[91mZFP_INCLUDE_DIR-NOTFOUNDZFP_LIBRARY-NOTFOUNDZFP
+[0m[91mInstalling with SEP VECTOR
+NOT INSTALLING WITH RSF[0m[91m
+[0m[91mNOT INSTALLING WITH SEPlib
+HYPERCUBE DIRNAME sepVectorhypercube [0m[91m
+[0m[91mCMake Warning at external/genericIO/python/CMakeLists.txt:8 (find_package):
+  By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "pybind11",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "pybind11" with any
+  of the following names:
+
+    pybind11Config.cmake
+    pybind11-config.cmake
+
+  Add the installation prefix of "pybind11" to CMAKE_PREFIX_PATH or set
+  "pybind11_DIR" to a directory containing one of the above files.  If
+  "pybind11" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+[0m[91mDid not find pybid11[0m[91m
+[0m[91mCMake Warning (dev) at external/genericIO/util/CMakeLists.txt:6 (link_directories):
+  This command specifies the relative path
+
+    ;
+
+  as a link directory.
+
+  Policy CMP0015 is not set: link_directories() treats paths relative to the
+  source dir.  Run "cmake --help-policy CMP0015" for policy details.  Use the
+  cmake_policy command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+[0m[91m
+[0m[91m/opt/qtcube/includeZFP_LIBRARY-NOTFOUNDZFP[0m[91m
+[0m[91mCompress CHECK FOUYND NO BVB[0m[91m
+[0m[91mDecompress CHECK FOUYND NO BVB[0m[91m
+[0m[91mDid not find sepVector
+[0m[91mDid not find hypercube[0m[91m
+[0m-- Looking for Q_WS_X11
+-- Looking for Q_WS_X11 - found
+-- Looking for Q_WS_WIN
+-- Looking for Q_WS_WIN - not found
+-- Looking for Q_WS_QWS
+-- Looking for Q_WS_QWS - not found
+-- Looking for Q_WS_MAC
+-- Looking for Q_WS_MAC - not found
+-- Found Qt4: /usr/bin/qmake-qt4 (found version "4.8.7") 
+-- BUILD_FORTRAN=OFF
+-- Boost_DIR=Boost_DIR-NOTFOUND
+-- Boost_INCLUDE_DIR=/usr/include
+-- Boost_LIBRARY_DIR_DEBUG=/usr/lib64
+-- Boost_LIBRARY_DIR_RELEASE=/usr/lib64
+-- Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG=/usr/lib64/libboost_program_options-mt.so
+-- Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE=/usr/lib64/libboost_program_options-mt.so
+-- Boost_UNIT_TEST_FRAMEWORK_LIBRARY_DEBUG=/usr/lib64/libboost_unit_test_framework-mt.so
+-- Boost_UNIT_TEST_FRAMEWORK_LIBRARY_RELEASE=/usr/lib64/libboost_unit_test_framework-mt.so
+-- CMAKE_AR=/usr/bin/ar
+-- CMAKE_AR=/usr/bin/ar
+-- CMAKE_AUTOMOC_COMPILER_PREDEFINES=ON
+-- CMAKE_AUTOMOC_MACRO_NAMES=Q_OBJECT;Q_GADGET;Q_NAMESPACE
+-- CMAKE_BASE_NAME=g++
+-- CMAKE_BINARY_DIR=/opt/qtcube/build
+-- CMAKE_BUILD_TOOL=/usr/bin/gmake
+-- CMAKE_BUILD_TYPE=
+-- CMAKE_C11_COMPILE_FEATURES=c_std_11;c_static_assert
+-- CMAKE_C11_EXTENSION_COMPILE_OPTION=-std=gnu11
+-- CMAKE_C11_STANDARD_COMPILE_OPTION=-std=c11
+-- CMAKE_C90_COMPILE_FEATURES=c_std_90;c_function_prototypes
+-- CMAKE_C90_EXTENSION_COMPILE_OPTION=-std=gnu90
+-- CMAKE_C90_STANDARD_COMPILE_OPTION=-std=c90
+-- CMAKE_C99_COMPILE_FEATURES=c_std_99;c_restrict;c_variadic_macros
+-- CMAKE_C99_EXTENSION_COMPILE_OPTION=-std=gnu99
+-- CMAKE_C99_STANDARD_COMPILE_OPTION=-std=c99
+-- CMAKE_CFG_INTDIR=.
+-- CMAKE_COLOR_MAKEFILE=ON
+-- CMAKE_COMMAND=/usr/bin/cmake3
+-- CMAKE_COMPILER_IS_GNUCC=1
+-- CMAKE_COMPILER_IS_GNUCXX=1
+-- CMAKE_CPACK_COMMAND=/usr/bin/cpack3
+-- CMAKE_CROSSCOMPILING=FALSE
+-- CMAKE_CTEST_COMMAND=/usr/bin/ctest3
+-- CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES=/usr/include
+-- CMAKE_CURRENT_BINARY_DIR=/opt/qtcube/build
+-- CMAKE_CURRENT_LIST_DIR=/opt/qtcube/src
+-- CMAKE_CURRENT_LIST_FILE=/opt/qtcube/src/CMakeLists.txt
+-- CMAKE_CURRENT_SOURCE_DIR=/opt/qtcube/src
+-- CMAKE_CXX11_COMPILE_FEATURES=cxx_std_11;cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_auto_type;cxx_constexpr;cxx_decltype;cxx_decltype_incomplete_return_types;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variadic_macros;cxx_variadic_templates
+-- CMAKE_CXX11_EXTENSION_COMPILE_OPTION=-std=gnu++11
+-- CMAKE_CXX11_STANDARD_COMPILE_OPTION=-std=c++11
+-- CMAKE_CXX14_COMPILE_FEATURES=cxx_std_14
+-- CMAKE_CXX14_EXTENSION_COMPILE_OPTION=-std=gnu++1y
+-- CMAKE_CXX14_STANDARD_COMPILE_OPTION=-std=c++1y
+-- CMAKE_CXX17_COMPILE_FEATURES=
+-- CMAKE_CXX20_COMPILE_FEATURES=
+-- CMAKE_CXX98_COMPILE_FEATURES=cxx_std_98;cxx_template_template_parameters
+-- CMAKE_CXX98_EXTENSION_COMPILE_OPTION=-std=gnu++98
+-- CMAKE_CXX98_STANDARD_COMPILE_OPTION=-std=c++98
+-- CMAKE_CXX_ABI_COMPILED=TRUE
+-- CMAKE_CXX_ARCHIVE_APPEND=<CMAKE_AR> q  <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_CXX_ARCHIVE_APPEND_IPO="/usr/bin/gcc-ar" r <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_CXX_ARCHIVE_CREATE=<CMAKE_AR> qc <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_CXX_ARCHIVE_CREATE_IPO="/usr/bin/gcc-ar" cr <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_CXX_ARCHIVE_FINISH=<CMAKE_RANLIB> <TARGET>
+-- CMAKE_CXX_ARCHIVE_FINISH_IPO="/usr/bin/gcc-ranlib" <TARGET>
+-- CMAKE_CXX_CL_SHOWINCLUDES_PREFIX=
+-- CMAKE_CXX_COMPILER=/usr/bin/c++
+-- CMAKE_CXX_COMPILER=/usr/bin/c++
+-- CMAKE_CXX_COMPILER_ABI=ELF
+-- CMAKE_CXX_COMPILER_AR=/usr/bin/gcc-ar
+-- CMAKE_CXX_COMPILER_AR=/usr/bin/gcc-ar
+-- CMAKE_CXX_COMPILER_ARCHITECTURE_ID=
+-- CMAKE_CXX_COMPILER_ARG1=
+-- CMAKE_CXX_COMPILER_ENV_VAR=CXX
+-- CMAKE_CXX_COMPILER_ID=GNU
+-- CMAKE_CXX_COMPILER_ID_PLATFORM_CONTENT=#define STRINGIFY_HELPER(X) #X
+#define STRINGIFY(X) STRINGIFY_HELPER(X)
+
+/* Identify known platforms by name.  */
+#if defined(__linux) || defined(__linux__) || defined(linux)
+# define PLATFORM_ID "Linux"
+
+#elif defined(__CYGWIN__)
+# define PLATFORM_ID "Cygwin"
+
+#elif defined(__MINGW32__)
+# define PLATFORM_ID "MinGW"
+
+#elif defined(__APPLE__)
+# define PLATFORM_ID "Darwin"
+
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+# define PLATFORM_ID "Windows"
+
+#elif defined(__FreeBSD__) || defined(__FreeBSD)
+# define PLATFORM_ID "FreeBSD"
+
+#elif defined(__NetBSD__) || defined(__NetBSD)
+# define PLATFORM_ID "NetBSD"
+
+#elif defined(__OpenBSD__) || defined(__OPENBSD)
+# define PLATFORM_ID "OpenBSD"
+
+#elif defined(__sun) || defined(sun)
+# define PLATFORM_ID "SunOS"
+
+#elif defined(_AIX) || defined(__AIX) || defined(__AIX__) || defined(__aix) || defined(__aix__)
+# define PLATFORM_ID "AIX"
+
+#elif defined(__sgi) || defined(__sgi__) || defined(_SGI)
+# define PLATFORM_ID "IRIX"
+
+#elif defined(__hpux) || defined(__hpux__)
+# define PLATFORM_ID "HP-UX"
+
+#elif defined(__HAIKU__)
+# define PLATFORM_ID "Haiku"
+
+#elif defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
+# define PLATFORM_ID "BeOS"
+
+#elif defined(__QNX__) || defined(__QNXNTO__)
+# define PLATFORM_ID "QNX"
+
+#elif defined(__tru64) || defined(_tru64) || defined(__TRU64__)
+# define PLATFORM_ID "Tru64"
+
+#elif defined(__riscos) || defined(__riscos__)
+# define PLATFORM_ID "RISCos"
+
+#elif defined(__sinix) || defined(__sinix__) || defined(__SINIX__)
+# define PLATFORM_ID "SINIX"
+
+#elif defined(__UNIX_SV__)
+# define PLATFORM_ID "UNIX_SV"
+
+#elif defined(__bsdos__)
+# define PLATFORM_ID "BSDOS"
+
+#elif defined(_MPRAS) || defined(MPRAS)
+# define PLATFORM_ID "MP-RAS"
+
+#elif defined(__osf) || defined(__osf__)
+# define PLATFORM_ID "OSF1"
+
+#elif defined(_SCO_SV) || defined(SCO_SV) || defined(sco_sv)
+# define PLATFORM_ID "SCO_SV"
+
+#elif defined(__ultrix) || defined(__ultrix__) || defined(_ULTRIX)
+# define PLATFORM_ID "ULTRIX"
+
+#elif defined(__XENIX__) || defined(_XENIX) || defined(XENIX)
+# define PLATFORM_ID "Xenix"
+
+#elif defined(__WATCOMC__)
+# if defined(__LINUX__)
+#  define PLATFORM_ID "Linux"
+
+# elif defined(__DOS__)
+#  define PLATFORM_ID "DOS"
+
+# elif defined(__OS2__)
+#  define PLATFORM_ID "OS2"
+
+# elif defined(__WINDOWS__)
+#  define PLATFORM_ID "Windows3x"
+
+# else /* unknown platform */
+#  define PLATFORM_ID
+# endif
+
+#else /* unknown platform */
+# define PLATFORM_ID
+
+#endif
+
+/* For windows compilers MSVC and Intel we can determine
+   the architecture of the compiler being used.  This is because
+   the compilers do not have flags that can change the architecture,
+   but rather depend on which compiler is being used
+*/
+#if defined(_WIN32) && defined(_MSC_VER)
+# if defined(_M_IA64)
+#  define ARCHITECTURE_ID "IA64"
+
+# elif defined(_M_X64) || defined(_M_AMD64)
+#  define ARCHITECTURE_ID "x64"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# elif defined(_M_ARM64)
+#  define ARCHITECTURE_ID "ARM64"
+
+# elif defined(_M_ARM)
+#  if _M_ARM == 4
+#   define ARCHITECTURE_ID "ARMV4I"
+#  elif _M_ARM == 5
+#   define ARCHITECTURE_ID "ARMV5I"
+#  else
+#   define ARCHITECTURE_ID "ARMV" STRINGIFY(_M_ARM)
+#  endif
+
+# elif defined(_M_MIPS)
+#  define ARCHITECTURE_ID "MIPS"
+
+# elif defined(_M_SH)
+#  define ARCHITECTURE_ID "SHx"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__WATCOMC__)
+# if defined(_M_I86)
+#  define ARCHITECTURE_ID "I86"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__IAR_SYSTEMS_ICC__) || defined(__IAR_SYSTEMS_ICC)
+# if defined(__ICCARM__)
+#  define ARCHITECTURE_ID "ARM"
+
+# elif defined(__ICCAVR__)
+#  define ARCHITECTURE_ID "AVR"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+#else
+#  define ARCHITECTURE_ID
+#endif
+
+/* Convert integer to decimal digit literals.  */
+#define DEC(n)                   \
+  ('0' + (((n) / 10000000)%10)), \
+  ('0' + (((n) / 1000000)%10)),  \
+  ('0' + (((n) / 100000)%10)),   \
+  ('0' + (((n) / 10000)%10)),    \
+  ('0' + (((n) / 1000)%10)),     \
+  ('0' + (((n) / 100)%10)),      \
+  ('0' + (((n) / 10)%10)),       \
+  ('0' +  ((n) % 10))
+
+/* Convert integer to hex digit literals.  */
+#define HEX(n)             \
+  ('0' + ((n)>>28 & 0xF)), \
+  ('0' + ((n)>>24 & 0xF)), \
+  ('0' + ((n)>>20 & 0xF)), \
+  ('0' + ((n)>>16 & 0xF)), \
+  ('0' + ((n)>>12 & 0xF)), \
+  ('0' + ((n)>>8  & 0xF)), \
+  ('0' + ((n)>>4  & 0xF)), \
+  ('0' + ((n)     & 0xF))
+
+/* Construct a string literal encoding the version number components. */
+#ifdef COMPILER_VERSION_MAJOR
+char const info_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
+  COMPILER_VERSION_MAJOR,
+# ifdef COMPILER_VERSION_MINOR
+  '.', COMPILER_VERSION_MINOR,
+#  ifdef COMPILER_VERSION_PATCH
+   '.', COMPILER_VERSION_PATCH,
+#   ifdef COMPILER_VERSION_TWEAK
+    '.', COMPILER_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct a string literal encoding the internal version number. */
+#ifdef COMPILER_VERSION_INTERNAL
+char const info_version_internal[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','_',
+  'i','n','t','e','r','n','a','l','[',
+  COMPILER_VERSION_INTERNAL,']','\0'};
+#endif
+
+/* Construct a string literal encoding the version number components. */
+#ifdef SIMULATE_VERSION_MAJOR
+char const info_simulate_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
+  SIMULATE_VERSION_MAJOR,
+# ifdef SIMULATE_VERSION_MINOR
+  '.', SIMULATE_VERSION_MINOR,
+#  ifdef SIMULATE_VERSION_PATCH
+   '.', SIMULATE_VERSION_PATCH,
+#   ifdef SIMULATE_VERSION_TWEAK
+    '.', SIMULATE_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct the string literal in pieces to prevent the source from
+   getting matched.  Store it in a pointer rather than an array
+   because some compilers will just produce instructions to fill the
+   array rather than assigning a pointer to a static array.  */
+char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+
+
+-- CMAKE_CXX_COMPILER_ID_RUN=1
+-- CMAKE_CXX_COMPILER_ID_TEST_FLAGS=-c;--c++;--ec++
+-- CMAKE_CXX_COMPILER_ID_TOOL_MATCH_INDEX=2
+-- CMAKE_CXX_COMPILER_ID_TOOL_MATCH_REGEX=
+Ld[^
+]*(
+[ 	]+[^
+]*)*
+[ 	]+([^ 	
+]+)[^
+]*-o[^
+]*CompilerIdCXX/(\./)?(CompilerIdCXX.xctest/)?CompilerIdCXX[ 	
+\"]
+-- CMAKE_CXX_COMPILER_ID_VENDORS=IAR
+-- CMAKE_CXX_COMPILER_ID_VENDOR_REGEX_IAR=IAR .+ Compiler
+-- CMAKE_CXX_COMPILER_INIT=NOTFOUND
+-- CMAKE_CXX_COMPILER_LIST=c++;CC;g++;aCC;cl;bcc;xlC;clang++
+-- CMAKE_CXX_COMPILER_LOADED=1
+-- CMAKE_CXX_COMPILER_NAMES=c++
+-- CMAKE_CXX_COMPILER_PREDEFINES_COMMAND=/usr/bin/c++;-dM;-E;-c;/usr/share/cmake3/Modules/CMakeCXXCompilerABI.cpp
+-- CMAKE_CXX_COMPILER_PRODUCED_FILES=a.out
+-- CMAKE_CXX_COMPILER_PRODUCED_OUTPUT=
+-- CMAKE_CXX_COMPILER_RANLIB=/usr/bin/gcc-ranlib
+-- CMAKE_CXX_COMPILER_RANLIB=/usr/bin/gcc-ranlib
+-- CMAKE_CXX_COMPILER_VERSION=4.8.5
+-- CMAKE_CXX_COMPILER_VERSION_INTERNAL=
+-- CMAKE_CXX_COMPILER_WORKS=TRUE
+-- CMAKE_CXX_COMPILER_WRAPPER=
+-- CMAKE_CXX_COMPILE_FEATURES=cxx_std_98;cxx_template_template_parameters;cxx_std_11;cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_auto_type;cxx_constexpr;cxx_decltype;cxx_decltype_incomplete_return_types;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variadic_macros;cxx_variadic_templates;cxx_std_14
+-- CMAKE_CXX_COMPILE_OBJECT=<CMAKE_CXX_COMPILER>  <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT> -c <SOURCE>
+-- CMAKE_CXX_COMPILE_OPTIONS_IPO=-flto;-fno-fat-lto-objects
+-- CMAKE_CXX_COMPILE_OPTIONS_PIC=-fPIC
+-- CMAKE_CXX_COMPILE_OPTIONS_PIE=-fPIE
+-- CMAKE_CXX_COMPILE_OPTIONS_SYSROOT=--sysroot=
+-- CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY=-fvisibility=
+-- CMAKE_CXX_COMPILE_OPTIONS_VISIBILITY_INLINES_HIDDEN=-fvisibility-inlines-hidden
+-- CMAKE_CXX_CREATE_ASSEMBLY_SOURCE=<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -S <SOURCE> -o <ASSEMBLY_SOURCE>
+-- CMAKE_CXX_CREATE_PREPROCESSED_SOURCE=<CMAKE_CXX_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>
+-- CMAKE_CXX_CREATE_SHARED_LIBRARY=<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>
+-- CMAKE_CXX_CREATE_SHARED_MODULE=<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>
+-- CMAKE_CXX_FLAGS=-O3  -std=c++11
+-- CMAKE_CXX_FLAGS=-O3  -std=c++11
+-- CMAKE_CXX_FLAGS_DEBUG=-g
+-- CMAKE_CXX_FLAGS_DEBUG_INIT= -g
+-- CMAKE_CXX_FLAGS_INIT=  
+-- CMAKE_CXX_FLAGS_MINSIZEREL=-Os -DNDEBUG
+-- CMAKE_CXX_FLAGS_MINSIZEREL_INIT= -Os -DNDEBUG
+-- CMAKE_CXX_FLAGS_RELEASE=-O2 -DNDEBUG
+-- CMAKE_CXX_FLAGS_RELEASE_INIT= -O2 -DNDEBUG
+-- CMAKE_CXX_FLAGS_RELWITHDEBINFO=-O2 -g -DNDEBUG
+-- CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT= -O2 -g -DNDEBUG
+-- CMAKE_CXX_IGNORE_EXTENSIONS=inl;h;hpp;HPP;H;o;O;obj;OBJ;def;DEF;rc;RC
+-- CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES=/usr/include
+-- CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES=/usr/lib/gcc/x86_64-redhat-linux/4.8.5;/usr/lib64;/lib64;/usr/lib
+-- CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES=
+-- CMAKE_CXX_IMPLICIT_LINK_LIBRARIES=stdc++;m;gcc_s;gcc;c;gcc_s;gcc
+-- CMAKE_CXX_INFORMATION_LOADED=1
+-- CMAKE_CXX_LIBRARY_ARCHITECTURE=
+-- CMAKE_CXX_LINKER_PREFERENCE=30
+-- CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES=1
+-- CMAKE_CXX_LINK_EXECUTABLE=<CMAKE_CXX_COMPILER>  <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>
+-- CMAKE_CXX_OUTPUT_EXTENSION=.o
+-- CMAKE_CXX_PLATFORM_ID=Linux
+-- CMAKE_CXX_SIMULATE_ID=
+-- CMAKE_CXX_SIMULATE_VERSION=
+-- CMAKE_CXX_SIZEOF_DATA_PTR=8
+-- CMAKE_CXX_SOURCE_FILE_EXTENSIONS=C;M;c++;cc;cpp;cxx;mm;CPP
+-- CMAKE_CXX_STANDARD_COMPUTED_DEFAULT=98
+-- CMAKE_CXX_STANDARD_DEFAULT=98
+-- CMAKE_CXX_VERBOSE_FLAG=-v
+-- CMAKE_CXX_XCODE_ARCHS=
+-- CMAKE_C_ABI_COMPILED=TRUE
+-- CMAKE_C_ARCHIVE_APPEND=<CMAKE_AR> q  <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_C_ARCHIVE_APPEND_IPO="/usr/bin/gcc-ar" r <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_C_ARCHIVE_CREATE=<CMAKE_AR> qc <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_C_ARCHIVE_CREATE_IPO="/usr/bin/gcc-ar" cr <TARGET> <LINK_FLAGS> <OBJECTS>
+-- CMAKE_C_ARCHIVE_FINISH=<CMAKE_RANLIB> <TARGET>
+-- CMAKE_C_ARCHIVE_FINISH_IPO="/usr/bin/gcc-ranlib" <TARGET>
+-- CMAKE_C_CL_SHOWINCLUDES_PREFIX=
+-- CMAKE_C_COMPILER=/usr/bin/cc
+-- CMAKE_C_COMPILER=/usr/bin/cc
+-- CMAKE_C_COMPILER_ABI=ELF
+-- CMAKE_C_COMPILER_AR=/usr/bin/gcc-ar
+-- CMAKE_C_COMPILER_AR=/usr/bin/gcc-ar
+-- CMAKE_C_COMPILER_ARCHITECTURE_ID=
+-- CMAKE_C_COMPILER_ARG1=
+-- CMAKE_C_COMPILER_ENV_VAR=CC
+-- CMAKE_C_COMPILER_ID=GNU
+-- CMAKE_C_COMPILER_ID_PLATFORM_CONTENT=#define STRINGIFY_HELPER(X) #X
+#define STRINGIFY(X) STRINGIFY_HELPER(X)
+
+/* Identify known platforms by name.  */
+#if defined(__linux) || defined(__linux__) || defined(linux)
+# define PLATFORM_ID "Linux"
+
+#elif defined(__CYGWIN__)
+# define PLATFORM_ID "Cygwin"
+
+#elif defined(__MINGW32__)
+# define PLATFORM_ID "MinGW"
+
+#elif defined(__APPLE__)
+# define PLATFORM_ID "Darwin"
+
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+# define PLATFORM_ID "Windows"
+
+#elif defined(__FreeBSD__) || defined(__FreeBSD)
+# define PLATFORM_ID "FreeBSD"
+
+#elif defined(__NetBSD__) || defined(__NetBSD)
+# define PLATFORM_ID "NetBSD"
+
+#elif defined(__OpenBSD__) || defined(__OPENBSD)
+# define PLATFORM_ID "OpenBSD"
+
+#elif defined(__sun) || defined(sun)
+# define PLATFORM_ID "SunOS"
+
+#elif defined(_AIX) || defined(__AIX) || defined(__AIX__) || defined(__aix) || defined(__aix__)
+# define PLATFORM_ID "AIX"
+
+#elif defined(__sgi) || defined(__sgi__) || defined(_SGI)
+# define PLATFORM_ID "IRIX"
+
+#elif defined(__hpux) || defined(__hpux__)
+# define PLATFORM_ID "HP-UX"
+
+#elif defined(__HAIKU__)
+# define PLATFORM_ID "Haiku"
+
+#elif defined(__BeOS) || defined(__BEOS__) || defined(_BEOS)
+# define PLATFORM_ID "BeOS"
+
+#elif defined(__QNX__) || defined(__QNXNTO__)
+# define PLATFORM_ID "QNX"
+
+#elif defined(__tru64) || defined(_tru64) || defined(__TRU64__)
+# define PLATFORM_ID "Tru64"
+
+#elif defined(__riscos) || defined(__riscos__)
+# define PLATFORM_ID "RISCos"
+
+#elif defined(__sinix) || defined(__sinix__) || defined(__SINIX__)
+# define PLATFORM_ID "SINIX"
+
+#elif defined(__UNIX_SV__)
+# define PLATFORM_ID "UNIX_SV"
+
+#elif defined(__bsdos__)
+# define PLATFORM_ID "BSDOS"
+
+#elif defined(_MPRAS) || defined(MPRAS)
+# define PLATFORM_ID "MP-RAS"
+
+#elif defined(__osf) || defined(__osf__)
+# define PLATFORM_ID "OSF1"
+
+#elif defined(_SCO_SV) || defined(SCO_SV) || defined(sco_sv)
+# define PLATFORM_ID "SCO_SV"
+
+#elif defined(__ultrix) || defined(__ultrix__) || defined(_ULTRIX)
+# define PLATFORM_ID "ULTRIX"
+
+#elif defined(__XENIX__) || defined(_XENIX) || defined(XENIX)
+# define PLATFORM_ID "Xenix"
+
+#elif defined(__WATCOMC__)
+# if defined(__LINUX__)
+#  define PLATFORM_ID "Linux"
+
+# elif defined(__DOS__)
+#  define PLATFORM_ID "DOS"
+
+# elif defined(__OS2__)
+#  define PLATFORM_ID "OS2"
+
+# elif defined(__WINDOWS__)
+#  define PLATFORM_ID "Windows3x"
+
+# else /* unknown platform */
+#  define PLATFORM_ID
+# endif
+
+#else /* unknown platform */
+# define PLATFORM_ID
+
+#endif
+
+/* For windows compilers MSVC and Intel we can determine
+   the architecture of the compiler being used.  This is because
+   the compilers do not have flags that can change the architecture,
+   but rather depend on which compiler is being used
+*/
+#if defined(_WIN32) && defined(_MSC_VER)
+# if defined(_M_IA64)
+#  define ARCHITECTURE_ID "IA64"
+
+# elif defined(_M_X64) || defined(_M_AMD64)
+#  define ARCHITECTURE_ID "x64"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# elif defined(_M_ARM64)
+#  define ARCHITECTURE_ID "ARM64"
+
+# elif defined(_M_ARM)
+#  if _M_ARM == 4
+#   define ARCHITECTURE_ID "ARMV4I"
+#  elif _M_ARM == 5
+#   define ARCHITECTURE_ID "ARMV5I"
+#  else
+#   define ARCHITECTURE_ID "ARMV" STRINGIFY(_M_ARM)
+#  endif
+
+# elif defined(_M_MIPS)
+#  define ARCHITECTURE_ID "MIPS"
+
+# elif defined(_M_SH)
+#  define ARCHITECTURE_ID "SHx"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__WATCOMC__)
+# if defined(_M_I86)
+#  define ARCHITECTURE_ID "I86"
+
+# elif defined(_M_IX86)
+#  define ARCHITECTURE_ID "X86"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+
+#elif defined(__IAR_SYSTEMS_ICC__) || defined(__IAR_SYSTEMS_ICC)
+# if defined(__ICCARM__)
+#  define ARCHITECTURE_ID "ARM"
+
+# elif defined(__ICCAVR__)
+#  define ARCHITECTURE_ID "AVR"
+
+# else /* unknown architecture */
+#  define ARCHITECTURE_ID ""
+# endif
+#else
+#  define ARCHITECTURE_ID
+#endif
+
+/* Convert integer to decimal digit literals.  */
+#define DEC(n)                   \
+  ('0' + (((n) / 10000000)%10)), \
+  ('0' + (((n) / 1000000)%10)),  \
+  ('0' + (((n) / 100000)%10)),   \
+  ('0' + (((n) / 10000)%10)),    \
+  ('0' + (((n) / 1000)%10)),     \
+  ('0' + (((n) / 100)%10)),      \
+  ('0' + (((n) / 10)%10)),       \
+  ('0' +  ((n) % 10))
+
+/* Convert integer to hex digit literals.  */
+#define HEX(n)             \
+  ('0' + ((n)>>28 & 0xF)), \
+  ('0' + ((n)>>24 & 0xF)), \
+  ('0' + ((n)>>20 & 0xF)), \
+  ('0' + ((n)>>16 & 0xF)), \
+  ('0' + ((n)>>12 & 0xF)), \
+  ('0' + ((n)>>8  & 0xF)), \
+  ('0' + ((n)>>4  & 0xF)), \
+  ('0' + ((n)     & 0xF))
+
+/* Construct a string literal encoding the version number components. */
+#ifdef COMPILER_VERSION_MAJOR
+char const info_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','[',
+  COMPILER_VERSION_MAJOR,
+# ifdef COMPILER_VERSION_MINOR
+  '.', COMPILER_VERSION_MINOR,
+#  ifdef COMPILER_VERSION_PATCH
+   '.', COMPILER_VERSION_PATCH,
+#   ifdef COMPILER_VERSION_TWEAK
+    '.', COMPILER_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct a string literal encoding the internal version number. */
+#ifdef COMPILER_VERSION_INTERNAL
+char const info_version_internal[] = {
+  'I', 'N', 'F', 'O', ':',
+  'c','o','m','p','i','l','e','r','_','v','e','r','s','i','o','n','_',
+  'i','n','t','e','r','n','a','l','[',
+  COMPILER_VERSION_INTERNAL,']','\0'};
+#endif
+
+/* Construct a string literal encoding the version number components. */
+#ifdef SIMULATE_VERSION_MAJOR
+char const info_simulate_version[] = {
+  'I', 'N', 'F', 'O', ':',
+  's','i','m','u','l','a','t','e','_','v','e','r','s','i','o','n','[',
+  SIMULATE_VERSION_MAJOR,
+# ifdef SIMULATE_VERSION_MINOR
+  '.', SIMULATE_VERSION_MINOR,
+#  ifdef SIMULATE_VERSION_PATCH
+   '.', SIMULATE_VERSION_PATCH,
+#   ifdef SIMULATE_VERSION_TWEAK
+    '.', SIMULATE_VERSION_TWEAK,
+#   endif
+#  endif
+# endif
+  ']','\0'};
+#endif
+
+/* Construct the string literal in pieces to prevent the source from
+   getting matched.  Store it in a pointer rather than an array
+   because some compilers will just produce instructions to fill the
+   array rather than assigning a pointer to a static array.  */
+char const* info_platform = "INFO" ":" "platform[" PLATFORM_ID "]";
+char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
+
+
+-- CMAKE_C_COMPILER_ID_RUN=1
+-- CMAKE_C_COMPILER_ID_TEST_FLAGS=-c;-Aa;-D__CLASSIC_C__
+-- CMAKE_C_COMPILER_ID_TOOL_MATCH_INDEX=2
+-- CMAKE_C_COMPILER_ID_TOOL_MATCH_REGEX=
+Ld[^
+]*(
+[ 	]+[^
+]*)*
+[ 	]+([^ 	
+]+)[^
+]*-o[^
+]*CompilerIdC/(\./)?(CompilerIdC.xctest/)?CompilerIdC[ 	
+\"]
+-- CMAKE_C_COMPILER_ID_VENDORS=IAR
+-- CMAKE_C_COMPILER_ID_VENDOR_REGEX_IAR=IAR .+ Compiler
+-- CMAKE_C_COMPILER_INIT=NOTFOUND
+-- CMAKE_C_COMPILER_LIST=cc;gcc;cl;bcc;xlc;clang
+-- CMAKE_C_COMPILER_LOADED=1
+-- CMAKE_C_COMPILER_NAMES=cc
+-- CMAKE_C_COMPILER_PREDEFINES_COMMAND=/usr/bin/cc;-dM;-E;-c;/usr/share/cmake3/Modules/CMakeCXXCompilerABI.cpp
+-- CMAKE_C_COMPILER_PRODUCED_FILES=a.out
+-- CMAKE_C_COMPILER_PRODUCED_OUTPUT=
+-- CMAKE_C_COMPILER_RANLIB=/usr/bin/gcc-ranlib
+-- CMAKE_C_COMPILER_RANLIB=/usr/bin/gcc-ranlib
+-- CMAKE_C_COMPILER_VERSION=4.8.5
+-- CMAKE_C_COMPILER_VERSION_INTERNAL=
+-- CMAKE_C_COMPILER_WORKS=TRUE
+-- CMAKE_C_COMPILER_WRAPPER=
+-- CMAKE_C_COMPILE_FEATURES=c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert
+-- CMAKE_C_COMPILE_OBJECT=<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT>   -c <SOURCE>
+-- CMAKE_C_COMPILE_OPTIONS_IPO=-flto;-fno-fat-lto-objects
+-- CMAKE_C_COMPILE_OPTIONS_PIC=-fPIC
+-- CMAKE_C_COMPILE_OPTIONS_PIE=-fPIE
+-- CMAKE_C_COMPILE_OPTIONS_SYSROOT=--sysroot=
+-- CMAKE_C_COMPILE_OPTIONS_VISIBILITY=-fvisibility=
+-- CMAKE_C_CREATE_ASSEMBLY_SOURCE=<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -S <SOURCE> -o <ASSEMBLY_SOURCE>
+-- CMAKE_C_CREATE_PREPROCESSED_SOURCE=<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>
+-- CMAKE_C_CREATE_SHARED_LIBRARY=<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>
+-- CMAKE_C_CREATE_SHARED_MODULE=<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>
+-- CMAKE_C_FLAGS=
+-- CMAKE_C_FLAGS_DEBUG=-g
+-- CMAKE_C_FLAGS_DEBUG_INIT= -g
+-- CMAKE_C_FLAGS_INIT=  
+-- CMAKE_C_FLAGS_MINSIZEREL=-Os -DNDEBUG
+-- CMAKE_C_FLAGS_MINSIZEREL_INIT= -Os -DNDEBUG
+-- CMAKE_C_FLAGS_RELEASE=-O2 -DNDEBUG
+-- CMAKE_C_FLAGS_RELEASE_INIT= -O2 -DNDEBUG
+-- CMAKE_C_FLAGS_RELWITHDEBINFO=-O2 -g -DNDEBUG
+-- CMAKE_C_FLAGS_RELWITHDEBINFO_INIT= -O2 -g -DNDEBUG
+-- CMAKE_C_IGNORE_EXTENSIONS=h;H;o;O;obj;OBJ;def;DEF;rc;RC
+-- CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES=/usr/include
+-- CMAKE_C_IMPLICIT_LINK_DIRECTORIES=/usr/lib/gcc/x86_64-redhat-linux/4.8.5;/usr/lib64;/lib64;/usr/lib
+-- CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES=
+-- CMAKE_C_IMPLICIT_LINK_LIBRARIES=gcc;gcc_s;c;gcc;gcc_s
+-- CMAKE_C_INFORMATION_LOADED=1
+-- CMAKE_C_LIBRARY_ARCHITECTURE=
+-- CMAKE_C_LINKER_PREFERENCE=10
+-- CMAKE_C_LINK_EXECUTABLE=<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS>  -o <TARGET> <LINK_LIBRARIES>
+-- CMAKE_C_OUTPUT_EXTENSION=.o
+-- CMAKE_C_PLATFORM_ID=Linux
+-- CMAKE_C_SIMULATE_ID=
+-- CMAKE_C_SIMULATE_VERSION=
+-- CMAKE_C_SIZEOF_DATA_PTR=8
+-- CMAKE_C_SOURCE_FILE_EXTENSIONS=c;m
+-- CMAKE_C_STANDARD_COMPUTED_DEFAULT=90
+-- CMAKE_C_STANDARD_DEFAULT=90
+-- CMAKE_C_VERBOSE_FLAG=-v
+-- CMAKE_C_XCODE_ARCHS=
+-- CMAKE_DEPFILE_FLAGS_C=-MD -MT <OBJECT> -MF <DEPFILE>
+-- CMAKE_DEPFILE_FLAGS_CXX=-MD -MT <OBJECT> -MF <DEPFILE>
+-- CMAKE_DL_LIBS=dl
+-- CMAKE_EDIT_COMMAND=/usr/bin/ccmake3
+-- CMAKE_EFFECTIVE_SYSTEM_NAME=Linux
+-- CMAKE_EXECUTABLE_FORMAT=ELF
+-- CMAKE_EXECUTABLE_RPATH_LINK_CXX_FLAG=-Wl,-rpath-link,
+-- CMAKE_EXECUTABLE_RPATH_LINK_C_FLAG=-Wl,-rpath-link,
+-- CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG=-Wl,-rpath,
+-- CMAKE_EXECUTABLE_RUNTIME_CXX_FLAG_SEP=:
+-- CMAKE_EXECUTABLE_RUNTIME_C_FLAG=-Wl,-rpath,
+-- CMAKE_EXECUTABLE_RUNTIME_C_FLAG_SEP=:
+-- CMAKE_EXECUTABLE_SUFFIX=
+-- CMAKE_EXE_EXPORTS_CXX_FLAG=-Wl,--export-dynamic
+-- CMAKE_EXE_EXPORTS_C_FLAG=-Wl,--export-dynamic
+-- CMAKE_EXE_LINKER_FLAGS=
+-- CMAKE_EXE_LINKER_FLAGS_DEBUG=
+-- CMAKE_EXE_LINKER_FLAGS_INIT=  
+-- CMAKE_EXE_LINKER_FLAGS_MINSIZEREL=
+-- CMAKE_EXE_LINKER_FLAGS_RELEASE=
+-- CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO=
+-- CMAKE_EXE_LINK_DYNAMIC_CXX_FLAGS=-Wl,-Bdynamic
+-- CMAKE_EXE_LINK_DYNAMIC_C_FLAGS=-Wl,-Bdynamic
+-- CMAKE_EXE_LINK_STATIC_CXX_FLAGS=-Wl,-Bstatic
+-- CMAKE_EXE_LINK_STATIC_C_FLAGS=-Wl,-Bstatic
+-- CMAKE_EXPORT_COMPILE_COMMANDS=OFF
+-- CMAKE_EXTRA_GENERATOR=
+-- CMAKE_FILES_DIRECTORY=/CMakeFiles
+-- CMAKE_FIND_LIBRARY_PREFIXES=lib
+-- CMAKE_FIND_LIBRARY_SUFFIXES=.so;.a
+-- CMAKE_FIND_LIBRARY_SUFFIXES_DEFAULT=.so;.a
+-- CMAKE_GENERATOR=Unix Makefiles
+-- CMAKE_GENERATOR_INSTANCE=
+-- CMAKE_GENERATOR_PLATFORM=
+-- CMAKE_GENERATOR_TOOLSET=
+-- CMAKE_HOME_DIRECTORY=/opt/qtcube/src
+-- CMAKE_HOST_SYSTEM=Linux-4.9.93-linuxkit-aufs
+-- CMAKE_HOST_SYSTEM_NAME=Linux
+-- CMAKE_HOST_SYSTEM_PROCESSOR=x86_64
+-- CMAKE_HOST_SYSTEM_VERSION=4.9.93-linuxkit-aufs
+-- CMAKE_HOST_UNIX=1
+-- CMAKE_INCLUDE_CURRENT_DIR=TRUE
+-- CMAKE_INCLUDE_FLAG_C=-I
+-- CMAKE_INCLUDE_FLAG_CXX=-I
+-- CMAKE_INCLUDE_SYSTEM_FLAG_C=-isystem 
+-- CMAKE_INCLUDE_SYSTEM_FLAG_CXX=-isystem 
+-- CMAKE_INSTALL_DEFAULT_COMPONENT_NAME=Unspecified
+-- CMAKE_INSTALL_PREFIX=/opt/qtcube
+-- CMAKE_INSTALL_SO_NO_EXE=0
+-- CMAKE_INTERNAL_PLATFORM_ABI=ELF
+-- CMAKE_LIBRARY_ARCHITECTURE_REGEX=[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*
+-- CMAKE_LIBRARY_PATH_FLAG=-L
+-- CMAKE_LIBRARY_PATH_TERMINATOR=
+-- CMAKE_LINKER=/usr/bin/ld
+-- CMAKE_LINKER=/usr/bin/ld
+-- CMAKE_LINK_LIBRARY_FLAG=-l
+-- CMAKE_LINK_LIBRARY_SUFFIX=
+-- CMAKE_MAJOR_VERSION=3
+-- CMAKE_MAKE_PROGRAM=/usr/bin/gmake
+-- CMAKE_MATCH_0=
+-- CMAKE_MATCH_1=
+-- CMAKE_MATCH_COUNT=0
+-- CMAKE_MINIMUM_REQUIRED_VERSION=2.8
+-- CMAKE_MINOR_VERSION=12
+-- CMAKE_MODULE_LINKER_FLAGS=
+-- CMAKE_MODULE_LINKER_FLAGS_DEBUG=
+-- CMAKE_MODULE_LINKER_FLAGS_INIT=  
+-- CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL=
+-- CMAKE_MODULE_LINKER_FLAGS_RELEASE=
+-- CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO=
+-- CMAKE_MODULE_PATH=/opt/qtcube/src/cmake
+-- CMAKE_NM=/usr/bin/nm
+-- CMAKE_OBJCOPY=/usr/bin/objcopy
+-- CMAKE_OBJDUMP=/usr/bin/objdump
+-- CMAKE_PARENT_LIST_FILE=/opt/qtcube/src/CMakeLists.txt
+-- CMAKE_PATCH_VERSION=0
+-- CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES=/lib;/lib32;/lib64;/usr/lib;/usr/lib32;/usr/lib64
+-- CMAKE_PLATFORM_INFO_DIR=/opt/qtcube/build/CMakeFiles/3.12.0
+-- CMAKE_PLATFORM_INFO_INITIALIZED=1
+-- CMAKE_PLATFORM_USES_PATH_WHEN_NO_SONAME=1
+-- CMAKE_PREFIX_PATH=/opt/SEP/cmake
+-- CMAKE_PROJECT_NAME=QTCUBE
+-- CMAKE_RANLIB=/usr/bin/ranlib
+-- CMAKE_RANLIB=/usr/bin/ranlib
+-- CMAKE_ROOT=/usr/share/cmake3
+-- CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS=-shared
+-- CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS=-shared
+-- CMAKE_SHARED_LIBRARY_CXX_FLAGS=-fPIC
+-- CMAKE_SHARED_LIBRARY_C_FLAGS=-fPIC
+-- CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS=-rdynamic
+-- CMAKE_SHARED_LIBRARY_LINK_C_FLAGS=-rdynamic
+-- CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_CXX_FLAGS=-Wl,-Bdynamic
+-- CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_C_FLAGS=-Wl,-Bdynamic
+-- CMAKE_SHARED_LIBRARY_LINK_STATIC_CXX_FLAGS=-Wl,-Bstatic
+-- CMAKE_SHARED_LIBRARY_LINK_STATIC_C_FLAGS=-Wl,-Bstatic
+-- CMAKE_SHARED_LIBRARY_PREFIX=lib
+-- CMAKE_SHARED_LIBRARY_RPATH_LINK_CXX_FLAG=-Wl,-rpath-link,
+-- CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG=-Wl,-rpath-link,
+-- CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG=-Wl,-rpath,
+-- CMAKE_SHARED_LIBRARY_RUNTIME_CXX_FLAG_SEP=:
+-- CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG=-Wl,-rpath,
+-- CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP=:
+-- CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG=-Wl,-soname,
+-- CMAKE_SHARED_LIBRARY_SONAME_C_FLAG=-Wl,-soname,
+-- CMAKE_SHARED_LIBRARY_SUFFIX=.so
+-- CMAKE_SHARED_LINKER_FLAGS=
+-- CMAKE_SHARED_LINKER_FLAGS_DEBUG=
+-- CMAKE_SHARED_LINKER_FLAGS_INIT=  
+-- CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL=
+-- CMAKE_SHARED_LINKER_FLAGS_RELEASE=
+-- CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO=
+-- CMAKE_SHARED_MODULE_CREATE_CXX_FLAGS=-shared
+-- CMAKE_SHARED_MODULE_CREATE_C_FLAGS=-shared
+-- CMAKE_SHARED_MODULE_CXX_FLAGS=-fPIC
+-- CMAKE_SHARED_MODULE_C_FLAGS=-fPIC
+-- CMAKE_SHARED_MODULE_LINK_DYNAMIC_CXX_FLAGS=-Wl,-Bdynamic
+-- CMAKE_SHARED_MODULE_LINK_DYNAMIC_C_FLAGS=-Wl,-Bdynamic
+-- CMAKE_SHARED_MODULE_LINK_STATIC_CXX_FLAGS=-Wl,-Bstatic
+-- CMAKE_SHARED_MODULE_LINK_STATIC_C_FLAGS=-Wl,-Bstatic
+-- CMAKE_SHARED_MODULE_PREFIX=lib
+-- CMAKE_SHARED_MODULE_SUFFIX=.so
+-- CMAKE_SIZEOF_VOID_P=8
+-- CMAKE_SKIP_INSTALL_RPATH=NO
+-- CMAKE_SKIP_RPATH=NO
+-- CMAKE_SOURCE_DIR=/opt/qtcube/src
+-- CMAKE_STATIC_LIBRARY_PREFIX=lib
+-- CMAKE_STATIC_LIBRARY_SUFFIX=.a
+-- CMAKE_STATIC_LINKER_FLAGS=
+-- CMAKE_STATIC_LINKER_FLAGS_DEBUG=
+-- CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL=
+-- CMAKE_STATIC_LINKER_FLAGS_RELEASE=
+-- CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO=
+-- CMAKE_STRIP=/usr/bin/strip
+-- CMAKE_SYSTEM=Linux-4.9.93-linuxkit-aufs
+-- CMAKE_SYSTEM_INCLUDE_PATH=/usr/include/X11
+-- CMAKE_SYSTEM_INFO_FILE=Platform/Linux
+-- CMAKE_SYSTEM_LIBRARY_PATH=/usr/lib/X11
+-- CMAKE_SYSTEM_LOADED=1
+-- CMAKE_SYSTEM_NAME=Linux
+-- CMAKE_SYSTEM_PREFIX_PATH=/usr/local;/usr;/;/usr;/opt/qtcube;/usr/X11R6;/usr/pkg;/opt
+-- CMAKE_SYSTEM_PROCESSOR=x86_64
+-- CMAKE_SYSTEM_SPECIFIC_INFORMATION_LOADED=1
+-- CMAKE_SYSTEM_SPECIFIC_INITIALIZE_LOADED=1
+-- CMAKE_SYSTEM_VERSION=4.9.93-linuxkit-aufs
+-- CMAKE_TWEAK_VERSION=0
+-- CMAKE_UNAME=/usr/bin/uname
+-- CMAKE_VERBOSE_MAKEFILE=FALSE
+-- CMAKE_VERSION=3.12.0
+-- COMPILER_SUPPORTS_CXX0X=1
+-- COMPILER_SUPPORTS_CXX11=1
+-- CPACK_BINARY_7Z=
+-- CPACK_BINARY_BUNDLE=
+-- CPACK_BINARY_CYGWIN=
+-- CPACK_BINARY_DEB=OFF
+-- CPACK_BINARY_DRAGNDROP=
+-- CPACK_BINARY_FREEBSD=OFF
+-- CPACK_BINARY_IFW=OFF
+-- CPACK_BINARY_NSIS=OFF
+-- CPACK_BINARY_NUGET=
+-- CPACK_BINARY_OSXX11=
+-- CPACK_BINARY_PACKAGEMAKER=
+-- CPACK_BINARY_PRODUCTBUILD=
+-- CPACK_BINARY_RPM=OFF
+-- CPACK_BINARY_STGZ=ON
+-- CPACK_BINARY_TBZ2=OFF
+-- CPACK_BINARY_TGZ=ON
+-- CPACK_BINARY_TXZ=OFF
+-- CPACK_BINARY_TZ=ON
+-- CPACK_BINARY_WIX=
+-- CPACK_BINARY_ZIP=
+-- CPACK_SOURCE_7Z=
+-- CPACK_SOURCE_CYGWIN=
+-- CPACK_SOURCE_RPM=OFF
+-- CPACK_SOURCE_TBZ2=ON
+-- CPACK_SOURCE_TGZ=ON
+-- CPACK_SOURCE_TXZ=ON
+-- CPACK_SOURCE_TZ=ON
+-- CPACK_SOURCE_ZIP=OFF
+-- CXX_TEST_WAS_RUN=1
+-- C_TEST_WAS_RUN=1
+-- FIND_PACKAGE_MESSAGE_DETAILS_NumPy=[/usr/lib/python3/dist-packages/numpy/core/include][v()]
+-- FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp=[/usr/bin/python3.6][v3.6.5(3)]
+-- FIND_PACKAGE_MESSAGE_DETAILS_Qt4=[/usr/bin/qmake-qt4][/usr/lib64/qt4/bin/moc-qt4][/usr/lib64/qt4/bin/rcc][/usr/lib64/qt4/bin/uic-qt4][/usr/include][/usr/lib64][/usr/lib64/libQtCore.so][v4.8.7()]
+-- FIND_PACKAGE_MESSAGE_DETAILS_TBB=[/usr/include][/usr/lib64/libtbb.so][c ][v4.1()]
+-- GIT_EXECUTABLE=/usr/bin/git
+-- Generic-IO-util_BINARY_DIR=/opt/qtcube/build/external/genericIO/util
+-- Generic-IO-util_SOURCE_DIR=/opt/qtcube/src/external/genericIO/util
+-- Generic-IO_BINARY_DIR=/opt/qtcube/build/external/genericIO/python
+-- Generic-IO_SOURCE_DIR=/opt/qtcube/src/external/genericIO/python
+-- Generic-cpp_BINARY_DIR=/opt/qtcube/build/external/genericIO/cpp
+-- Generic-cpp_SOURCE_DIR=/opt/qtcube/src/external/genericIO/cpp
+-- INSTSLL_SEPLIB=OFF
+-- LIBTBB=/usr/lib64/libtbb.so
+-- MACRO_CHECK_FUNCTION_DEFINITIONS=-DCOMPILER_SUPPORTS_CXX11 
+-- MSVC_CXX_ARCHITECTURE_ID=
+-- MSVC_C_ARCHITECTURE_ID=
+-- OUTPUT=Change Dir: /opt/qtcube/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_d386d/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_d386d.dir/build.make CMakeFiles/cmTC_d386d.dir/build
+gmake[1]: Entering directory `/opt/qtcube/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_d386d.dir/src.cxx.o
+/usr/bin/c++    -O3  -DCOMPILER_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTC_d386d.dir/src.cxx.o -c /opt/qtcube/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_d386d
+/usr/bin/cmake3 -E cmake_link_script CMakeFiles/cmTC_d386d.dir/link.txt --verbose=1
+/usr/bin/c++  -O3  -DCOMPILER_SUPPORTS_CXX11    -rdynamic CMakeFiles/cmTC_d386d.dir/src.cxx.o  -o cmTC_d386d 
+gmake[1]: Leaving directory `/opt/qtcube/build/CMakeFiles/CMakeTmp'
+
+-- PRESET_CMAKE_SYSTEM_NAME=FALSE
+-- PROJECT_BINARY_DIR=/opt/qtcube/build
+-- PROJECT_NAME=QTCUBE
+-- PROJECT_SOURCE_DIR=/opt/qtcube/src
+-- PYTHONINTERP_FOUND=TRUE
+-- PYTHON_EXECUTABLE=/usr/bin/python3.6
+-- PYTHON_NUMPY_FOUND=1
+-- PYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include
+-- PYTHON_VERSION_MAJOR=3
+-- PYTHON_VERSION_MINOR=6
+-- PYTHON_VERSION_PATCH=5
+-- PYTHON_VERSION_STRING=3.6.5
+-- PythonInterp_FOUND=TRUE
+-- QT4_FOUND=TRUE
+-- QT4_INSTALLED_VERSION_TOO_OLD=FALSE
+-- QTCUBE_BINARY_DIR=/opt/qtcube/build
+-- QTCUBE_SOURCE_DIR=/opt/qtcube/src
+-- QTVERSION=4.8.7
+-- QT_ACCESSIBLE_PLUGINS=qtaccessiblecompatwidgets;qtaccessiblewidgets
+-- QT_ACCESSIBLE_PLUGINS_DIR=/usr/lib64/qt4/plugins/accessible
+-- QT_ARTHURPLUGIN_PLUGIN_DEBUG=QT_ARTHURPLUGIN_PLUGIN_DEBUG-NOTFOUND
+-- QT_ARTHURPLUGIN_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libarthurplugin.so
+-- QT_BEARER_PLUGINS=qcorewlanbearer;qgenericbearer;qnativewifibearer
+-- QT_BEARER_PLUGINS_DIR=/usr/lib64/qt4/plugins/bearer
+-- QT_BINARY_DIR=/usr/lib64/qt4/bin
+-- QT_CODECS_PLUGINS=qcncodecs;qjpcodecs;qkrcodecs;qtwcodecs
+-- QT_CODECS_PLUGINS_DIR=/usr/lib64/qt4/plugins/codecs
+-- QT_CONFIG=CONFIG +=  shared def_files_disabled exceptions no_mocdepend release stl qt_no_framework
+-- QT_CONTAINEREXTENSION_PLUGIN_DEBUG=QT_CONTAINEREXTENSION_PLUGIN_DEBUG-NOTFOUND
+-- QT_CONTAINEREXTENSION_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libcontainerextension.so
+-- QT_CUSTOMWIDGETPLUGIN_PLUGIN_DEBUG=QT_CUSTOMWIDGETPLUGIN_PLUGIN_DEBUG-NOTFOUND
+-- QT_CUSTOMWIDGETPLUGIN_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libcustomwidgetplugin.so
+-- QT_DBUSCPP2XML_EXECUTABLE=/usr/lib64/qt4/bin/qdbuscpp2xml
+-- QT_DBUSXML2CPP_EXECUTABLE=/usr/lib64/qt4/bin/qdbusxml2cpp
+-- QT_DECORATIONS_PLUGINS=qdecorationdefault;qdecorationwindows
+-- QT_DECORATIONS_PLUGINS_DIR=/usr/lib64/qt4/plugins/decorations
+-- QT_DEFINITIONS=
+-- QT_DESIGNER_EXECUTABLE=/usr/lib64/qt4/bin/designer-qt4
+-- QT_DESIGNER_PLUGINS=arthurplugin;containerextension;customwidgetplugin;phononwidgets;qdeclarativeview;qt3supportwidgets;qwebview;taskmenuextension;worldtimeclockplugin
+-- QT_DESIGNER_PLUGINS_DIR=/usr/lib64/qt4/plugins/designer
+-- QT_DOC_DIR=/usr/share/doc/qt4
+-- QT_EDITION=EDITION = OpenSource
+-- QT_FOUND=TRUE
+-- QT_GFXDRIVERS_PLUGINS_DIR=/usr/lib64/qt4/plugins/gfxdrivers
+-- QT_GRAPHICSDRIVERS_PLUGINS=qgfxtransformed;qgfxvnc;qscreenvfb
+-- QT_GRAPHICSSYSTEMS_PLUGINS=qglgraphicssystem;qtracegraphicssystem
+-- QT_GRAPHICSSYSTEMS_PLUGINS_DIR=/usr/lib64/qt4/plugins/graphicssystems
+-- QT_HEADERS_DIR=/usr/include
+-- QT_ICONENGINES_PLUGINS=qsvgicon
+-- QT_ICONENGINES_PLUGINS_DIR=/usr/lib64/qt4/plugins/iconengines
+-- QT_IMAGEFORMATS_PLUGINS=qgif;qjpeg;qmng;qico;qsvg;qtiff;qtga
+-- QT_IMAGEFORMATS_PLUGINS_DIR=/usr/lib64/qt4/plugins/imageformats
+-- QT_IMPORTS_DIR=/usr/lib64/qt4/imports
+-- QT_INCLUDES=/usr/include/QtDesigner;/usr/include/QtDeclarative;/usr/include/QtScriptTools;/usr/include/QtDBus;/usr/include/QtDesigner;/usr/include/QtXml;/usr/include/QtSql;/usr/include/QtOpenGL;/usr/include/QtMultimedia;/usr/include/QtNetwork;/usr/include/QtXmlPatterns;/usr/include/QtHelp;/usr/include/QtUiTools;/usr/include/QtTest;/usr/include/QtScript;/usr/include/QtSvg;/usr/include/Qt3Support;/usr/include/QtGui;/usr/include/QtCore;/usr/lib64/qt4/mkspecs/default;/usr/include;/usr/include/QtCore
+-- QT_INCLUDE_DIR=/usr/include
+-- QT_INPUTMETHODS_PLUGINS=qimsw_multi
+-- QT_INPUTMETHODS_PLUGINS_DIR=/usr/lib64/qt4/plugins/inputmethods
+-- QT_LIBINFIX=
+-- QT_LIBRARIES=/usr/lib64/libQtGui.so;/usr/lib64/libQtCore.so
+-- QT_LIBRARIES_PLUGINS=qtaccessiblewidgets;qgif;qjpeg;qmng;qico;qsvg;qtiff;qtga;qdecorationdefault;qdecorationwindows;qgfxtransformed;qgfxvnc;qscreenvfb;qglgraphicssystem;qtracegraphicssystem;qimsw_multi;qwstslibmousehandler;qcorewlanbearer;qgenericbearer;qnativewifibearer;qcncodecs;qjpcodecs;qkrcodecs;qtwcodecs
+-- QT_LIBRARY_DIR=/usr/lib64
+-- QT_LIBRARY_DIR_TMP=/usr/lib64
+-- QT_LINGUIST_EXECUTABLE=/usr/lib64/qt4/bin/linguist-qt4
+-- QT_LRELEASE_EXECUTABLE=/usr/lib64/qt4/bin/lrelease-qt4
+-- QT_LUPDATE_EXECUTABLE=/usr/lib64/qt4/bin/lupdate-qt4
+-- QT_MKSPECS_DIR=/usr/lib64/qt4/mkspecs
+-- QT_MOC_EXE=/usr/lib64/qt4/bin/moc-qt4
+-- QT_MOC_EXECUTABLE=/usr/lib64/qt4/bin/moc-qt4
+-- QT_MODULE=
+-- QT_MODULES=QtGui;Qt3Support;QtSvg;QtScript;QtTest;QtUiTools;QtHelp;QtWebKit;QtXmlPatterns;phonon;QtNetwork;QtMultimedia;QtNsPlugin;QtOpenGL;QtSql;QtXml;QtDesigner;QtDBus;QtScriptTools;QtDeclarative;QtMotif
+-- QT_MOUSEDRIVERS_PLUGINS=qwstslibmousehandler
+-- QT_MOUSEDRIVERS_PLUGINS_DIR=/usr/lib64/qt4/plugins/mousedrivers
+-- QT_PHONONWIDGETS_PLUGIN_DEBUG=QT_PHONONWIDGETS_PLUGIN_DEBUG-NOTFOUND
+-- QT_PHONONWIDGETS_PLUGIN_RELEASE=QT_PHONONWIDGETS_PLUGIN_RELEASE-NOTFOUND
+-- QT_PHONON_BACKEND_PLUGINS_DIR=/usr/lib64/qt4/plugins/phonon_backend
+-- QT_PHONON_INCLUDE_DIR=QT_PHONON_INCLUDE_DIR-NOTFOUND
+-- QT_PHONON_LIBRARY=
+-- QT_PHONON_LIBRARY_DEBUG=QT_PHONON_LIBRARY_DEBUG-NOTFOUND
+-- QT_PHONON_LIBRARY_RELEASE=QT_PHONON_LIBRARY_RELEASE-NOTFOUND
+-- QT_PHONON_MODULE_DEPENDS=QTGUI;QTDBUS;QTCORE
+-- QT_PLUGIN=
+-- QT_PLUGINS_DIR=/usr/lib64/qt4/plugins
+-- QT_PLUGIN_TYPE=
+-- QT_PLUGIN_TYPES=accessible;bearer;codecs;decorations;designer;gfxdrivers;graphicssystems;iconengines;imageformats;inputmethods;mousedrivers;phonon_backend;script;sqldrivers
+-- QT_QAXCONTAINER_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QAXSERVER_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QCNCODECS_PLUGIN_DEBUG=QT_QCNCODECS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QCNCODECS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/codecs/libqcncodecs.so
+-- QT_QCOLLECTIONGENERATOR_EXECUTABLE=/usr/lib64/qt4/bin/qcollectiongenerator
+-- QT_QCONFIG=QT_CONFIG +=  minimal-config small-config medium-config large-config full-config qt3support phonon phonon-backend accessibility opengl shared reduce_exports reduce_relocations ipv6 clock-gettime clock-monotonic mremap getaddrinfo ipv6ifname getifaddrs inotify system-jpeg system-mng system-png png system-tiff system-freetype system-zlib nis cups iconv glib gstreamer dbus dbus-linked openssl-linked x11sm xshape xvideo xsync xinerama xcursor xfixes xrandr xrender mitshm fontconfig xinput tablet xkb alsa pulseaudio icu concurrent xmlpatterns multimedia audio-backend svg script scripttools declarative release
+-- QT_QCOREWLANBEARER_PLUGIN_DEBUG=QT_QCOREWLANBEARER_PLUGIN_DEBUG-NOTFOUND
+-- QT_QCOREWLANBEARER_PLUGIN_RELEASE=QT_QCOREWLANBEARER_PLUGIN_RELEASE-NOTFOUND
+-- QT_QDECLARATIVEVIEW_PLUGIN_DEBUG=QT_QDECLARATIVEVIEW_PLUGIN_DEBUG-NOTFOUND
+-- QT_QDECLARATIVEVIEW_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libqdeclarativeview.so
+-- QT_QDECORATIONDEFAULT_PLUGIN_DEBUG=QT_QDECORATIONDEFAULT_PLUGIN_DEBUG-NOTFOUND
+-- QT_QDECORATIONDEFAULT_PLUGIN_RELEASE=QT_QDECORATIONDEFAULT_PLUGIN_RELEASE-NOTFOUND
+-- QT_QDECORATIONWINDOWS_PLUGIN_DEBUG=QT_QDECORATIONWINDOWS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QDECORATIONWINDOWS_PLUGIN_RELEASE=QT_QDECORATIONWINDOWS_PLUGIN_RELEASE-NOTFOUND
+-- QT_QGENERICBEARER_PLUGIN_DEBUG=QT_QGENERICBEARER_PLUGIN_DEBUG-NOTFOUND
+-- QT_QGENERICBEARER_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/bearer/libqgenericbearer.so
+-- QT_QGIF_PLUGIN_DEBUG=QT_QGIF_PLUGIN_DEBUG-NOTFOUND
+-- QT_QGIF_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqgif.so
+-- QT_QGLGRAPHICSSYSTEM_PLUGIN_DEBUG=QT_QGLGRAPHICSSYSTEM_PLUGIN_DEBUG-NOTFOUND
+-- QT_QGLGRAPHICSSYSTEM_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/graphicssystems/libqglgraphicssystem.so
+-- QT_QICO_PLUGIN_DEBUG=QT_QICO_PLUGIN_DEBUG-NOTFOUND
+-- QT_QICO_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqico.so
+-- QT_QIMSW_MULTI_PLUGIN_DEBUG=QT_QIMSW_MULTI_PLUGIN_DEBUG-NOTFOUND
+-- QT_QIMSW_MULTI_PLUGIN_RELEASE=QT_QIMSW_MULTI_PLUGIN_RELEASE-NOTFOUND
+-- QT_QJPCODECS_PLUGIN_DEBUG=QT_QJPCODECS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QJPCODECS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/codecs/libqjpcodecs.so
+-- QT_QJPEG_PLUGIN_DEBUG=QT_QJPEG_PLUGIN_DEBUG-NOTFOUND
+-- QT_QJPEG_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqjpeg.so
+-- QT_QKRCODECS_PLUGIN_DEBUG=QT_QKRCODECS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QKRCODECS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/codecs/libqkrcodecs.so
+-- QT_QMAKE_CHANGED=0
+-- QT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4
+-- QT_QMAKE_EXECUTABLE=/usr/bin/qmake-qt4
+-- QT_QMAKE_EXECUTABLE_LAST=/usr/bin/qmake-qt4
+-- QT_QMNG_PLUGIN_DEBUG=QT_QMNG_PLUGIN_DEBUG-NOTFOUND
+-- QT_QMNG_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqmng.so
+-- QT_QNATIVEWIFIBEARER_PLUGIN_DEBUG=QT_QNATIVEWIFIBEARER_PLUGIN_DEBUG-NOTFOUND
+-- QT_QNATIVEWIFIBEARER_PLUGIN_RELEASE=QT_QNATIVEWIFIBEARER_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLDB2_PLUGIN_DEBUG=QT_QSQLDB2_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLDB2_PLUGIN_RELEASE=QT_QSQLDB2_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLIBASE_PLUGIN_DEBUG=QT_QSQLIBASE_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLIBASE_PLUGIN_RELEASE=QT_QSQLIBASE_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLITE2_PLUGIN_DEBUG=QT_QSQLITE2_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLITE2_PLUGIN_RELEASE=QT_QSQLITE2_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLITE_PLUGIN_DEBUG=QT_QSQLITE_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLITE_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/sqldrivers/libqsqlite.so
+-- QT_QSQLMYSQL_PLUGIN_DEBUG=QT_QSQLMYSQL_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLMYSQL_PLUGIN_RELEASE=QT_QSQLMYSQL_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLOCI_PLUGIN_DEBUG=QT_QSQLOCI_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLOCI_PLUGIN_RELEASE=QT_QSQLOCI_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLODBC_PLUGIN_DEBUG=QT_QSQLODBC_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLODBC_PLUGIN_RELEASE=QT_QSQLODBC_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLPSQL_PLUGIN_DEBUG=QT_QSQLPSQL_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLPSQL_PLUGIN_RELEASE=QT_QSQLPSQL_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSQLTDS_PLUGIN_DEBUG=QT_QSQLTDS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSQLTDS_PLUGIN_RELEASE=QT_QSQLTDS_PLUGIN_RELEASE-NOTFOUND
+-- QT_QSVGICON_PLUGIN_DEBUG=QT_QSVGICON_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSVGICON_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/iconengines/libqsvgicon.so
+-- QT_QSVG_PLUGIN_DEBUG=QT_QSVG_PLUGIN_DEBUG-NOTFOUND
+-- QT_QSVG_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqsvg.so
+-- QT_QT3SUPPORTWIDGETS_PLUGIN_DEBUG=QT_QT3SUPPORTWIDGETS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QT3SUPPORTWIDGETS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libqt3supportwidgets.so
+-- QT_QT3SUPPORT_FOUND=1
+-- QT_QT3SUPPORT_INCLUDE_DIR=/usr/include/Qt3Support
+-- QT_QT3SUPPORT_LIBRARIES=optimized;/usr/lib64/libQt3Support.so;debug;/usr/lib64/libQt3Support_debug.so
+-- QT_QT3SUPPORT_LIBRARY=/usr/lib64/libQt3Support.so
+-- QT_QT3SUPPORT_LIBRARY_DEBUG=/usr/lib64/libQt3Support_debug.so
+-- QT_QT3SUPPORT_LIBRARY_RELEASE=/usr/lib64/libQt3Support.so
+-- QT_QT3SUPPORT_MODULE_DEPENDS=QTGUI;QTSQL;QTXML;QTNETWORK;QTCORE
+-- QT_QT3SUPPORT_PLUGINS=qtaccessiblecompatwidgets
+-- QT_QTACCESSIBLECOMPATWIDGETS_PLUGIN_DEBUG=QT_QTACCESSIBLECOMPATWIDGETS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTACCESSIBLECOMPATWIDGETS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/accessible/libqtaccessiblecompatwidgets.so
+-- QT_QTACCESSIBLEWIDGETS_PLUGIN_DEBUG=QT_QTACCESSIBLEWIDGETS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTACCESSIBLEWIDGETS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/accessible/libqtaccessiblewidgets.so
+-- QT_QTASSISTANTCLIENT_INCLUDE_DIR=QT_QTASSISTANTCLIENT_INCLUDE_DIR-NOTFOUND
+-- QT_QTASSISTANTCLIENT_LIBRARY=
+-- QT_QTASSISTANTCLIENT_LIBRARY_DEBUG=QT_QTASSISTANTCLIENT_LIBRARY_DEBUG-NOTFOUND
+-- QT_QTASSISTANTCLIENT_LIBRARY_RELEASE=QT_QTASSISTANTCLIENT_LIBRARY_RELEASE-NOTFOUND
+-- QT_QTASSISTANT_INCLUDE_DIR=QT_QTASSISTANT_INCLUDE_DIR-NOTFOUND
+-- QT_QTASSISTANT_LIBRARY=
+-- QT_QTASSISTANT_LIBRARY_DEBUG=QT_QTASSISTANT_LIBRARY_DEBUG-NOTFOUND
+-- QT_QTASSISTANT_LIBRARY_RELEASE=QT_QTASSISTANT_LIBRARY_RELEASE-NOTFOUND
+-- QT_QTCLUCENE_FOUND=1
+-- QT_QTCLUCENE_INCLUDE_DIR=
+-- QT_QTCLUCENE_LIBRARIES=optimized;/usr/lib64/libQtCLucene.so;debug;/usr/lib64/libQtCLucene_debug.so
+-- QT_QTCLUCENE_LIBRARY=/usr/lib64/libQtCLucene.so
+-- QT_QTCLUCENE_LIBRARY_DEBUG=/usr/lib64/libQtCLucene_debug.so
+-- QT_QTCLUCENE_LIBRARY_RELEASE=/usr/lib64/libQtCLucene.so
+-- QT_QTCORE_FOUND=1
+-- QT_QTCORE_INCLUDE_DIR=/usr/include/QtCore
+-- QT_QTCORE_LIBRARIES=optimized;/usr/lib64/libQtCore.so;debug;/usr/lib64/libQtCore_debug.so
+-- QT_QTCORE_LIBRARY=/usr/lib64/libQtCore.so
+-- QT_QTCORE_LIBRARY_DEBUG=/usr/lib64/libQtCore_debug.so
+-- QT_QTCORE_LIBRARY_RELEASE=/usr/lib64/libQtCore.so
+-- QT_QTCORE_LIB_DEPENDENCIES=
+-- QT_QTCORE_PLUGINS=qcorewlanbearer;qgenericbearer;qnativewifibearer;qcncodecs;qjpcodecs;qkrcodecs;qtwcodecs
+-- QT_QTDBUS_FOUND=1
+-- QT_QTDBUS_INCLUDE_DIR=/usr/include/QtDBus
+-- QT_QTDBUS_LIBRARIES=optimized;/usr/lib64/libQtDBus.so;debug;/usr/lib64/libQtDBus_debug.so
+-- QT_QTDBUS_LIBRARY=/usr/lib64/libQtDBus.so
+-- QT_QTDBUS_LIBRARY_DEBUG=/usr/lib64/libQtDBus_debug.so
+-- QT_QTDBUS_LIBRARY_RELEASE=/usr/lib64/libQtDBus.so
+-- QT_QTDBUS_LIB_DEPENDENCIES=
+-- QT_QTDBUS_MODULE_DEPENDS=QTXML;QTCORE
+-- QT_QTDECLARATIVE_FOUND=1
+-- QT_QTDECLARATIVE_INCLUDE_DIR=/usr/include/QtDeclarative
+-- QT_QTDECLARATIVE_LIBRARIES=optimized;/usr/lib64/libQtDeclarative.so;debug;/usr/lib64/libQtDeclarative_debug.so
+-- QT_QTDECLARATIVE_LIBRARY=/usr/lib64/libQtDeclarative.so
+-- QT_QTDECLARATIVE_LIBRARY_DEBUG=/usr/lib64/libQtDeclarative_debug.so
+-- QT_QTDECLARATIVE_LIBRARY_RELEASE=/usr/lib64/libQtDeclarative.so
+-- QT_QTDECLARATIVE_MODULE_DEPENDS=QTSCRIPT;QTSVG;QTSQL;QTXMLPATTERNS;QTGUI;QTCORE
+-- QT_QTDESIGNERCOMPONENTS_FOUND=1
+-- QT_QTDESIGNERCOMPONENTS_INCLUDE_DIR=/usr/include/QtDesigner
+-- QT_QTDESIGNERCOMPONENTS_LIBRARIES=optimized;/usr/lib64/libQtDesignerComponents.so;debug;/usr/lib64/libQtDesignerComponents_debug.so
+-- QT_QTDESIGNERCOMPONENTS_LIBRARY=/usr/lib64/libQtDesignerComponents.so
+-- QT_QTDESIGNERCOMPONENTS_LIBRARY_DEBUG=/usr/lib64/libQtDesignerComponents_debug.so
+-- QT_QTDESIGNERCOMPONENTS_LIBRARY_RELEASE=/usr/lib64/libQtDesignerComponents.so
+-- QT_QTDESIGNER_FOUND=1
+-- QT_QTDESIGNER_INCLUDE_DIR=/usr/include/QtDesigner
+-- QT_QTDESIGNER_LIBRARIES=optimized;/usr/lib64/libQtDesigner.so;debug;/usr/lib64/libQtDesigner_debug.so
+-- QT_QTDESIGNER_LIBRARY=/usr/lib64/libQtDesigner.so
+-- QT_QTDESIGNER_LIBRARY_DEBUG=/usr/lib64/libQtDesigner_debug.so
+-- QT_QTDESIGNER_LIBRARY_RELEASE=/usr/lib64/libQtDesigner.so
+-- QT_QTGA_PLUGIN_DEBUG=QT_QTGA_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTGA_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqtga.so
+-- QT_QTGUI_FOUND=1
+-- QT_QTGUI_INCLUDE_DIR=/usr/include/QtGui
+-- QT_QTGUI_LIBRARIES=optimized;/usr/lib64/libQtGui.so;debug;/usr/lib64/libQtGui_debug.so
+-- QT_QTGUI_LIBRARY=/usr/lib64/libQtGui.so
+-- QT_QTGUI_LIBRARY_DEBUG=/usr/lib64/libQtGui_debug.so
+-- QT_QTGUI_LIBRARY_RELEASE=/usr/lib64/libQtGui.so
+-- QT_QTGUI_LIB_DEPENDENCIES=
+-- QT_QTGUI_MODULE_DEPENDS=QTCORE
+-- QT_QTGUI_PLUGINS=qtaccessiblewidgets;qgif;qjpeg;qmng;qico;qsvg;qtiff;qtga;qdecorationdefault;qdecorationwindows;qgfxtransformed;qgfxvnc;qscreenvfb;qglgraphicssystem;qtracegraphicssystem;qimsw_multi;qwstslibmousehandler
+-- QT_QTHELP_FOUND=1
+-- QT_QTHELP_INCLUDE_DIR=/usr/include/QtHelp
+-- QT_QTHELP_LIBRARIES=optimized;/usr/lib64/libQtHelp.so;debug;/usr/lib64/libQtHelp_debug.so
+-- QT_QTHELP_LIBRARY=/usr/lib64/libQtHelp.so
+-- QT_QTHELP_LIBRARY_DEBUG=/usr/lib64/libQtHelp_debug.so
+-- QT_QTHELP_LIBRARY_RELEASE=/usr/lib64/libQtHelp.so
+-- QT_QTHELP_LIB_DEPENDENCIES=/usr/lib64/libQtCLucene.so
+-- QT_QTHELP_MODULE_DEPENDS=QTGUI;QTSQL;QTXML;QTNETWORK;QTCORE
+-- QT_QTIFF_PLUGIN_DEBUG=QT_QTIFF_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTIFF_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/imageformats/libqtiff.so
+-- QT_QTMOTIF_INCLUDE_DIR=QT_QTMOTIF_INCLUDE_DIR-NOTFOUND
+-- QT_QTMOTIF_LIBRARY=
+-- QT_QTMOTIF_LIBRARY_DEBUG=QT_QTMOTIF_LIBRARY_DEBUG-NOTFOUND
+-- QT_QTMOTIF_LIBRARY_RELEASE=QT_QTMOTIF_LIBRARY_RELEASE-NOTFOUND
+-- QT_QTMULTIMEDIA_FOUND=1
+-- QT_QTMULTIMEDIA_INCLUDE_DIR=/usr/include/QtMultimedia
+-- QT_QTMULTIMEDIA_LIBRARIES=optimized;/usr/lib64/libQtMultimedia.so;debug;/usr/lib64/libQtMultimedia_debug.so
+-- QT_QTMULTIMEDIA_LIBRARY=/usr/lib64/libQtMultimedia.so
+-- QT_QTMULTIMEDIA_LIBRARY_DEBUG=/usr/lib64/libQtMultimedia_debug.so
+-- QT_QTMULTIMEDIA_LIBRARY_RELEASE=/usr/lib64/libQtMultimedia.so
+-- QT_QTMULTIMEDIA_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QTNETWORK_FOUND=1
+-- QT_QTNETWORK_INCLUDE_DIR=/usr/include/QtNetwork
+-- QT_QTNETWORK_LIBRARIES=optimized;/usr/lib64/libQtNetwork.so;debug;/usr/lib64/libQtNetwork_debug.so
+-- QT_QTNETWORK_LIBRARY=/usr/lib64/libQtNetwork.so
+-- QT_QTNETWORK_LIBRARY_DEBUG=/usr/lib64/libQtNetwork_debug.so
+-- QT_QTNETWORK_LIBRARY_RELEASE=/usr/lib64/libQtNetwork.so
+-- QT_QTNETWORK_LIB_DEPENDENCIES=
+-- QT_QTNETWORK_MODULE_DEPENDS=QTCORE
+-- QT_QTNSPLUGIN_INCLUDE_DIR=QT_QTNSPLUGIN_INCLUDE_DIR-NOTFOUND
+-- QT_QTNSPLUGIN_LIBRARY=
+-- QT_QTNSPLUGIN_LIBRARY_DEBUG=QT_QTNSPLUGIN_LIBRARY_DEBUG-NOTFOUND
+-- QT_QTNSPLUGIN_LIBRARY_RELEASE=QT_QTNSPLUGIN_LIBRARY_RELEASE-NOTFOUND
+-- QT_QTOPENGL_FOUND=1
+-- QT_QTOPENGL_INCLUDE_DIR=/usr/include/QtOpenGL
+-- QT_QTOPENGL_LIBRARIES=optimized;/usr/lib64/libQtOpenGL.so;debug;/usr/lib64/libQtOpenGL_debug.so
+-- QT_QTOPENGL_LIBRARY=/usr/lib64/libQtOpenGL.so
+-- QT_QTOPENGL_LIBRARY_DEBUG=/usr/lib64/libQtOpenGL_debug.so
+-- QT_QTOPENGL_LIBRARY_RELEASE=/usr/lib64/libQtOpenGL.so
+-- QT_QTOPENGL_LIB_DEPENDENCIES=
+-- QT_QTOPENGL_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QTRACEGRAPHICSSYSTEM_PLUGIN_DEBUG=QT_QTRACEGRAPHICSSYSTEM_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTRACEGRAPHICSSYSTEM_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/graphicssystems/libqtracegraphicssystem.so
+-- QT_QTSCRIPTDBUS_PLUGIN_DEBUG=QT_QTSCRIPTDBUS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTSCRIPTDBUS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/script/libqtscriptdbus.so
+-- QT_QTSCRIPTTOOLS_FOUND=1
+-- QT_QTSCRIPTTOOLS_INCLUDE_DIR=/usr/include/QtScriptTools
+-- QT_QTSCRIPTTOOLS_LIBRARIES=optimized;/usr/lib64/libQtScriptTools.so;debug;/usr/lib64/libQtScriptTools_debug.so
+-- QT_QTSCRIPTTOOLS_LIBRARY=/usr/lib64/libQtScriptTools.so
+-- QT_QTSCRIPTTOOLS_LIBRARY_DEBUG=/usr/lib64/libQtScriptTools_debug.so
+-- QT_QTSCRIPTTOOLS_LIBRARY_RELEASE=/usr/lib64/libQtScriptTools.so
+-- QT_QTSCRIPTTOOLS_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QTSCRIPT_FOUND=1
+-- QT_QTSCRIPT_INCLUDE_DIR=/usr/include/QtScript
+-- QT_QTSCRIPT_LIBRARIES=optimized;/usr/lib64/libQtScript.so;debug;/usr/lib64/libQtScript_debug.so
+-- QT_QTSCRIPT_LIBRARY=/usr/lib64/libQtScript.so
+-- QT_QTSCRIPT_LIBRARY_DEBUG=/usr/lib64/libQtScript_debug.so
+-- QT_QTSCRIPT_LIBRARY_RELEASE=/usr/lib64/libQtScript.so
+-- QT_QTSCRIPT_MODULE_DEPENDS=QTCORE
+-- QT_QTSCRIPT_PLUGINS=qtscriptdbus
+-- QT_QTSQL_FOUND=1
+-- QT_QTSQL_INCLUDE_DIR=/usr/include/QtSql
+-- QT_QTSQL_LIBRARIES=optimized;/usr/lib64/libQtSql.so;debug;/usr/lib64/libQtSql_debug.so
+-- QT_QTSQL_LIBRARY=/usr/lib64/libQtSql.so
+-- QT_QTSQL_LIBRARY_DEBUG=/usr/lib64/libQtSql_debug.so
+-- QT_QTSQL_LIBRARY_RELEASE=/usr/lib64/libQtSql.so
+-- QT_QTSQL_MODULE_DEPENDS=QTCORE
+-- QT_QTSQL_PLUGINS=qsqldb2;qsqlibase;qsqlite;qsqlite2;qsqlmysql;qsqloci;qsqlodbc;qsqlpsql;qsqltds
+-- QT_QTSVG_FOUND=1
+-- QT_QTSVG_INCLUDE_DIR=/usr/include/QtSvg
+-- QT_QTSVG_LIBRARIES=optimized;/usr/lib64/libQtSvg.so;debug;/usr/lib64/libQtSvg_debug.so
+-- QT_QTSVG_LIBRARY=/usr/lib64/libQtSvg.so
+-- QT_QTSVG_LIBRARY_DEBUG=/usr/lib64/libQtSvg_debug.so
+-- QT_QTSVG_LIBRARY_RELEASE=/usr/lib64/libQtSvg.so
+-- QT_QTSVG_MODULE_DEPENDS=QTGUI;QTCORE
+-- QT_QTSVG_PLUGINS=qsvg;qsvgicon
+-- QT_QTTEST_FOUND=1
+-- QT_QTTEST_INCLUDE_DIR=/usr/include/QtTest
+-- QT_QTTEST_LIBRARIES=optimized;/usr/lib64/libQtTest.so;debug;/usr/lib64/libQtTest_debug.so
+-- QT_QTTEST_LIBRARY=/usr/lib64/libQtTest.so
+-- QT_QTTEST_LIBRARY_DEBUG=/usr/lib64/libQtTest_debug.so
+-- QT_QTTEST_LIBRARY_RELEASE=/usr/lib64/libQtTest.so
+-- QT_QTTEST_MODULE_DEPENDS=QTCORE
+-- QT_QTUITOOLS_FOUND=1
+-- QT_QTUITOOLS_INCLUDE_DIR=/usr/include/QtUiTools
+-- QT_QTUITOOLS_LIBRARIES=optimized;/usr/lib64/libQtUiTools.a;debug;/usr/lib64/libQtUiTools_debug.a
+-- QT_QTUITOOLS_LIBRARY=/usr/lib64/libQtUiTools.a
+-- QT_QTUITOOLS_LIBRARY_DEBUG=/usr/lib64/libQtUiTools_debug.a
+-- QT_QTUITOOLS_LIBRARY_RELEASE=/usr/lib64/libQtUiTools.a
+-- QT_QTUITOOLS_MODULE_DEPENDS=QTGUI;QTXML;QTCORE
+-- QT_QTWCODECS_PLUGIN_DEBUG=QT_QTWCODECS_PLUGIN_DEBUG-NOTFOUND
+-- QT_QTWCODECS_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/codecs/libqtwcodecs.so
+-- QT_QTWEBKIT_INCLUDE_DIR=QT_QTWEBKIT_INCLUDE_DIR-NOTFOUND
+-- QT_QTWEBKIT_LIBRARY=
+-- QT_QTWEBKIT_LIBRARY_DEBUG=QT_QTWEBKIT_LIBRARY_DEBUG-NOTFOUND
+-- QT_QTWEBKIT_LIBRARY_RELEASE=QT_QTWEBKIT_LIBRARY_RELEASE-NOTFOUND
+-- QT_QTWEBKIT_MODULE_DEPENDS=QTXMLPATTERNS;QTGUI;QTCORE
+-- QT_QTXMLPATTERNS_FOUND=1
+-- QT_QTXMLPATTERNS_INCLUDE_DIR=/usr/include/QtXmlPatterns
+-- QT_QTXMLPATTERNS_LIBRARIES=optimized;/usr/lib64/libQtXmlPatterns.so;debug;/usr/lib64/libQtXmlPatterns_debug.so
+-- QT_QTXMLPATTERNS_LIBRARY=/usr/lib64/libQtXmlPatterns.so
+-- QT_QTXMLPATTERNS_LIBRARY_DEBUG=/usr/lib64/libQtXmlPatterns_debug.so
+-- QT_QTXMLPATTERNS_LIBRARY_RELEASE=/usr/lib64/libQtXmlPatterns.so
+-- QT_QTXMLPATTERNS_MODULE_DEPENDS=QTNETWORK;QTCORE
+-- QT_QTXML_FOUND=1
+-- QT_QTXML_INCLUDE_DIR=/usr/include/QtXml
+-- QT_QTXML_LIBRARIES=optimized;/usr/lib64/libQtXml.so;debug;/usr/lib64/libQtXml_debug.so
+-- QT_QTXML_LIBRARY=/usr/lib64/libQtXml.so
+-- QT_QTXML_LIBRARY_DEBUG=/usr/lib64/libQtXml_debug.so
+-- QT_QTXML_LIBRARY_RELEASE=/usr/lib64/libQtXml.so
+-- QT_QTXML_MODULE_DEPENDS=QTCORE
+-- QT_QT_LIBRARY=
+-- QT_QWEBVIEW_PLUGIN_DEBUG=QT_QWEBVIEW_PLUGIN_DEBUG-NOTFOUND
+-- QT_QWEBVIEW_PLUGIN_RELEASE=QT_QWEBVIEW_PLUGIN_RELEASE-NOTFOUND
+-- QT_QWSTSLIBMOUSEHANDLER_PLUGIN_DEBUG=QT_QWSTSLIBMOUSEHANDLER_PLUGIN_DEBUG-NOTFOUND
+-- QT_QWSTSLIBMOUSEHANDLER_PLUGIN_RELEASE=QT_QWSTSLIBMOUSEHANDLER_PLUGIN_RELEASE-NOTFOUND
+-- QT_RCC_EXECUTABLE=/usr/lib64/qt4/bin/rcc
+-- QT_SCRIPT_PLUGINS=qtscriptdbus
+-- QT_SCRIPT_PLUGINS_DIR=/usr/lib64/qt4/plugins/script
+-- QT_SQLDRIVERS_PLUGINS=qsqldb2;qsqlibase;qsqlite;qsqlite2;qsqlmysql;qsqloci;qsqlodbc;qsqlpsql;qsqltds
+-- QT_SQLDRIVERS_PLUGINS_DIR=/usr/lib64/qt4/plugins/sqldrivers
+-- QT_TASKMENUEXTENSION_PLUGIN_DEBUG=QT_TASKMENUEXTENSION_PLUGIN_DEBUG-NOTFOUND
+-- QT_TASKMENUEXTENSION_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libtaskmenuextension.so
+-- QT_TRANSLATIONS_DIR=/usr/share/qt4/translations
+-- QT_UIC3_EXECUTABLE=/usr/lib64/qt4/bin/uic3
+-- QT_UIC_EXE=/usr/lib64/qt4/bin/uic-qt4
+-- QT_UIC_EXECUTABLE=/usr/lib64/qt4/bin/uic-qt4
+-- QT_USE_FILE=/usr/share/cmake3/Modules/UseQt4.cmake
+-- QT_USE_QTCORE=1
+-- QT_USE_QTCORE_DEPENDS=1
+-- QT_USE_QTGUI=1
+-- QT_VERSION_MAJOR=4
+-- QT_VERSION_MINOR=8
+-- QT_VERSION_PATCH=7
+-- QT_WORLDTIMECLOCKPLUGIN_PLUGIN_DEBUG=QT_WORLDTIMECLOCKPLUGIN_PLUGIN_DEBUG-NOTFOUND
+-- QT_WORLDTIMECLOCKPLUGIN_PLUGIN_RELEASE=/usr/lib64/qt4/plugins/designer/libworldtimeclockplugin.so
+-- QT_WRAP_CPP=YES
+-- QT_WRAP_UI=YES
+-- Q_WS_MAC=
+-- Q_WS_QWS=
+-- Q_WS_WIN=
+-- Q_WS_X11=1
+-- Qt4_FOUND=TRUE
+-- QtApp_RCCS=qt_cube.qrc
+-- QtApp_RCC_SRCS=/opt/qtcube/build/qrc_qt_cube.cxx
+-- RSFINCDIR=RSFINCDIR-NOTFOUND
+-- RUN_CONFIGURE=ON
+-- SAFE_CMAKE_REQUIRED_DEFINITIONS=
+-- TBB_DEFINITIONS=
+-- TBB_DEFINITIONS_DEBUG=-DTBB_USE_DEBUG=1
+-- TBB_DEFINITIONS_RELEASE=
+-- TBB_FOUND=TRUE
+-- TBB_INCLUDE_DIRS=/usr/include
+-- TBB_INTERFACE_VERSION=6103
+-- TBB_LIBRARIES=/usr/lib64/libtbb.so
+-- TBB_LIBRARIES=/usr/lib64/libtbb.so
+-- TBB_LIBRARIES_RELEASE=/usr/lib64/libtbb.so
+-- TBB_SEARCH_COMPOMPONENTS=tbb_preview;tbbmalloc;tbb
+-- TBB_VERSION=4.1
+-- TBB_VERSION_MAJOR=4
+-- TBB_VERSION_MINOR=1
+-- TBB_tbb_FOUND=TRUE
+-- TBB_tbb_LIBRARY=/usr/lib64/libtbb.so
+-- TBB_tbb_LIBRARY=/usr/lib64/libtbb.so
+-- TBB_tbb_LIBRARY_DEBUG=TBB_tbb_LIBRARY_DEBUG-NOTFOUND
+-- TBB_tbb_LIBRARY_RELEASE=/usr/lib64/libtbb.so
+-- UNIX=1
+-- ZFP_INCLUDE_DIR=ZFP_INCLUDE_DIR-NOTFOUND
+-- ZFP_LIBRARY=ZFP_LIBRARY-NOTFOUND
+-- _Boost_COMPONENTS_SEARCHED=program_options;unit_test_framework
+-- _Boost_INCLUDE_DIR_LAST=/usr/include
+-- _Boost_LIBRARY_DIR_DEBUG_LAST=/usr/lib64
+-- _Boost_LIBRARY_DIR_RELEASE_LAST=/usr/lib64
+-- _Boost_NAMESPACE_LAST=boost
+-- _Boost_USE_MULTITHREADED_LAST=TRUE
+-- _CMAKE_CXX_IPO_MAY_BE_SUPPORTED_BY_COMPILER=YES
+-- _CMAKE_CXX_IPO_SUPPORTED_BY_CMAKE=YES
+-- _CMAKE_C_IPO_MAY_BE_SUPPORTED_BY_COMPILER=YES
+-- _CMAKE_C_IPO_SUPPORTED_BY_CMAKE=YES
+-- _CMAKE_INSTALL_DIR=/usr
+-- _CMAKE_PUSH_CHECK_STATE_COUNTER=0
+-- _CMAKE_TOOLCHAIN_LOCATION=/usr/bin
+-- _CMAKE_USER_LINKER_PATH=/usr/bin
+-- _DEPEND=
+-- _FAIL_REGEX=command line option .* is valid for .* but not for C\+\+;[Uu]nrecogni[sz]ed .*option;unknown .*option;optimization flag .* not supported;unknown argument ignored;ignoring unknown option;warning D9002;option.*not supported;invalid argument .*option;ignoring option .*argument required;ignoring option .*argument is of wrong type;[Uu]nknown option;[Ww]arning: [Oo]ption;command option .* is not recognized;command option .* contains an incorrect subargument;Option .* is not recognized.  Option will be ignored.;not supported in this configuration. ignored;File with unknown suffix passed to linker;[Uu]nknown switch;WARNING: unknown flag:;Incorrect command line option:;Warning: illegal option;[Ww]arning: Invalid suboption
+-- _INCLUDED_FILE=/usr/share/cmake3/Modules/Platform/Linux-GNU-CXX.cmake
+-- _INCLUDED_SYSTEM_INFO_FILE=/usr/share/cmake3/Modules/Platform/Linux.cmake
+-- _IN_TC=0
+-- _Python_NAMES=python3
+-- _Python_VERSIONS=;;3.8;3.7;3.6;3.5;3.4;3.3;3.2;3.1;3.0
+-- _QT4_DOING_OPTIONS=FALSE
+-- _QT4_DOING_TARGET=FALSE
+-- _QT4_FOUND_REQUIRED_VARS=QT_QMAKE_EXECUTABLE;QT_MOC_EXECUTABLE;QT_RCC_EXECUTABLE;QT_UIC_EXECUTABLE;QT_INCLUDE_DIR;QT_LIBRARY_DIR;QT_QTCORE_LIBRARY
+-- _QT4_QMAKE_NAMES=qmake;qmake4;qmake-qt4;qmake-mac
+-- _RC_DEPENDS=/opt/qtcube/src/images/about.png;/opt/qtcube/src/images/across-arrow.png;/opt/qtcube/src/images/back-play.png;/opt/qtcube/src/images/qt_cube.icns;/opt/qtcube/src/images/back.png;/opt/qtcube/src/images/back-start.png;/opt/qtcube/src/images/blob-clear.png;/opt/qtcube/src/images/blob.png;/opt/qtcube/src/images/blob-undo.png;/opt/qtcube/src/images/clear.png;/opt/qtcube/src/images/corner.png;/opt/qtcube/src/images/deep-arrow.png;/opt/qtcube/src/images/down-arrow.png;/opt/qtcube/src/images/big.png;/opt/qtcube/src/images/small.png;/opt/qtcube/src/images/down.png;/opt/qtcube/src/images/even-cube.png;/opt/qtcube/src/images/forward-end.png;/opt/qtcube/src/images/forward-play.png;/opt/qtcube/src/images/forward.png;/opt/qtcube/src/images/home.png;/opt/qtcube/src/images/interpolate.png;/opt/qtcube/src/images/interpolate-undo.png;/opt/qtcube/src/images/middle-move.png;/opt/qtcube/src/images/middle.png;/opt/qtcube/src/images/movie.png;/opt/qtcube/src/images/open.png;/opt/qtcube/src/images/picks-far.png;/opt/qtcube/src/images/picks-fix.png;/opt/qtcube/src/images/picks-large.png;/opt/qtcube/src/images/picks-near.png;/opt/qtcube/src/images/picks-small.png;/opt/qtcube/src/images/redo.png;/opt/qtcube/src/images/refresh.png;/opt/qtcube/src/images/ricksep.png;/opt/qtcube/src/images/sample.png;/opt/qtcube/src/images/save.png;/opt/qtcube/src/images/stop.png;/opt/qtcube/src/images/true-cube.png;/opt/qtcube/src/images/undo.png;/opt/qtcube/src/images/up.png
+-- _RC_FILE=
+-- _SET_CMAKE_CXX_COMPILER_ARCHITECTURE_ID=
+-- _SET_CMAKE_C_COMPILER_ARCHITECTURE_ID=
+-- __COMPILER_CMAKE_COMMON_COMPILER_MACROS=1
+-- __COMPILER_GNU=1
+-- __LINUX_COMPILER_GNU=1
+-- __UNIX_PATHS_INCLUDED=1
+-- __gcc_hints=/usr/bin
+-- __lto_flags=-flto;-fno-fat-lto-objects
+-- __version_x=4
+-- __version_x_y=4.8
+-- _binlength=17
+-- _checkinfile=/opt/qtcube/src/q
+-- _comp=
+-- _config=
+-- _currentArg=
+-- _infileLength=27
+-- _isMultiConfig=0
+-- _key=FAIL_REGEX
+-- _location=/usr/lib64/libQtDesignerComponents_debug.so
+-- _outfile=qt_cube
+-- _qconfig_FILE_contents=#configuration
+CONFIG +=  shared def_files_disabled exceptions no_mocdepend release stl qt_no_framework
+QT_ARCH = x86_64
+QT_EDITION = OpenSource
+QT_CONFIG +=  minimal-config small-config medium-config large-config full-config qt3support phonon phonon-backend accessibility opengl shared reduce_exports reduce_relocations ipv6 clock-gettime clock-monotonic mremap getaddrinfo ipv6ifname getifaddrs inotify system-jpeg system-mng system-png png system-tiff system-freetype system-zlib nis cups iconv glib gstreamer dbus dbus-linked openssl-linked x11sm xshape xvideo xsync xinerama xcursor xfixes xrandr xrender mitshm fontconfig xinput tablet xkb alsa pulseaudio icu concurrent xmlpatterns multimedia audio-backend svg script scripttools declarative release
+
+#versioning
+QT_VERSION = 4.8.7
+QT_MAJOR_VERSION = 4
+QT_MINOR_VERSION = 8
+QT_PATCH_VERSION = 7
+
+#namespaces
+QT_LIBINFIX = 
+QT_NAMESPACE = 
+QT_NAMESPACE_MAC_CRC = 
+
+QT_GCC_MAJOR_VERSION = 4
+QT_GCC_MINOR_VERSION = 8
+QT_GCC_PATCH_VERSION = 5
+
+-- _qconfig_qt_libinfix=QT_LIBINFIX = 
+-- _qt4_current_dir=/usr/share/cmake3/Modules
+-- _regex=
+-- _stemname=DESIGNERCOMPONENTS
+-- _tbb_version_file=/*
+    Copyright 2005-2013 Intel Corporation.  All Rights Reserved.
+
+    This file is part of Threading Building Blocks.
+
+    Threading Building Blocks is free software; you can redistribute it
+    and/or modify it under the terms of the GNU General Public License
+    version 2 as published by the Free Software Foundation.
+
+    Threading Building Blocks is distributed in the hope that it will be
+    useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+    of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Threading Building Blocks; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+    As a special exception, you may use this file as part of a free software
+    library without restriction.  Specifically, if other files instantiate
+    templates or use macros or inline functions from this file, or you compile
+    this file and link it with other files to produce an executable, this
+    file does not by itself cause the resulting executable to be covered by
+    the GNU General Public License.  This exception does not however
+    invalidate any other reasons why the executable file might be covered by
+    the GNU General Public License.
+*/
+
+#ifndef __TBB_tbb_stddef_H
+#define __TBB_tbb_stddef_H
+
+// Marketing-driven product version
+#define TBB_VERSION_MAJOR 4
+#define TBB_VERSION_MINOR 1
+
+// Engineering-focused interface version
+#define TBB_INTERFACE_VERSION 6103
+#define TBB_INTERFACE_VERSION_MAJOR TBB_INTERFACE_VERSION/1000
+
+// The oldest major interface version still supported
+// To be used in SONAME, manifests, etc.
+#define TBB_COMPATIBLE_INTERFACE_VERSION 2
+
+#define __TBB_STRING_AUX(x) #x
+#define __TBB_STRING(x) __TBB_STRING_AUX(x)
+
+// We do not need defines below for resource processing on windows
+#if !defined RC_INVOKED
+
+// Define groups for Doxygen documentation
+/**
+ * @defgroup algorithms         Algorithms
+ * @defgroup containers         Containers
+ * @defgroup memory_allocation  Memory Allocation
+ * @defgroup synchronization    Synchronization
+ * @defgroup timing             Timing
+ * @defgroup task_scheduling    Task Scheduling
+ */
+
+// Simple text that is displayed on the main page of Doxygen documentation.
+/**
+ * \mainpage Main Page
+ *
+ * Click the tabs above for information about the
+ * - <a href="./modules.html">Modules</a> (groups of functionality) implemented by the library 
+ * - <a href="./annotated.html">Classes</a> provided by the library
+ * - <a href="./files.html">Files</a> constituting the library.
+ * .
+ * Please note that significant part of TBB functionality is implemented in the form of
+ * template functions, descriptions of which are not accessible on the <a href="./annotated.html">Classes</a>
+ * tab. Use <a href="./modules.html">Modules</a> or <a href="./namespacemembers.html">Namespace/Namespace Members</a>
+ * tabs to find them.
+ *
+ * Additional pieces of information can be found here
+ * - \subpage concepts
+ * .
+ */
+
+/** \page concepts TBB concepts
+    
+    A concept is a set of requirements to a type, which are necessary and sufficient
+    for the type to model a particular behavior or a set of behaviors. Some concepts 
+    are specific to a particular algorithm (e.g. algorithm body), while other ones 
+    are common to several algorithms (e.g. range concept). 
+
+    All TBB algorithms make use of different classes implementing various concepts.
+    Implementation classes are supplied by the user as type arguments of template 
+    parameters and/or as objects passed as function call arguments. The library 
+    provides predefined  implementations of some concepts (e.g. several kinds of 
+    \ref range_req "ranges"), while other ones must always be implemented by the user. 
+    
+    TBB defines a set of minimal requirements each concept must conform to. Here is 
+    the list of different concepts hyperlinked to the corresponding requirements specifications:
+    - \subpage range_req
+    - \subpage parallel_do_body_req
+    - \subpage parallel_for_body_req
+    - \subpage parallel_reduce_body_req
+    - \subpage parallel_scan_body_req
+    - \subpage parallel_sort_iter_req
+**/
+
+// tbb_config.h should be included the first since it contains macro definitions used in other headers
+#include "tbb_config.h"
+
+#if _MSC_VER >=1400
+    #define __TBB_EXPORTED_FUNC   __cdecl
+    #define __TBB_EXPORTED_METHOD __thiscall
+#else
+    #define __TBB_EXPORTED_FUNC
+    #define __TBB_EXPORTED_METHOD
+#endif
+
+#if __INTEL_COMPILER || _MSC_VER
+#define __TBB_NOINLINE(decl) __declspec(noinline) decl
+#elif __GNUC__
+#define __TBB_NOINLINE(decl) decl __attribute__ ((noinline))
+#else
+#define __TBB_NOINLINE(decl) decl
+#endif
+
+#include <cstddef>      /* Need size_t and ptrdiff_t */
+
+#if _MSC_VER
+    #define __TBB_tbb_windef_H
+    #include "internal/_tbb_windef.h"
+    #undef __TBB_tbb_windef_H
+#endif
+#if !defined(_MSC_VER) || _MSC_VER>=1600
+    #include <stdint.h>
+#endif
+
+//! Type for an assertion handler
+typedef void(*assertion_handler_type)( const char* filename, int line, const char* expression, const char * comment );
+
+#if TBB_USE_ASSERT
+
+     #define __TBB_ASSERT_NS(predicate,message,ns) ((predicate)?((void)0) : ns::assertion_failure(__FILE__,__LINE__,#predicate,message))
+    //! Assert that x is true.
+    /** If x is false, print assertion failure message.  
+        If the comment argument is not NULL, it is printed as part of the failure message.  
+        The comment argument has no other effect. */
+#if __TBBMALLOC_BUILD
+namespace rml { namespace internal {
+    #define __TBB_ASSERT(predicate,message) __TBB_ASSERT_NS(predicate,message,rml::internal)
+#else
+namespace tbb {
+    #define __TBB_ASSERT(predicate,message) __TBB_ASSERT_NS(predicate,message,tbb)
+#endif
+
+    #define __TBB_ASSERT_EX __TBB_ASSERT
+
+    //! Set assertion handler and return previous value of it.
+    assertion_handler_type __TBB_EXPORTED_FUNC set_assertion_handler( assertion_handler_type new_handler );
+
+    //! Process an assertion failure.
+    /** Normally called from __TBB_ASSERT macro.
+        If assertion handler is null, print message for assertion failure and abort.
+        Otherwise call the assertion handler. */
+    void __TBB_EXPORTED_FUNC assertion_failure( const char* filename, int line, const char* expression, const char* comment );
+
+#if __TBBMALLOC_BUILD
+}}  // namespace rml::internal
+#else
+} // namespace tbb
+#endif
+#else /* !TBB_USE_ASSERT */
+
+    //! No-op version of __TBB_ASSERT.
+    #define __TBB_ASSERT(predicate,comment) ((void)0)
+    //! "Extended" version is useful to suppress warnings if a variable is only used with an assert
+    #define __TBB_ASSERT_EX(predicate,comment) ((void)(1 && (predicate)))
+
+#endif /* !TBB_USE_ASSERT */
+
+//! The namespace tbb contains all components of the library.
+namespace tbb {
+
+#if _MSC_VER && _MSC_VER<1600
+    namespace internal {
+        typedef __int8 int8_t;
+        typedef __int16 int16_t;
+        typedef __int32 int32_t;
+        typedef __int64 int64_t;
+        typedef unsigned __int8 uint8_t;
+        typedef unsigned __int16 uint16_t;
+        typedef unsigned __int32 uint32_t;
+        typedef unsigned __int64 uint64_t;
+    } // namespace internal
+#else /* Posix */
+    namespace internal {
+        using ::int8_t;
+        using ::int16_t;
+        using ::int32_t;
+        using ::int64_t;
+        using ::uint8_t;
+        using ::uint16_t;
+        using ::uint32_t;
+        using ::uint64_t;
+    } // namespace internal
+#endif /* Posix */
+
+    using std::size_t;
+    using std::ptrdiff_t;
+
+//! The function returns the interface version of the TBB shared library being used.
+/**
+ * The version it returns is determined at runtime, not at compile/link time.
+ * So it can be different than the value of TBB_INTERFACE_VERSION obtained at compile time.
+ */
+extern "C" int __TBB_EXPORTED_FUNC TBB_runtime_interface_version();
+
+//! Dummy type that distinguishes splitting constructor from copy constructor.
+/**
+ * See description of parallel_for and parallel_reduce for example usages.
+ * @ingroup algorithms
+ */
+class split {
+};
+
+/**
+ * @cond INTERNAL
+ * @brief Identifiers declared inside namespace internal should never be used directly by client code.
+ */
+namespace internal {
+
+//! Compile-time constant that is upper bound on cache line/sector size.
+/** It should be used only in situations where having a compile-time upper 
+    bound is more useful than a run-time exact answer.
+    @ingroup memory_allocation */
+const size_t NFS_MaxLineSize = 128;
+
+/** Label for data that may be accessed from different threads, and that may eventually become wrapped
+    in a formal atomic type.
+    
+    Note that no problems have yet been observed relating to the definition currently being empty,
+    even if at least "volatile" would seem to be in order to avoid data sometimes temporarily hiding
+    in a register (although "volatile" as a "poor man's atomic" lacks several other features of a proper
+    atomic, some of which are now provided instead through specialized functions).
+
+    Note that usage is intentionally compatible with a definition as qualifier "volatile",
+    both as a way to have the compiler help enforce use of the label and to quickly rule out
+    one potential issue.
+
+    Note however that, with some architecture/compiler combinations, e.g. on IA-64, "volatile" 
+    also has non-portable memory semantics that are needlessly expensive for "relaxed" operations.
+
+    Note that this must only be applied to data that will not change bit patterns when cast to/from
+    an integral type of the same length; tbb::atomic must be used instead for, e.g., floating-point types.
+
+    TODO: apply wherever relevant **/
+#define __TBB_atomic // intentionally empty, see above
+
+template<class T, int S>
+struct padded_base : T {
+    char pad[NFS_MaxLineSize - sizeof(T) % NFS_MaxLineSize];
+};
+template<class T> struct padded_base<T, 0> : T {};
+
+//! Pads type T to fill out to a multiple of cache line size.
+template<class T>
+struct padded : padded_base<T, sizeof(T)> {};
+
+//! Extended variant of the standard offsetof macro
+/** The standard offsetof macro is not sufficient for TBB as it can be used for
+    POD-types only. The constant 0x1000 (not NULL) is necessary to appease GCC. **/
+#define __TBB_offsetof(class_name, member_name) \
+    ((ptrdiff_t)&(reinterpret_cast<class_name*>(0x1000)->member_name) - 0x1000)
+
+//! Returns address of the object containing a member with the given name and address
+#define __TBB_get_object_ref(class_name, member_name, member_addr) \
+    (*reinterpret_cast<class_name*>((char*)member_addr - __TBB_offsetof(class_name, member_name)))
+
+//! Throws std::runtime_error with what() returning error_code description prefixed with aux_info
+void __TBB_EXPORTED_FUNC handle_perror( int error_code, const char* aux_info );
+
+#if TBB_USE_EXCEPTIONS
+    #define __TBB_TRY try
+    #define __TBB_CATCH(e) catch(e)
+    #define __TBB_THROW(e) throw e
+    #define __TBB_RETHROW() throw
+#else /* !TBB_USE_EXCEPTIONS */
+    inline bool __TBB_false() { return false; }
+    #define __TBB_TRY
+    #define __TBB_CATCH(e) if ( tbb::internal::__TBB_false() )
+    #define __TBB_THROW(e) ((void)0)
+    #define __TBB_RETHROW() ((void)0)
+#endif /* !TBB_USE_EXCEPTIONS */
+
+//! Report a runtime warning.
+void __TBB_EXPORTED_FUNC runtime_warning( const char* format, ... );
+
+#if TBB_USE_ASSERT
+static void* const poisoned_ptr = reinterpret_cast<void*>(-1);
+
+//! Set p to invalid pointer value.
+template<typename T>
+inline void poison_pointer( T*& p ) { p = reinterpret_cast<T*>(poisoned_ptr); }
+
+/** Expected to be used in assertions only, thus no empty form is defined. **/
+template<typename T>
+inline bool is_poisoned( T* p ) { return p == reinterpret_cast<T*>(poisoned_ptr); }
+#else
+template<typename T>
+inline void poison_pointer( T* ) {/*do nothing*/}
+#endif /* !TBB_USE_ASSERT */
+
+//! Cast pointer from U* to T.
+/** This method should be used sparingly as a last resort for dealing with 
+    situations that inherently break strict ISO C++ aliasing rules. */
+template<typename T, typename U> 
+inline T punned_cast( U* ptr ) {
+    uintptr_t x = reinterpret_cast<uintptr_t>(ptr);
+    return reinterpret_cast<T>(x);
+}
+
+//! Base class for types that should not be assigned.
+class no_assign {
+    // Deny assignment
+    void operator=( const no_assign& );
+public:
+#if __GNUC__
+    //! Explicitly define default construction, because otherwise gcc issues gratuitous warning.
+    no_assign() {}
+#endif /* __GNUC__ */
+};
+
+//! Base class for types that should not be copied or assigned.
+class no_copy: no_assign {
+    //! Deny copy construction
+    no_copy( const no_copy& );
+public:
+    //! Allow default construction
+    no_copy() {}
+};
+
+//! Class for determining type of std::allocator<T>::value_type.
+template<typename T>
+struct allocator_type {
+    typedef T value_type;
+};
+
+#if _MSC_VER
+//! Microsoft std::allocator has non-standard extension that strips const from a type. 
+template<typename T>
+struct allocator_type<const T> {
+    typedef T value_type;
+};
+#endif
+
+//! A template to select either 32-bit or 64-bit constant as compile time, depending on machine word size.
+template <unsigned u, unsigned long long ull >
+struct select_size_t_constant {
+    //Explicit cast is needed to avoid compiler warnings about possible truncation.
+    //The value of the right size,   which is selected by ?:, is anyway not truncated or promoted.
+    static const size_t value = (size_t)((sizeof(size_t)==sizeof(u)) ? u : ull);
+};
+
+//! A function to check if passed in pointer is aligned on a specific border
+template<typename T>
+inline bool is_aligned(T* pointer, uintptr_t alignment) {
+    return 0==((uintptr_t)pointer & (alignment-1));
+}
+
+//! A function to check if passed integer is a power of 2
+template<typename integer_type>
+inline bool is_power_of_two(integer_type arg) {
+    return arg && (0 == (arg & (arg - 1)));
+}
+
+//! A function to compute arg modulo divisor where divisor is a power of 2.
+template<typename argument_integer_type, typename divisor_integer_type>
+inline argument_integer_type modulo_power_of_two(argument_integer_type arg, divisor_integer_type divisor) {
+    // Divisor is assumed to be a power of two (which is valid for current uses).
+    __TBB_ASSERT( is_power_of_two(divisor), "Divisor should be a power of two" );
+    return (arg & (divisor - 1));
+}
+
+
+//! A function to determine if "arg is a multiplication of a number and a power of 2".
+// i.e. for strictly positive i and j, with j a power of 2,
+// determines whether i==j<<k for some nonnegative k (so i==j yields true).
+template<typename argument_integer_type, typename divisor_integer_type>
+inline bool is_power_of_two_factor(argument_integer_type arg, divisor_integer_type divisor) {
+    // Divisor is assumed to be a power of two (which is valid for current uses).
+    __TBB_ASSERT( is_power_of_two(divisor), "Divisor should be a power of two" );
+    return 0 == (arg & (arg - divisor));
+}
+
+// Struct to be used as a version tag for inline functions.
+/** Version tag can be necessary to prevent loader on Linux from using the wrong 
+    symbol in debug builds (when inline functions are compiled as out-of-line). **/
+struct version_tag_v3 {};
+
+typedef version_tag_v3 version_tag;
+
+} // internal
+//! @endcond
+
+} // tbb
+
+namespace tbb { namespace internal {
+template <bool condition>
+struct STATIC_ASSERTION_FAILED;
+
+template <>
+struct STATIC_ASSERTION_FAILED<false> { enum {value=1};};
+
+template<>
+struct STATIC_ASSERTION_FAILED<true>; //intentionally left undefined to cause compile time error
+}} // namespace tbb { namespace internal {
+
+#if    __TBB_STATIC_ASSERT_PRESENT
+#define __TBB_STATIC_ASSERT(condition,msg) static_assert(condition,msg)
+#else
+//please note condition is intentionally inverted to get a bit more understandable error msg
+#define __TBB_STATIC_ASSERT_IMPL1(condition,msg,line)       \
+    enum {static_assert_on_line_##line = tbb::internal::STATIC_ASSERTION_FAILED<!(condition)>::value}
+
+#define __TBB_STATIC_ASSERT_IMPL(condition,msg,line) __TBB_STATIC_ASSERT_IMPL1(condition,msg,line)
+//! Verify at compile time that passed in condition is hold
+#define __TBB_STATIC_ASSERT(condition,msg) __TBB_STATIC_ASSERT_IMPL(condition,msg,__LINE__)
+#endif
+
+#endif /* RC_INVOKED */
+#endif /* __TBB_tbb_stddef_H */
+
+-- _upper_qt_module=QTMOTIF
+-- _upper_qt_plugin=QSQLTDS
+-- _upper_qt_plugin_type=SQLDRIVERS
+-- arg=
+-- basename=QTDESIGNERCOMPONENTS
+-- depend_module=
+-- f=
+-- genericIO-envModules_BINARY_DIR=/opt/qtcube/build/external/genericIO/env-modules
+-- genericIO-envModules_SOURCE_DIR=/opt/qtcube/src/external/genericIO/env-modules
+-- genericIO_CONSIDERED_CONFIGS=
+-- genericIO_CONSIDERED_VERSIONS=
+-- genericIO_DIR=genericIO_DIR-NOTFOUND
+-- genericIO_FOUND=0
+-- hypercube-python_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector/external/hypercube/env-modules
+-- hypercube-python_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector/external/hypercube/env-modules
+-- hypercube_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector/external/hypercube/lib
+-- hypercube_CONSIDERED_CONFIGS=
+-- hypercube_CONSIDERED_VERSIONS=
+-- hypercube_DIR=hypercube_DIR-NOTFOUND
+-- hypercube_FOUND=0
+-- hypercube_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector/external/hypercube/lib
+-- infile=/opt/qtcube/src/qt_cube.qrc
+-- it=
+-- l=
+-- module=
+-- out_depends=/opt/qtcube/build/qt_cube.qrc.depends
+-- outfile=/opt/qtcube/build/qrc_qt_cube.cxx
+-- outfilename=qt_cube
+-- outpath=/opt/qtcube/build
+-- pybind11_DIR=pybind11_DIR-NOTFOUND
+-- qt_module_def=CORE
+-- qtcore_lib_ext=.so
+-- qtcube-base_BINARY_DIR=/opt/qtcube/build/base
+-- qtcube-base_SOURCE_DIR=/opt/qtcube/src/base
+-- qtcube-gui_BINARY_DIR=/opt/qtcube/build/gui
+-- qtcube-gui_SOURCE_DIR=/opt/qtcube/src/gui
+-- qtcube_MAJOR_VERSION=1
+-- qtcube_MINOR_VERSION=2
+-- qtcube_VERSION_STRING=.2
+-- rc_path=/opt/qtcube/src
+-- rcc_files=qt_cube.qrc
+-- rel=qt_cube.qrc
+-- sepVector-lib_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector/lib
+-- sepVector-lib_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector/lib
+-- sepVector-python_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector/python
+-- sepVector-python_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector/python
+-- sepVector_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector
+-- sepVector_CONSIDERED_CONFIGS=
+-- sepVector_CONSIDERED_VERSIONS=
+-- sepVector_DIR=sepVector_DIR-NOTFOUND
+-- sepVector_FOUND=0
+-- sepVector_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector
+-- sepvector-env-modules_BINARY_DIR=/opt/qtcube/build/external/genericIO/external/sepVector/env-modules
+-- sepvector-env-modules_SOURCE_DIR=/opt/qtcube/src/external/genericIO/external/sepVector/env-modules
+-- type=
+-- v=
+-- val=0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/qtcube/build
+Scanning dependencies of target gui_autogen
+[  1%] Automatic MOC for target gui
+[  1%] Built target gui_autogen
+Scanning dependencies of target gui
+[  2%] Building CXX object gui/CMakeFiles/gui.dir/anno.cpp.o
+[  3%] Building CXX object gui/CMakeFiles/gui.dir/mode.cpp.o
+[  3%] Building CXX object gui/CMakeFiles/gui.dir/pick_new.cpp.o
+[  4%] Building CXX object gui/CMakeFiles/gui.dir/ano_panel.cpp.o
+[  5%] Building CXX object gui/CMakeFiles/gui.dir/mouse_anno.cpp.o
+[  6%] Building CXX object gui/CMakeFiles/gui.dir/pick_panel.cpp.o
+[  6%] Building CXX object gui/CMakeFiles/gui.dir/auto_brown.cpp.o
+[  7%] Building CXX object gui/CMakeFiles/gui.dir/mouse_func.cpp.o
+[  8%] Building CXX object gui/CMakeFiles/gui.dir/pick_plane_new.cpp.o
+[  8%] Building CXX object gui/CMakeFiles/gui.dir/autopick_2d.cpp.o
+[  9%] Building CXX object gui/CMakeFiles/gui.dir/mouse_orient.cpp.o
+[ 10%] Building CXX object gui/CMakeFiles/gui.dir/position.cpp.o
+[ 11%] Building CXX object gui/CMakeFiles/gui.dir/autopick.cpp.o
+[ 11%] Building CXX object gui/CMakeFiles/gui.dir/mouse_overlay.cpp.o
+[ 12%] Building CXX object gui/CMakeFiles/gui.dir/qcube_panel.cpp.o
+[ 13%] Building CXX object gui/CMakeFiles/gui.dir/auto_viteribi.cpp.o
+[ 13%] Building CXX object gui/CMakeFiles/gui.dir/mouse_pick.cpp.o
+[ 14%] Building CXX object gui/CMakeFiles/gui.dir/qcubetabbasics.cpp.o
+[ 15%] Building CXX object gui/CMakeFiles/gui.dir/buffer.cpp.o
+[ 15%] Building CXX object gui/CMakeFiles/gui.dir/mouse_region.cpp.o
+[ 16%] Building CXX object gui/CMakeFiles/gui.dir/qcubewidgetbasics.cpp.o
+[ 17%] Building CXX object gui/CMakeFiles/gui.dir/byte_buffer.cpp.o
+[ 18%] Building CXX object gui/CMakeFiles/gui.dir/mouse_zoom.cpp.o
+[ 18%] Building CXX object gui/CMakeFiles/gui.dir/raster.cpp.o
+[ 19%] Building CXX object gui/CMakeFiles/gui.dir/centerwindow.cpp.o
+[ 20%] Building CXX object gui/CMakeFiles/gui.dir/moved_out.cpp.o
+[ 20%] Building CXX object gui/CMakeFiles/gui.dir/move_semblance.cpp.o
+[ 21%] Building CXX object gui/CMakeFiles/gui.dir/clip_bar.cpp.o
+[ 22%] Building CXX object gui/CMakeFiles/gui.dir/multiface.cpp.o
+[ 23%] Building CXX object gui/CMakeFiles/gui.dir/color_panel.cpp.o
+[ 23%] Building CXX object gui/CMakeFiles/gui.dir/multiple.cpp.o
+[ 24%] Building CXX object gui/CMakeFiles/gui.dir/contour.cpp.o
+[ 25%] Building CXX object gui/CMakeFiles/gui.dir/my_colors.cpp.o
+[ 25%] Building CXX object gui/CMakeFiles/gui.dir/simple_color.cpp.o
+[ 26%] Building CXX object gui/CMakeFiles/gui.dir/created_data.cpp.o
+[ 27%] Building CXX object gui/CMakeFiles/gui.dir/my_fonts.cpp.o
+[ 27%] Building CXX object gui/CMakeFiles/gui.dir/single.cpp.o
+[ 28%] Building CXX object gui/CMakeFiles/gui.dir/cube.cpp.o
+[ 29%] Building CXX object gui/CMakeFiles/gui.dir/navigate_panel.cpp.o
+[ 30%] Building CXX object gui/CMakeFiles/gui.dir/slice.cpp.o
+[ 30%] Building CXX object gui/CMakeFiles/gui.dir/cube_cut.cpp.o
+[ 31%] Building CXX object gui/CMakeFiles/gui.dir/nmoed.cpp.o
+[ 32%] Building CXX object gui/CMakeFiles/gui.dir/slice_types.cpp.o
+[ 32%] Building CXX object gui/CMakeFiles/gui.dir/data_panel.cpp.o
+[ 33%] Building CXX object gui/CMakeFiles/gui.dir/nmo_semblance.cpp.o
+[ 34%] Building CXX object gui/CMakeFiles/gui.dir/dataset.cpp.o
+[ 34%] Building CXX object gui/CMakeFiles/gui.dir/orientation_server.cpp.o
+[ 35%] Building CXX object gui/CMakeFiles/gui.dir/surface_data.cpp.o
+[ 36%] Building CXX object gui/CMakeFiles/gui.dir/datasets.cpp.o
+[ 37%] Building CXX object gui/CMakeFiles/gui.dir/orient_cube.cpp.o
+[ 37%] Building CXX object gui/CMakeFiles/gui.dir/threeface.cpp.o
+[ 38%] Building CXX object gui/CMakeFiles/gui.dir/display_panel.cpp.o
+[ 39%] Building CXX object gui/CMakeFiles/gui.dir/orient_map.cpp.o
+[ 39%] Building CXX object gui/CMakeFiles/gui.dir/three_view.cpp.o
+[ 40%] Building CXX object gui/CMakeFiles/gui.dir/draw_other.cpp.o
+[ 41%] Building CXX object gui/CMakeFiles/gui.dir/orient_panel.cpp.o
+[ 42%] Building CXX object gui/CMakeFiles/gui.dir/trace_io.cpp.o
+[ 42%] Building CXX object gui/CMakeFiles/gui.dir/drawwindow.cpp.o
+[ 43%] Building CXX object gui/CMakeFiles/gui.dir/outcore_data.cpp.o
+[ 44%] Building CXX object gui/CMakeFiles/gui.dir/util.cpp.o
+[ 44%] Building CXX object gui/CMakeFiles/gui.dir/fileIO.cpp.o
+[ 45%] Building CXX object gui/CMakeFiles/gui.dir/pairs_new.cpp.o
+[ 46%] Building CXX object gui/CMakeFiles/gui.dir/view.cpp.o
+[ 46%] Building CXX object gui/CMakeFiles/gui.dir/float_buffer.cpp.o
+[ 47%] Building CXX object gui/CMakeFiles/gui.dir/panel.cpp.o
+[ 48%] Building CXX object gui/CMakeFiles/gui.dir/view_panel.cpp.o
+[ 49%] Building CXX object gui/CMakeFiles/gui.dir/panel_panel.cpp.o
+[ 49%] Building CXX object gui/CMakeFiles/gui.dir/view_types.cpp.o
+[ 50%] Building CXX object gui/CMakeFiles/gui.dir/help_panel.cpp.o
+[ 51%] Building CXX object gui/CMakeFiles/gui.dir/panels.cpp.o
+[ 51%] Building CXX object gui/CMakeFiles/gui.dir/widget_tools.cpp.o
+[ 52%] Building CXX object gui/CMakeFiles/gui.dir/history.cpp.o
+[ 53%] Building CXX object gui/CMakeFiles/gui.dir/partial_data.cpp.o
+[ 53%] Building CXX object gui/CMakeFiles/gui.dir/wiggle.cpp.o
+[ 54%] Building CXX object gui/CMakeFiles/gui.dir/incore_data.cpp.o
+[ 55%] Building CXX object gui/CMakeFiles/gui.dir/part_semb_data.cpp.o
+[ 56%] Building CXX object gui/CMakeFiles/gui.dir/window_panel.cpp.o
+[ 56%] Building CXX object gui/CMakeFiles/gui.dir/interval_pick.cpp.o
+[ 57%] Building CXX object gui/CMakeFiles/gui.dir/path.cpp.o
+[ 58%] Building CXX object gui/CMakeFiles/gui.dir/windows.cpp.o
+[ 58%] Building CXX object gui/CMakeFiles/gui.dir/io_func.cpp.o
+[ 59%] Building CXX object gui/CMakeFiles/gui.dir/pick_bucket.cpp.o
+[ 60%] Building CXX object gui/CMakeFiles/gui.dir/maps.cpp.o
+[ 61%] Building CXX object gui/CMakeFiles/gui.dir/pick_draw.cpp.o
+[ 61%] Building CXX object gui/CMakeFiles/gui.dir/gui_autogen/mocs_compilation.cpp.o
+[ 62%] Linking CXX static library libgui.a
+[ 62%] Built target gui
+Scanning dependencies of target hypercube
+[ 62%] Building CXX object external/genericIO/external/sepVector/external/hypercube/lib/CMakeFiles/hypercube.dir/axis.cpp.o
+[ 63%] Building CXX object external/genericIO/external/sepVector/external/hypercube/lib/CMakeFiles/hypercube.dir/hypercube.cpp.o
+[ 64%] Linking CXX static library libhypercube.a
+[ 64%] Built target hypercube
+Scanning dependencies of target genericCpp
+[ 64%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/basicIO.cpp.o
+[ 65%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/genericFile.cpp.o
+[ 66%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/jsoncpp.cpp.o
+[ 66%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/jsonParamObj.cpp.o
+[ 67%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/jsonGenericFile.cpp.o
+[ 68%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/genericIO.cpp.o
+[ 69%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/genericC.cpp.o
+[ 69%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/jsonGenericIO.cpp.o
+[ 70%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/ioModes.cpp.o
+[ 71%] Building CXX object external/genericIO/cpp/CMakeFiles/genericCpp.dir/segyIO.cpp.o
+[ 71%] Linking CXX static library libgenericCpp.a
+[ 71%] Built target genericCpp
+Scanning dependencies of target base
+[ 71%] Building CXX object base/CMakeFiles/base.dir/dynamic.cpp.o
+[ 72%] Building CXX object base/CMakeFiles/base.dir/hypercube_float.cpp.o
+[ 73%] Building CXX object base/CMakeFiles/base.dir/norm_vector.cpp.o
+[ 74%] Building CXX object base/CMakeFiles/base.dir/pqueue.cpp.o
+[ 74%] Building CXX object base/CMakeFiles/base.dir/fastmarch.cpp.o
+[ 75%] Building CXX object base/CMakeFiles/base.dir/l2_norm.cpp.o
+[ 76%] Building CXX object base/CMakeFiles/base.dir/float_1d.cpp.o
+[ 76%] Building CXX object base/CMakeFiles/base.dir/lloyd_1d.cpp.o
+[ 77%] Building CXX object base/CMakeFiles/base.dir/path.cpp.o
+[ 78%] Building CXX object base/CMakeFiles/base.dir/float_2d.cpp.o
+[ 79%] Building CXX object base/CMakeFiles/base.dir/lloyd.cpp.o
+[ 79%] Building CXX object base/CMakeFiles/base.dir/percentile.cpp.o
+[ 80%] Building CXX object base/CMakeFiles/base.dir/viterbi.cpp.o
+[ 81%] Linking CXX static library libbase.a
+[ 81%] Built target base
+[ 81%] Generating qrc_qt_cube.cxx
+Scanning dependencies of target qt_cube
+[ 82%] Building CXX object CMakeFiles/qt_cube.dir/main.cpp.o
+[ 83%] Building CXX object CMakeFiles/qt_cube.dir/qrc_qt_cube.cxx.o
+[ 84%] Linking CXX executable qt_cube
+[ 84%] Built target qt_cube
+Scanning dependencies of target ZFP_INSTALL
+[ 84%] Creating directories for 'ZFP_INSTALL'
+[ 85%] Performing download step (git clone) for 'ZFP_INSTALL'
+Cloning into 'ZFP_INSTALL'...
+[91mAlready on 'master'
+[0m[ 85%] No patch step for 'ZFP_INSTALL'
+[ 86%] Performing update step for 'ZFP_INSTALL'
+Current branch master is up to date.
+[ 87%] Performing configure step for 'ZFP_INSTALL'
+-- The C compiler identification is GNU 4.8.5
+-- The CXX compiler identification is GNU 4.8.5
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Compiling with C standard: 99
+-- Compiling with C++ standard: 98
+-- Found OpenMP_C: -fopenmp (found version "3.1") 
+-- Found OpenMP_CXX: -fopenmp (found version "3.1") 
+-- Found OpenMP: TRUE (found version "3.1")  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/qtcube/build/external/genericIO/ZFP_INSTALL-prefix/src/ZFP_INSTALL-build
+[ 88%] Performing build step for 'ZFP_INSTALL'
+Scanning dependencies of target zfp
+[  3%] Building C object src/CMakeFiles/zfp.dir/zfp.c.o
+[  6%] Building C object src/CMakeFiles/zfp.dir/bitstream.c.o
+[  9%] Building C object src/CMakeFiles/zfp.dir/encode1f.c.o
+[ 12%] Building C object src/CMakeFiles/zfp.dir/encode1d.c.o
+[ 15%] Building C object src/CMakeFiles/zfp.dir/encode1i.c.o
+[ 18%] Building C object src/CMakeFiles/zfp.dir/encode1l.c.o
+[ 21%] Building C object src/CMakeFiles/zfp.dir/decode1f.c.o
+[ 25%] Building C object src/CMakeFiles/zfp.dir/decode1d.c.o
+[ 28%] Building C object src/CMakeFiles/zfp.dir/decode1i.c.o
+[ 31%] Building C object src/CMakeFiles/zfp.dir/decode1l.c.o
+[ 34%] Building C object src/CMakeFiles/zfp.dir/encode2f.c.o
+[ 37%] Building C object src/CMakeFiles/zfp.dir/encode2d.c.o
+[ 40%] Building C object src/CMakeFiles/zfp.dir/encode2i.c.o
+[ 43%] Building C object src/CMakeFiles/zfp.dir/encode2l.c.o
+[ 46%] Building C object src/CMakeFiles/zfp.dir/decode2f.c.o
+[ 50%] Building C object src/CMakeFiles/zfp.dir/decode2d.c.o
+[ 53%] Building C object src/CMakeFiles/zfp.dir/decode2i.c.o
+[ 56%] Building C object src/CMakeFiles/zfp.dir/decode2l.c.o
+[ 59%] Building C object src/CMakeFiles/zfp.dir/encode3f.c.o
+[ 62%] Building C object src/CMakeFiles/zfp.dir/encode3d.c.o
+[ 65%] Building C object src/CMakeFiles/zfp.dir/encode3i.c.o
+[ 68%] Building C object src/CMakeFiles/zfp.dir/encode3l.c.o
+[ 71%] Building C object src/CMakeFiles/zfp.dir/decode3f.c.o
+[ 75%] Building C object src/CMakeFiles/zfp.dir/decode3d.c.o
+[ 78%] Building C object src/CMakeFiles/zfp.dir/decode3i.c.o
+[ 81%] Building C object src/CMakeFiles/zfp.dir/decode3l.c.o
+[ 84%] Linking C shared library ../lib/libzfp.so
+[ 84%] Built target zfp
+Scanning dependencies of target zfpcmd
+[ 87%] Building C object utils/CMakeFiles/zfpcmd.dir/zfp.c.o
+[ 90%] Linking C executable ../bin/zfp
+[ 90%] Built target zfpcmd
+Scanning dependencies of target testzfp
+[ 93%] Building CXX object tests/CMakeFiles/testzfp.dir/testzfp.cpp.o
+[ 96%] Building C object tests/CMakeFiles/testzfp.dir/fields.c.o
+[100%] Linking CXX executable ../bin/testzfp
+[100%] Built target testzfp
+[ 89%] Performing install step for 'ZFP_INSTALL'
+[ 84%] Built target zfp
+[ 90%] Built target zfpcmd
+[100%] Built target testzfp
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /opt/qtcube/include
+-- Installing: /opt/qtcube/include/zfp
+-- Installing: /opt/qtcube/include/zfp/macros.h
+-- Installing: /opt/qtcube/include/zfp/system.h
+-- Installing: /opt/qtcube/include/zfp/types.h
+-- Installing: /opt/qtcube/include/zfp.h
+-- Installing: /opt/qtcube/include/bitstream.h
+-- Up-to-date: /opt/qtcube/include
+-- Installing: /opt/qtcube/include/zfpcodec.h
+-- Up-to-date: /opt/qtcube/include/zfp
+-- Installing: /opt/qtcube/include/zfp/cache.h
+-- Installing: /opt/qtcube/include/zfp/memory.h
+-- Installing: /opt/qtcube/include/zfparray2.h
+-- Installing: /opt/qtcube/include/zfpcodecf.h
+-- Installing: /opt/qtcube/include/zfparray1.h
+-- Installing: /opt/qtcube/include/zfparray.h
+-- Installing: /opt/qtcube/include/zfparray3.h
+-- Installing: /opt/qtcube/include/zfpcodecd.h
+-- Installing: /opt/qtcube/lib/libzfp.so.0.5.3
+-- Installing: /opt/qtcube/lib/libzfp.so.0
+-- Installing: /opt/qtcube/lib/libzfp.so
+[ 90%] Completed 'ZFP_INSTALL'
+[ 90%] Built target ZFP_INSTALL
+Scanning dependencies of target sepVector
+[ 90%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/Vector.cc.o
+[ 91%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/float1DReg.cc.o
+[ 92%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/float2DReg.cc.o
+[ 92%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/float3DReg.cc.o
+[ 93%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/floatHyper.cc.o
+[ 94%] Building CXX object external/genericIO/external/sepVector/lib/CMakeFiles/sepVector.dir/float4DReg.cc.o
+[ 95%] Linking CXX static library libsepVector.a
+[ 95%] Built target sepVector
+Scanning dependencies of target Info
+[ 96%] Building CXX object external/genericIO/util/CMakeFiles/Info.dir/Info.cc.o
+[ 97%] Linking CXX executable Info
+[ 97%] Built target Info
+Scanning dependencies of target Window
+[ 97%] Building CXX object external/genericIO/util/CMakeFiles/Window.dir/Window.cc.o
+[ 98%] Linking CXX executable Window
+[ 98%] Built target Window
+Scanning dependencies of target Compress
+[ 98%] Building CXX object external/genericIO/util/CMakeFiles/Compress.dir/Compress.cc.o
+[ 99%] Linking CXX executable Compress
+[ 99%] Built target Compress
+Scanning dependencies of target Decompress
+[100%] Building CXX object external/genericIO/util/CMakeFiles/Decompress.dir/Decompress.cc.o
+[100%] Linking CXX executable Decompress
+[100%] Built target Decompress
+Install the project...
+-- Install configuration: ""
+-- Installing: /opt/qtcube/bin/Sep_cube
+-- Installing: /opt/qtcube/bin/qt_cube
+-- Set runtime path of "/opt/qtcube/bin/qt_cube" to ""
+-- Installing: /opt/qtcube/cmake/genericIOConfig.cmake
+-- Installing: /opt/qtcube/cmake/genericIOExports.cmake
+-- Installing: /opt/qtcube/cmake/genericIOExports-noconfig.cmake
+-- Installing: /opt/qtcube/include/ioConfig.h
+-- Installing: /opt/qtcube/cmake/sepVectorConfig.cmake
+-- Installing: /opt/qtcube/cmake/sepVectorExports.cmake
+-- Installing: /opt/qtcube/cmake/sepVectorExports-noconfig.cmake
+-- Installing: /opt/qtcube/cmake/hypercubeConfig.cmake
+-- Installing: /opt/qtcube/cmake/hypercubeExports.cmake
+-- Installing: /opt/qtcube/cmake/hypercubeExports-noconfig.cmake
+-- Installing: /opt/qtcube/include/axis.h
+-- Installing: /opt/qtcube/include/hypercube.h
+-- Installing: /opt/qtcube/lib/libhypercube.a
+-- Installing: /opt/qtcube/share/modules/hypercube
+-- Installing: /opt/qtcube/include/Vector.h
+-- Installing: /opt/qtcube/include/float1DReg.h
+-- Installing: /opt/qtcube/include/float2DReg.h
+-- Installing: /opt/qtcube/include/float3DReg.h
+-- Installing: /opt/qtcube/include/floatHyper.h
+-- Installing: /opt/qtcube/include/float4DReg.h
+-- Installing: /opt/qtcube/include/superVec.h
+-- Installing: /opt/qtcube/lib/libsepVector.a
+-- Installing: /opt/qtcube/share/modules/sepVector
+-- Installing: /opt/qtcube/include/genericIO.h
+-- Installing: /opt/qtcube/include/jsonGenericFile.h
+-- Installing: /opt/qtcube/include/jsonParamObj.h
+-- Installing: /opt/qtcube/include/basicIO.h
+-- Installing: /opt/qtcube/include/genericC.h
+-- Installing: /opt/qtcube/include/jsonGenericIO.h
+-- Installing: /opt/qtcube/include/paramObj.h
+-- Installing: /opt/qtcube/include/genericFile.h
+-- Installing: /opt/qtcube/include/json.h
+-- Installing: /opt/qtcube/include/ioModes.h
+-- Installing: /opt/qtcube/include/segyIO.h
+-- Installing: /opt/qtcube/lib/libgenericCpp.a
+-- Installing: /opt/qtcube/bin/Window
+-- Installing: /opt/qtcube/bin/Info
+-- Installing: /opt/qtcube/bin/Compress
+-- Set runtime path of "/opt/qtcube/bin/Compress" to ""
+-- Installing: /opt/qtcube/bin/Decompress
+-- Set runtime path of "/opt/qtcube/bin/Decompress" to ""
+-- Installing: /opt/qtcube/bin/SEP2JSON
+-- Installing: /opt/qtcube/bin/JSONIZE
+-- Installing: /opt/qtcube/share/modules/genericIO
+Removing intermediate container 6a8d4f02d312
+ ---> f2e516295a62
+Successfully built f2e516295a62
+Successfully tagged rgc007/qt-centos:latest
