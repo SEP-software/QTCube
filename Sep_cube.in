@@ -20,7 +20,6 @@ debug=0
 
 binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
 if "QTCUBE" in os.environ: binary=os.environ["QTCUBE"]
-binary="@CMAKE_INSTALL_PREFIX@/bin/qt_cube"
 
 
 

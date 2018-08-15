@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(qtcube-base)
 
 include_directories(${GENERICIOINCDIR})
+include_directories(${TBB_INCLUDE_DIRS})
 
 #include_directories(/sep/bob/genericIO/include)
 set(SOURCES dynamic.cpp    hypercube_float.cpp  norm_vector.cpp  pqueue.cpp)
