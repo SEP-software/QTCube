@@ -35,7 +35,7 @@ if(genericIO_FOUND)
 else(genericIO_FOUND)
   message("Unable to find genericIO")
   execute_process(COMMAND git submodule update --init --recursive  -- external/genericIO
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   add_subdirectory(external/genericIO)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
   INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/cpp)
@@ -96,7 +96,6 @@ TARGET_LINK_LIBRARIES(qt_cube base)
 TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} hypercube ${LIBTBB})
 
 
-get_cmake_property(_variableNames VARIABLES)
 
 target_link_libraries(qt_cube Qt4::QtGui Qt4::QtXml)
 TARGET_LINK_LIBRARIES(qt_cube ${LIBTBB})

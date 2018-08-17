@@ -20,7 +20,7 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
 RUN /usr/bin/python3.6 -m pip install pytest
 RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&\
    cd /opt/qtcube/build &&\
-   cmake3  -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6 -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube  -DCMAKE_CXX_FLAGS="-O3" -DCMAKE_PREFIX_PATH=/opt/SEP/cmake   ../src  && \
+   cmake3  -DCMAKE_PREFIX_PATH=/opt/SEP/cmake  -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6 -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/SEP  -DCMAKE_CXX_FLAGS="-O3"   ../src  && \
    make install &&\
    rm -rf /opt/qtcube/build
 

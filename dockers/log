@@ -3,36 +3,36 @@ Step 1/12 : From centos:7
  ---> 5182e96772bf
 Step 2/12 : MAINTAINER Bob Clapp <bob@sep.stanford.edu>
  ---> Using cache
- ---> da2c3ceac04f
+ ---> 445122a5df35
 Step 3/12 : RUN yum -y install make libX11-devel libXt-devel gcc git; yum -y clean all
  ---> Using cache
- ---> 2f757f03f83d
+ ---> dfecf0f1e819
 Step 4/12 : RUN yum -y install make automake autoconf libtool git libXt-devel    libX11-devel libXaw-devel gcc-c++  gcc gcc-gfortran fftw-libs-single fftw-devel flex cmake; yum -y clean all
  ---> Using cache
- ---> af1f9ccba64c
+ ---> 16543a62805c
 Step 5/12 : RUN mkdir -p /opt/SEP/build
  ---> Using cache
- ---> 8c8422e86088
+ ---> c4eace87a6a4
 Step 6/12 : RUN git clone http://zapad.stanford.edu/bob/SEPlib.git /opt/SEP/src &&   cd /opt/SEP/build &&   cmake -DCMAKE_INSTALL_PREFIX=/opt/SEP ../src &&   make &&   make install &&   rm -rf /opt/SEP/build
  ---> Using cache
- ---> f1737a7cb8dc
+ ---> 3dcc4144990e
 Step 7/12 : RUN yum -y install gcc gcc-c++ epel-release make git cmake  &&     yum -y install https://centos7.iuscommunity.org/ius-release.rpm &&     yum -y install  boost-devel boost-filesystem python36u-devel python36u-pip  python36u-pytest cmake3  &&    yum -y clean all
  ---> Using cache
- ---> 7dd572f09a6f
+ ---> 3499de5d73cc
 Step 8/12 : RUN yum -y install tbb-devel qt-devel python36u-devel python36u-pip  python36u-pytest cmake3   &&yum -y clean all
  ---> Using cache
- ---> eb23cc3ec73d
+ ---> 4f406c3bfbe8
 Step 9/12 : RUN mkdir -p /opt/qtcube/build
  ---> Using cache
- ---> 95b44bb7483c
+ ---> 3833da138b2a
 Step 10/12 : RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
  ---> Using cache
- ---> c81cd4d02361
+ ---> 033b5ca2c8ee
 Step 11/12 : RUN /usr/bin/python3.6 -m pip install pytest
  ---> Using cache
- ---> b760bc5c4fec
-Step 12/12 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6 -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/qtcube  -DCMAKE_CXX_FLAGS="-O3" -DCMAKE_PREFIX_PATH=/opt/SEP/cmake   ../src  &&    make install &&   rm -rf /opt/qtcube/build
- ---> Running in 6a8d4f02d312
+ ---> eb10b49f52e3
+Step 12/12 : RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&   cd /opt/qtcube/build &&   cmake3  -DCMAKE_PREFIX_PATH=/opt/SEP/cmake  -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.6 -DPYTHON_NUMPY_INCLUDE_DIR=/usr/lib/python3/dist-packages/numpy/core/include  -DCMAKE_INSTALL_PREFIX=/opt/SEP  -DCMAKE_CXX_FLAGS="-O3"   ../src  &&    make install &&   rm -rf /opt/qtcube/build
+ ---> Running in d6d19ab360f3
 Cloning into '/opt/qtcube/src'...
 -- The C compiler identification is GNU 4.8.5
 -- The CXX compiler identification is GNU 4.8.5
@@ -68,7 +68,7 @@ Cloning into '/opt/qtcube/src'...
   "genericIO" provides a separate development package or SDK, be sure it has
   been installed.
 
-[0m[91m
+
 [0m[91mCMake Warning at CMakeLists.txt:27 (FIND_PACKAGE):
   By not providing "FindsepVector.cmake" in CMAKE_MODULE_PATH this project
   has asked CMake to find a package configuration file provided by
@@ -85,7 +85,7 @@ Cloning into '/opt/qtcube/src'...
   "sepVector" provides a separate development package or SDK, be sure it has
   been installed.
 
-[0m[91m
+
 [0m[91mCMake Warning at CMakeLists.txt:28 (FIND_PACKAGE):
   By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
   has asked CMake to find a package configuration file provided by
@@ -102,8 +102,8 @@ Cloning into '/opt/qtcube/src'...
   "hypercube" provides a separate development package or SDK, be sure it has
   been installed.
 
-[0m[91m
-[0m[91mUnable to find genericIO[0m[91m
+
+[0m[91mUnable to find genericIO
 [0mSubmodule 'external/genericIO' (http://zapad.Stanford.EDU/bob/genericIO.git) registered for path 'external/genericIO'
 Cloning into 'external/genericIO'...
 Submodule path 'external/genericIO': checked out '969cc2e6d6cdeee0b37a1ec5b52165d6fcfa49d8'
@@ -163,7 +163,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   "hypercube" provides a separate development package or SDK, be sure it has
   been installed.
 
-
+[0m[91m
 [0m[91mUnable to find sepVector
 [0m[91mCMake Warning at external/genericIO/external/sepVector/CMakeLists.txt:20 (FIND_PACKAGE):
   By not providing "Findhypercube.cmake" in CMAKE_MODULE_PATH this project
@@ -182,7 +182,7 @@ This warning is for project developers.  Use -Wno-dev to suppress it.
   been installed.
 
 
-Unable to find hypercube
+[0m[91mUnable to find hypercube
 [0m[91mbefore add subdirectory
 [0m[91mCMake Warning at external/genericIO/external/sepVector/external/hypercube/python/CMakeLists.txt:7 (find_package):
   By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
@@ -201,7 +201,7 @@ Unable to find hypercube
   been installed.
 
 
-[0m[91mDID not find pybind11
+DID not find pybind11
 [0m-- Boost version: 1.53.0
 -- Found the following Boost libraries:
 --   program_options
@@ -227,9 +227,9 @@ Unable to find hypercube
 [0m[91mDid not find hypercube
 [0m[91mZFP_INCLUDE_DIR-NOTFOUNDZFP_LIBRARY-NOTFOUNDZFP
 [0m[91mInstalling with SEP VECTOR
-NOT INSTALLING WITH RSF[0m[91m
+[0m[91mNOT INSTALLING WITH RSF
 [0m[91mNOT INSTALLING WITH SEPlib
-HYPERCUBE DIRNAME sepVectorhypercube [0m[91m
+[0m[91mHYPERCUBE DIRNAME sepVectorhypercube [0m[91m
 [0m[91mCMake Warning at external/genericIO/python/CMakeLists.txt:8 (find_package):
   By not providing "Findpybind11.cmake" in CMAKE_MODULE_PATH this project has
   asked CMake to find a package configuration file provided by "pybind11",
@@ -259,11 +259,11 @@ HYPERCUBE DIRNAME sepVectorhypercube [0m[91m
   source dir.  Run "cmake --help-policy CMP0015" for policy details.  Use the
   cmake_policy command to set the policy and suppress this warning.
 This warning is for project developers.  Use -Wno-dev to suppress it.
-[0m[91m
-[0m[91m/opt/qtcube/includeZFP_LIBRARY-NOTFOUNDZFP[0m[91m
-[0m[91mCompress CHECK FOUYND NO BVB[0m[91m
+
+[0m[91m/opt/SEP/includeZFP_LIBRARY-NOTFOUNDZFP[0m[91m
+[0m[91mCompress CHECK FOUYND NO BVB
 [0m[91mDecompress CHECK FOUYND NO BVB[0m[91m
-[0m[91mDid not find sepVector
+[0m[91mDid not find sepVector[0m[91m
 [0m[91mDid not find hypercube[0m[91m
 [0m-- Looking for Q_WS_X11
 -- Looking for Q_WS_X11 - found
@@ -1020,7 +1020,7 @@ Ld[^
 -- CMAKE_INCLUDE_SYSTEM_FLAG_C=-isystem 
 -- CMAKE_INCLUDE_SYSTEM_FLAG_CXX=-isystem 
 -- CMAKE_INSTALL_DEFAULT_COMPONENT_NAME=Unspecified
--- CMAKE_INSTALL_PREFIX=/opt/qtcube
+-- CMAKE_INSTALL_PREFIX=/opt/SEP
 -- CMAKE_INSTALL_SO_NO_EXE=0
 -- CMAKE_INTERNAL_PLATFORM_ABI=ELF
 -- CMAKE_LIBRARY_ARCHITECTURE_REGEX=[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*
@@ -1112,7 +1112,7 @@ Ld[^
 -- CMAKE_SYSTEM_LIBRARY_PATH=/usr/lib/X11
 -- CMAKE_SYSTEM_LOADED=1
 -- CMAKE_SYSTEM_NAME=Linux
--- CMAKE_SYSTEM_PREFIX_PATH=/usr/local;/usr;/;/usr;/opt/qtcube;/usr/X11R6;/usr/pkg;/opt
+-- CMAKE_SYSTEM_PREFIX_PATH=/usr/local;/usr;/;/usr;/opt/SEP;/usr/X11R6;/usr/pkg;/opt
 -- CMAKE_SYSTEM_PROCESSOR=x86_64
 -- CMAKE_SYSTEM_SPECIFIC_INFORMATION_LOADED=1
 -- CMAKE_SYSTEM_SPECIFIC_INITIALIZE_LOADED=1
@@ -1171,14 +1171,14 @@ Ld[^
 -- MSVC_C_ARCHITECTURE_ID=
 -- OUTPUT=Change Dir: /opt/qtcube/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/gmake" "cmTC_d386d/fast"
-/usr/bin/gmake -f CMakeFiles/cmTC_d386d.dir/build.make CMakeFiles/cmTC_d386d.dir/build
+Run Build Command:"/usr/bin/gmake" "cmTC_2295c/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_2295c.dir/build.make CMakeFiles/cmTC_2295c.dir/build
 gmake[1]: Entering directory `/opt/qtcube/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_d386d.dir/src.cxx.o
-/usr/bin/c++    -O3  -DCOMPILER_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTC_d386d.dir/src.cxx.o -c /opt/qtcube/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_d386d
-/usr/bin/cmake3 -E cmake_link_script CMakeFiles/cmTC_d386d.dir/link.txt --verbose=1
-/usr/bin/c++  -O3  -DCOMPILER_SUPPORTS_CXX11    -rdynamic CMakeFiles/cmTC_d386d.dir/src.cxx.o  -o cmTC_d386d 
+Building CXX object CMakeFiles/cmTC_2295c.dir/src.cxx.o
+/usr/bin/c++    -O3  -DCOMPILER_SUPPORTS_CXX11   -std=c++11 -o CMakeFiles/cmTC_2295c.dir/src.cxx.o -c /opt/qtcube/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_2295c
+/usr/bin/cmake3 -E cmake_link_script CMakeFiles/cmTC_2295c.dir/link.txt --verbose=1
+/usr/bin/c++  -O3  -DCOMPILER_SUPPORTS_CXX11    -rdynamic CMakeFiles/cmTC_2295c.dir/src.cxx.o  -o cmTC_2295c 
 gmake[1]: Leaving directory `/opt/qtcube/build/CMakeFiles/CMakeTmp'
 
 -- PRESET_CMAKE_SYSTEM_NAME=FALSE
@@ -2333,27 +2333,27 @@ Scanning dependencies of target testzfp
 [100%] Built target testzfp
 Install the project...
 -- Install configuration: "Release"
--- Installing: /opt/qtcube/include
--- Installing: /opt/qtcube/include/zfp
--- Installing: /opt/qtcube/include/zfp/macros.h
--- Installing: /opt/qtcube/include/zfp/system.h
--- Installing: /opt/qtcube/include/zfp/types.h
--- Installing: /opt/qtcube/include/zfp.h
--- Installing: /opt/qtcube/include/bitstream.h
--- Up-to-date: /opt/qtcube/include
--- Installing: /opt/qtcube/include/zfpcodec.h
--- Up-to-date: /opt/qtcube/include/zfp
--- Installing: /opt/qtcube/include/zfp/cache.h
--- Installing: /opt/qtcube/include/zfp/memory.h
--- Installing: /opt/qtcube/include/zfparray2.h
--- Installing: /opt/qtcube/include/zfpcodecf.h
--- Installing: /opt/qtcube/include/zfparray1.h
--- Installing: /opt/qtcube/include/zfparray.h
--- Installing: /opt/qtcube/include/zfparray3.h
--- Installing: /opt/qtcube/include/zfpcodecd.h
--- Installing: /opt/qtcube/lib/libzfp.so.0.5.3
--- Installing: /opt/qtcube/lib/libzfp.so.0
--- Installing: /opt/qtcube/lib/libzfp.so
+-- Up-to-date: /opt/SEP/include
+-- Installing: /opt/SEP/include/zfp
+-- Installing: /opt/SEP/include/zfp/macros.h
+-- Installing: /opt/SEP/include/zfp/system.h
+-- Installing: /opt/SEP/include/zfp/types.h
+-- Installing: /opt/SEP/include/zfp.h
+-- Installing: /opt/SEP/include/bitstream.h
+-- Up-to-date: /opt/SEP/include
+-- Installing: /opt/SEP/include/zfpcodec.h
+-- Up-to-date: /opt/SEP/include/zfp
+-- Installing: /opt/SEP/include/zfp/cache.h
+-- Installing: /opt/SEP/include/zfp/memory.h
+-- Installing: /opt/SEP/include/zfparray2.h
+-- Installing: /opt/SEP/include/zfpcodecf.h
+-- Installing: /opt/SEP/include/zfparray1.h
+-- Installing: /opt/SEP/include/zfparray.h
+-- Installing: /opt/SEP/include/zfparray3.h
+-- Installing: /opt/SEP/include/zfpcodecd.h
+-- Installing: /opt/SEP/lib/libzfp.so.0.5.3
+-- Installing: /opt/SEP/lib/libzfp.so.0
+-- Installing: /opt/SEP/lib/libzfp.so
 [ 90%] Completed 'ZFP_INSTALL'
 [ 90%] Built target ZFP_INSTALL
 Scanning dependencies of target sepVector
@@ -2383,54 +2383,54 @@ Scanning dependencies of target Decompress
 [100%] Built target Decompress
 Install the project...
 -- Install configuration: ""
--- Installing: /opt/qtcube/bin/Sep_cube
--- Installing: /opt/qtcube/bin/qt_cube
--- Set runtime path of "/opt/qtcube/bin/qt_cube" to ""
--- Installing: /opt/qtcube/cmake/genericIOConfig.cmake
--- Installing: /opt/qtcube/cmake/genericIOExports.cmake
--- Installing: /opt/qtcube/cmake/genericIOExports-noconfig.cmake
--- Installing: /opt/qtcube/include/ioConfig.h
--- Installing: /opt/qtcube/cmake/sepVectorConfig.cmake
--- Installing: /opt/qtcube/cmake/sepVectorExports.cmake
--- Installing: /opt/qtcube/cmake/sepVectorExports-noconfig.cmake
--- Installing: /opt/qtcube/cmake/hypercubeConfig.cmake
--- Installing: /opt/qtcube/cmake/hypercubeExports.cmake
--- Installing: /opt/qtcube/cmake/hypercubeExports-noconfig.cmake
--- Installing: /opt/qtcube/include/axis.h
--- Installing: /opt/qtcube/include/hypercube.h
--- Installing: /opt/qtcube/lib/libhypercube.a
--- Installing: /opt/qtcube/share/modules/hypercube
--- Installing: /opt/qtcube/include/Vector.h
--- Installing: /opt/qtcube/include/float1DReg.h
--- Installing: /opt/qtcube/include/float2DReg.h
--- Installing: /opt/qtcube/include/float3DReg.h
--- Installing: /opt/qtcube/include/floatHyper.h
--- Installing: /opt/qtcube/include/float4DReg.h
--- Installing: /opt/qtcube/include/superVec.h
--- Installing: /opt/qtcube/lib/libsepVector.a
--- Installing: /opt/qtcube/share/modules/sepVector
--- Installing: /opt/qtcube/include/genericIO.h
--- Installing: /opt/qtcube/include/jsonGenericFile.h
--- Installing: /opt/qtcube/include/jsonParamObj.h
--- Installing: /opt/qtcube/include/basicIO.h
--- Installing: /opt/qtcube/include/genericC.h
--- Installing: /opt/qtcube/include/jsonGenericIO.h
--- Installing: /opt/qtcube/include/paramObj.h
--- Installing: /opt/qtcube/include/genericFile.h
--- Installing: /opt/qtcube/include/json.h
--- Installing: /opt/qtcube/include/ioModes.h
--- Installing: /opt/qtcube/include/segyIO.h
--- Installing: /opt/qtcube/lib/libgenericCpp.a
--- Installing: /opt/qtcube/bin/Window
--- Installing: /opt/qtcube/bin/Info
--- Installing: /opt/qtcube/bin/Compress
--- Set runtime path of "/opt/qtcube/bin/Compress" to ""
--- Installing: /opt/qtcube/bin/Decompress
--- Set runtime path of "/opt/qtcube/bin/Decompress" to ""
--- Installing: /opt/qtcube/bin/SEP2JSON
--- Installing: /opt/qtcube/bin/JSONIZE
--- Installing: /opt/qtcube/share/modules/genericIO
-Removing intermediate container 6a8d4f02d312
- ---> f2e516295a62
-Successfully built f2e516295a62
+-- Installing: /opt/SEP/bin/Sep_cube
+-- Installing: /opt/SEP/bin/qt_cube
+-- Set runtime path of "/opt/SEP/bin/qt_cube" to ""
+-- Installing: /opt/SEP/cmake/genericIOConfig.cmake
+-- Installing: /opt/SEP/cmake/genericIOExports.cmake
+-- Installing: /opt/SEP/cmake/genericIOExports-noconfig.cmake
+-- Installing: /opt/SEP/include/ioConfig.h
+-- Installing: /opt/SEP/cmake/sepVectorConfig.cmake
+-- Installing: /opt/SEP/cmake/sepVectorExports.cmake
+-- Installing: /opt/SEP/cmake/sepVectorExports-noconfig.cmake
+-- Installing: /opt/SEP/cmake/hypercubeConfig.cmake
+-- Installing: /opt/SEP/cmake/hypercubeExports.cmake
+-- Installing: /opt/SEP/cmake/hypercubeExports-noconfig.cmake
+-- Installing: /opt/SEP/include/axis.h
+-- Installing: /opt/SEP/include/hypercube.h
+-- Installing: /opt/SEP/lib/libhypercube.a
+-- Installing: /opt/SEP/share/modules/hypercube
+-- Installing: /opt/SEP/include/Vector.h
+-- Installing: /opt/SEP/include/float1DReg.h
+-- Installing: /opt/SEP/include/float2DReg.h
+-- Installing: /opt/SEP/include/float3DReg.h
+-- Installing: /opt/SEP/include/floatHyper.h
+-- Installing: /opt/SEP/include/float4DReg.h
+-- Installing: /opt/SEP/include/superVec.h
+-- Installing: /opt/SEP/lib/libsepVector.a
+-- Installing: /opt/SEP/share/modules/sepVector
+-- Installing: /opt/SEP/include/genericIO.h
+-- Installing: /opt/SEP/include/jsonGenericFile.h
+-- Installing: /opt/SEP/include/jsonParamObj.h
+-- Installing: /opt/SEP/include/basicIO.h
+-- Installing: /opt/SEP/include/genericC.h
+-- Installing: /opt/SEP/include/jsonGenericIO.h
+-- Installing: /opt/SEP/include/paramObj.h
+-- Installing: /opt/SEP/include/genericFile.h
+-- Installing: /opt/SEP/include/json.h
+-- Installing: /opt/SEP/include/ioModes.h
+-- Installing: /opt/SEP/include/segyIO.h
+-- Installing: /opt/SEP/lib/libgenericCpp.a
+-- Installing: /opt/SEP/bin/Window
+-- Installing: /opt/SEP/bin/Info
+-- Installing: /opt/SEP/bin/Compress
+-- Set runtime path of "/opt/SEP/bin/Compress" to ""
+-- Installing: /opt/SEP/bin/Decompress
+-- Set runtime path of "/opt/SEP/bin/Decompress" to ""
+-- Installing: /opt/SEP/bin/SEP2JSON
+-- Installing: /opt/SEP/bin/JSONIZE
+-- Installing: /opt/SEP/share/modules/genericIO
+Removing intermediate container d6d19ab360f3
+ ---> 227c419aae5c
+Successfully built 227c419aae5c
 Successfully tagged rgc007/qt-centos:latest
