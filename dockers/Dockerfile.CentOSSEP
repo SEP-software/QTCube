@@ -3,7 +3,7 @@ MAINTAINER Bob Clapp <bob@sep.stanford.edu>
 RUN yum -y install make libX11-devel libXt-devel gcc git; yum -y clean all
 RUN yum -y install make automake autoconf libtool git libXt-devel \
    libX11-devel libXaw-devel gcc-c++  gcc gcc-gfortran fftw-libs-single fftw-devel flex cmake; yum -y clean all
-RUN mkdir -p /opt/SEP/build
+RUN mkdir -p  /opt/SEP/build
 RUN git clone http://zapad.stanford.edu/bob/SEPlib.git /opt/SEP/src &&\
    cd /opt/SEP/build &&\
    cmake -DCMAKE_INSTALL_PREFIX=/opt/SEP ../src &&\
