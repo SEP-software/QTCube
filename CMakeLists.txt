@@ -71,7 +71,7 @@ ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
 set_property(TARGET qt_cube PROPERTY LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(qt_cube gui)
 TARGET_LINK_LIBRARIES(qt_cube base)
-TARGET_LINK_LIBRARIES(qt_cube genericCpp ${GENERIC_EXPORT_LIBS} hypercube ${LIBTBB})
+TARGET_LINK_LIBRARIES(qt_cube genericCpp buffers ${GENERIC_EXPORT_LIBS} hypercube ${LIBTBB})
 
 
 
