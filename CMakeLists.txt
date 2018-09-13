@@ -50,21 +50,44 @@ install(PROGRAMS ${PROJECT_BINARY_DIR}/Sep_cube
  DESTINATION bin
 )
 
+
+
+
+find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}
+    ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -fPIC")
+
+
+ # The Qt5Widgets_INCLUDES also includes the include directories for
+  # dependencies QtCore and QtGui
+  include_directories(${Qt5Widgets_INCLUDES} ${Qt5Gui_INCLUDE_DIRS})
+
+  # We need add -DQT_WIDGETS_LIB when using QtWidgets in Qt 5.
+  add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Gui_DEFINITIONS})
+
+  # Executables fail to build with Qt 5 in the default configuration
+  # without -fPIE. We add that here.
+  set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+
+get_cmake_property(_variableNames VARIABLES)
+list (SORT _variableNames)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
 add_subdirectory(base)
 add_subdirectory(gui)
 
 
-
-FIND_PACKAGE(Qt4 REQUIRED)
-INCLUDE(${QT_USE_FILE})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/base)
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/base)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui)
 link_directories(${CURRENT_BINARY_DIR}/base ${CURRENT_BINARY_DIR}/gui)
 
 SET(QtApp_RCCS qt_cube.qrc)
 
 # generate rules for building source files from the resources
-QT4_ADD_RESOURCES(QtApp_RCC_SRCS ${QtApp_RCCS})
+#QT_ADD_RESOURCES(QtApp_RCC_SRCS ${QtApp_RCCS})
 
 
 ADD_EXECUTABLE(qt_cube main.cpp ${QtApp_RCC_SRCS} )
@@ -75,7 +98,7 @@ TARGET_LINK_LIBRARIES(qt_cube genericCpp buffers ${GENERIC_EXPORT_LIBS} hypercub
 
 
 
-target_link_libraries(qt_cube Qt4::QtGui Qt4::QtXml)
+target_link_libraries(qt_cube Qt5::QtGui Qt5::QtXml)
 TARGET_LINK_LIBRARIES(qt_cube ${LIBTBB})
 
 install(TARGETS qt_cube  

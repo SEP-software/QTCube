@@ -10,7 +10,7 @@ sufixes={"H" : "SEP", "T" :"SEP", "json":"JSON","h": "SEP", "t": "SEP", "RSF": "
        "segy": "SEGY", "sgy":"SEGY", "sp": "SEISPAK","SP": "SEISPAK"}
 
 
-myt=["SEP","SEGY","SEISPAK","SU"]
+myt=["SEP","SEGY","SEISPAK","SU","BUFFERS"]
 
 
 #YOU NEED TO EDIT THIS LIKE
@@ -104,8 +104,15 @@ def find_files(args,eqs):
   sufR=re.compile(".+\.(\S+)$")
   count=0;
   for arg in args:   
-      if not os.path.exists(arg):
-       err("%s is not a file. Expecting all arguments not of form a=b to be files to display"%arg)
+    if os.path.isfile(arg+"/des.dat"):
+        get_json_params(arg+"/des.dat",eqs,count)
+        eqs["data%d"%count]=arg
+        eqs["type%d"%count]="FILE"
+        eqs["fileType%d"%count]="BUFFERS"
+        count+=1
+    else:
+      if not os.path.isfile(arg):
+       err("%s is not a file or a buffers file. Expecting all arguments not of form a=b to be files to display"%arg)
       fnd=sufR.search(arg)
       if not fnd:
         if not "type%d"%count in eqs:
@@ -129,6 +136,8 @@ def find_files(args,eqs):
           get_sep_params(arg,eqs,"g")
       elif eqs["fileType%d"%count]=="JSON":
         get_json_params(arg,eqs,count)
+      elif eqs["fileType%d"%count]=="BUFFERS":
+              get_json_params(arg,eqs,count)
       elif eqs["fileType%d"%count]=="SEISPAK":
         get_seispak_params(arg,eqs,count)
         if not pars_exist("g",eqs):
@@ -160,7 +169,7 @@ def find_files(args,eqs):
   eqs["ndata"]=str(count)
   return count,eqs      
 def getJsonParam(file,par):
-   stat,out,err=get_status_output("grep %s %s"%(par,file))    
+   stat,out,err=get_status_output("grep %s %s"%(par,file),None)    
    if not stat: 
     return ""
    else:
@@ -187,7 +196,7 @@ def get_json_params(file,par,o):
    if not  "n%s_%d"%(o,i+1) in par: par["n%s_%d"%(o,i+1)]=out1
    if not "o%s_%d"%(o,i+1) in par: par["o%s_%d"%(o,i+1)]=out2
    if not "d%s_%d"%(o,i+0) in par: par["d%s_%d"%(o,i+1)]=out3
-   if not "label%s_%d"%(o,i+1) in oar: par["label%s_%d"%(o,i+1)]=out4
+   if not "label%s_%d"%(o,i+1) in par: par["label%s_%d"%(o,i+1)]=out4
  return par
 def get_sep_params(file,par,o):
  for i in range(8):

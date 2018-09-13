@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(qtcube-gui)
    set(CMAKE_AUTOMOC TRUE)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 include_directories(${TBB_INCLUDE_DIRS})
@@ -68,6 +69,5 @@ incore_data.cpp        part_semb_data.cpp      window_panel.cpp
 interval_pick.cpp      path.cpp	       windows.cpp
 io_func.cpp	       pick_bucket.cpp
 maps.cpp	       pick_draw.cpp)
-FIND_PACKAGE(Qt4 REQUIRED)
-INCLUDE(${QT_USE_FILE})
+#INCLUDE(${QT_USE_FILE})
 add_library(gui 	${SOURCES} ${INCLUDES})
