@@ -1,9 +1,10 @@
 #ifndef AUTOPICK_H
 #define AUTOPICK_H 1
 #include <vector>
+#include "float1DReg.h"
+
 #include "autopick_2d.h"
-#include "float_1d.h"
-#include "float_2d.h"
+#include "float2DReg.h"
 #include "pick_draw.h"
 #include "view.h"
 namespace SEP {
@@ -20,11 +21,11 @@ class autopick {
   int get_ipick() { return ipick; }
   void set_correlate() { correlate = true; }
   void set_amplitude() { correlate = false; }
-  std::shared_ptr<float_2d> extract_dat(std::shared_ptr<SEP::orient_cube> pos,
-                                        std::shared_ptr<dataset> dat,
-                                        int isingle, int isort,
-                                        std::shared_ptr<float_1d> line, int ns,
-                                        int f);
+  std::shared_ptr<float2DReg> extract_dat(std::shared_ptr<SEP::orient_cube> pos,
+                                          std::shared_ptr<dataset> dat,
+                                          int isingle, int isort,
+                                          std::shared_ptr<float1DReg> line,
+                                          int ns, int f);
   void pick_line(std::shared_ptr<view> myv, float *fpos,
                  std::shared_ptr<SEP::orient_cube> pos, int iax1, int iax2,
                  int isort, int isingle, std::shared_ptr<pairs_new> myp,
@@ -34,8 +35,8 @@ class autopick {
   bool get_correlate() { return correlate; }
   int get_ncor() { return ncor; }
   int get_nsearch() { return nsearch; }
-  std::shared_ptr<float_2d> correlate_it(std::shared_ptr<float_2d> ar, int ncor,
-                                         std::vector<int> close);
+  std::shared_ptr<float2DReg> correlate_it(std::shared_ptr<float2DReg> ar,
+                                           int ncor, std::vector<int> close);
   int decrease_auto() {
     cur_auto--;
     return 0;
