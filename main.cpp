@@ -10,13 +10,15 @@
 #include "drawwindow.h"
 //#include "pick_groups.h"
 #include <ioModes.h>
-#include "created_data.h"
-#include "incore_data.h"
+#include "Qcreated_data.h"
+#include "Qincore_data.h"
+#include "Qoutcore_data.h"
+#include "Qsurface_data.h"
+
+#include "Qpartial_data.h"
 #include "nmo_semblance.h"
 #include "nmoed.h"
-#include "outcore_data.h"
 #include "part_semb_data.h"
-#include "partial_data.h"
 #include "pick_draw.h"
 #include "surface_data.h"
 #include "util.h"
@@ -49,7 +51,6 @@ int main(int argc, char** argv) {
     std::string title =
         pars->getString(std::string("title") + std::to_string(i), name);
     std::shared_ptr<io_func> iof;
-    QString nameq = QString(name.c_str());
     if (i == 0 && type != std::string("FILE"))
       pars->error("First type specified must be a file");
     if (type == std::string("FILE")) {
@@ -62,58 +63,58 @@ int main(int argc, char** argv) {
       iof = fileI;
       if (i == 0) grid = iof->return_hyper();
     } else if (type == std::string("SEMBLANCE")) {
-      std::shared_ptr<nmo_semblance> se(
-          new nmo_semblance(grid, datas->return_dat(imov), it_axis, ioff_axis,
-                            5, pars, pk, red, blue));
+      std::shared_ptr<nmo_semblance> se(new nmo_semblance(
+          grid, datas->return_dat(imov), it_axis, ioff_axis, 5, pars, pk,
+          red.toStdString(), blue.toStdString()));
       iof = se;
     } else if (type == std::string("NMOED")) {
-      std::shared_ptr<nmoed> nmo(new nmoed(grid, datas->return_dat(imov),
-                                           it_axis, ioff_axis, 5, pars, pk, red,
-                                           blue));
+      std::shared_ptr<nmoed> nmo(
+          new nmoed(grid, datas->return_dat(imov), it_axis, ioff_axis, 5, pars,
+                    pk, red.toStdString(), blue.toStdString()));
       iof = nmo;
     } else
       pars->error(std::string("Unknown storage type :") + type);
 
     if (storage == std::string("IN_FLOAT")) {
-      std::shared_ptr<incore_data_float> icf(
-          new incore_data_float(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qincore_data_float> icf(
+          new Qincore_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icf);
     } else if (storage == std::string("IN_BYTE")) {
-      std::shared_ptr<incore_data_byte> icb(
-          new incore_data_byte(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qincore_data_byte> icb(
+          new Qincore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("PART_FLOAT")) {
-      std::shared_ptr<partial_data_float> icb(
-          new partial_data_float(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qpartial_data_float> icb(
+          new Qpartial_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("PART_BYTE")) {
-      std::shared_ptr<partial_data_byte> icb(
-          new partial_data_byte(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qpartial_data_byte> icb(
+          new Qpartial_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("OUT_FLOAT")) {
-      std::shared_ptr<outcore_data_float> icb(
-          new outcore_data_float(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qoutcore_data_float> icb(
+          new Qoutcore_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("OUT_BYTE")) {
-      std::shared_ptr<outcore_data_byte> icb(
-          new outcore_data_byte(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qoutcore_data_byte> icb(
+          new Qoutcore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("CREATED_FLOAT")) {
-      std::shared_ptr<created_data_float> icb(
-          new created_data_float(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qcreated_data_float> icb(
+          new Qcreated_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("CREATED_BYTE")) {
-      std::shared_ptr<created_data_byte> icb(
-          new created_data_byte(title, nameq, grid, iof, pars, i, 1));
+      std::shared_ptr<Qcreated_data_byte> icb(
+          new Qcreated_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else
       pars->error("unknown storage type");
   }
   int surf = pars->getInt("do_surface", 0);
   if (surf == 1) {
-    std::shared_ptr<surface_data> sd(
-        new surface_data(grid, "Surface", "single", datas->return_dat(0), pars,
-                         pk, "red", pars->getInt("ndata")));
+    std::shared_ptr<Qsurface_data> sd(
+        new Qsurface_data(grid, "Surface", "single", datas->return_dat(0), pars,
+                          pk, "red", pars->getInt("ndata")));
   }
   std::shared_ptr<slice_types> ct(new slice_types());
 

@@ -101,7 +101,8 @@ class pick_draw {
                     QString col = "None");
   void delete_pick_vals(int ival, QString col);
   void float_to_int(const float *floc, int *iloc);
-  std::map<long long, std::shared_ptr<SEP::pick_new>> return_all(QString col) {
+  std::map<long long, std::shared_ptr<SEP::pick_new>> return_all(
+      const std::string &col) {
     return buck->return_all(col);
   }
   std::shared_ptr<SEP::picks_vec> return_all_picks(

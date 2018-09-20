@@ -149,10 +149,9 @@ void pick_draw::write_file(const QString &text) {
     for (int j = 0; j < b->return_size(); j++) {
       std::shared_ptr<pick_new> p(b->return_pick(j));
       int_to_float(p->iloc, floc);
-      fprintf(fd, "%s %f %f %f %f %f %f %f %f %d %d %s\n",
-              p->col.toLatin1().constData(), floc[0], floc[1], floc[2], floc[3],
-              floc[4], floc[5], floc[6], floc[7], p->type, p->extra,
-              p->txt.toLatin1().constData());
+      fprintf(fd, "%s %f %f %f %f %f %f %f %f %d %d %s\n", p->col.c_str(),
+              floc[0], floc[1], floc[2], floc[3], floc[4], floc[5], floc[6],
+              floc[7], p->type, p->extra, p->txt.c_str());
     }
   }
   fclose(fd);
@@ -160,7 +159,8 @@ void pick_draw::write_file(const QString &text) {
 void pick_draw::add_rotated_pt(int orient_num, int *iloc, int type, QString col,
                                int ex, QString t) {
   long long pos = buck->loc_to_index(iloc);
-  std::shared_ptr<pick_new> pk(new pick_new(iloc, pos, 1, active_col, ex, t));
+  std::shared_ptr<pick_new> pk(new pick_new(
+      iloc, pos, 1, active_col.toStdString(), ex, t.toStdString()));
   std::shared_ptr<pick_new> orig(serv->convert_back_pick(orient_num, pk));
   add_pt(orig->iloc, type, col, ex, active_txt);
 }
@@ -170,21 +170,23 @@ void pick_draw::add_pt(int *iloc, int type, QString col, int ex, QString txt) {
   if (ex == -99) ex = extra;
 
   long long pos = buck->loc_to_index(iloc);
-  std::shared_ptr<pick_new> pk = buck->get_pick(pos, col);
+  std::shared_ptr<pick_new> pk = buck->get_pick(pos, col.toStdString());
   if (pk) {
     for (std::map<int, std::shared_ptr<pick_orient>>::iterator p =
              orient_planes.begin();
          p != orient_planes.end(); p++) {
       std::shared_ptr<pick_new> pk2 = serv->convert_pick(p->second->oc, pk);
-      std::shared_ptr<pick_new> pk3 = p->second->buck->get_pick(pk2->pos, col);
+      std::shared_ptr<pick_new> pk3 =
+          p->second->buck->get_pick(pk2->pos, col.toStdString());
       assert(pk3 != 0);
       p->second->planes->del_pick(pk3);
-      p->second->buck->del_pick(pk3->pos, col);
+      p->second->buck->del_pick(pk3->pos, col.toStdString());
     }
     planes->del_pick(pk);
-    buck->del_pick(pk->pos, col);
+    buck->del_pick(pk->pos, col.toStdString());
   }
-  pk = buck->add_pick(iloc, pos, type, col, extra, active_txt);
+  pk = buck->add_pick(iloc, pos, type, col.toStdString(), extra,
+                      active_txt.toStdString());
   for (std::map<int, std::shared_ptr<pick_orient>>::iterator p =
            orient_planes.begin();
        p != orient_planes.end(); p++) {
@@ -207,11 +209,11 @@ void pick_draw::delete_multi_picks(std::vector<long long> locs) {
   QString col = active_col;
   for (int i = 0; i < (int)locs.size(); i++) {
     std::shared_ptr<pick_new> pk;
-    pk = buck->get_pick(locs[i], col);
+    pk = buck->get_pick(locs[i], col.toStdString());
     if (pk != 0) {
       del_pick_orients(pk);
       planes->del_pick(pk);
-      buck->del_pick(locs[i], col);
+      buck->del_pick(locs[i], col.toStdString());
     }
   }
 }
@@ -225,15 +227,15 @@ void pick_draw::del_nearest(std::shared_ptr<orient_cube> pos, int *iloc,
     ;
   }
   long long hsh = buck->loc_to_index(iloc);
-  hsh = buck->find_nearest(hsh, iax1, iax2, col);
+  hsh = buck->find_nearest(hsh, iax1, iax2, col.toStdString());
 
-  std::shared_ptr<pick_new> pk = buck->get_pick(hsh, col);
+  std::shared_ptr<pick_new> pk = buck->get_pick(hsh, col.toStdString());
   if (!pk) {
     return;
   }
   del_pick_orients(pk);
   planes->del_pick(pk);
-  buck->del_pick(hsh, col);
+  buck->del_pick(hsh, col.toStdString());
 }
 void pick_draw::del_pt(std::shared_ptr<orient_cube> pos, int *iloc, int iax1,
                        int iax2) {
@@ -245,13 +247,13 @@ void pick_draw::del_pt(std::shared_ptr<orient_cube> pos, int *iloc, int iax1,
     ;
   }
   long long hsh = buck->loc_to_index(iloc);
-  std::shared_ptr<pick_new> pk = buck->get_pick(hsh, col);
+  std::shared_ptr<pick_new> pk = buck->get_pick(hsh, col.toStdString());
   if (!pk) {
     return;
   }
   del_pick_orients(pk);
   planes->del_pick(pk);
-  buck->del_pick(hsh, col);
+  buck->del_pick(hsh, col.toStdString());
 }
 void pick_draw::del_pick_orients(std::shared_ptr<pick_new> pk) {
   for (std::map<int, std::shared_ptr<pick_orient>>::iterator p =
@@ -274,7 +276,7 @@ std::shared_ptr<pairs_new> pick_draw::get_pts_sort(
   std::shared_ptr<pairs_new> prs(new pairs_new());
   for (int i = 0; i < all->return_size(); i++) {
     std::shared_ptr<pick_new> p = all->return_pick(i);
-    if (col == p->col) {
+    if (col.toStdString() == p->col) {
       prs->add_point(p->iloc[iax1], p->iloc[iax2]);
     }
   }
@@ -332,18 +334,18 @@ std::shared_ptr<picks_vec> pick_draw::return_all_picks(
     std::shared_ptr<orient_cube> pos, QString col) {
   int orient_num = -1;
   if (pos != 0) orient_num = pos->get_orient_num();
-  if (orient_num == -1) return buck->return_all_picks(col);
+  if (orient_num == -1) return buck->return_all_picks(col.toStdString());
   check_create_oc(pos);
-  return orient_planes[orient_num]->buck->return_all_picks(col);
+  return orient_planes[orient_num]->buck->return_all_picks(col.toStdString());
 }
 std::shared_ptr<picks_vec> pick_draw::return_iloc_based(int *iloc,
                                                         QString col) {
-  std::shared_ptr<picks_vec> all = buck->return_all_picks(col);
+  std::shared_ptr<picks_vec> all = buck->return_all_picks(col.toStdString());
 
   std::shared_ptr<picks_vec> sub(new picks_vec());
   for (int i = 0; i < all->return_size(); i++) {
     std::shared_ptr<pick_new> p = all->return_pick(i);
-    if (p->col == col)
+    if (p->col == col.toStdString())
       if ((iloc[0] != 1 || iloc[0] != p->iloc[0]))
         if (iloc[1] != 1 || iloc[1] != p->iloc[1])
           if (iloc[2] != 1 || iloc[2] != p->iloc[2])
@@ -475,8 +477,9 @@ void pick_param::draw_points(QPainter *painter,
     iy = points->vals[i].y;
     ix = points->vals[i].x;
     if (txt) {
-      int pw = fm->width(points->vals[i].txt);
-      painter->drawText(ix - pw / 2, iy, points->vals[i].txt);
+      int pw = fm->width(QString::fromStdString(points->vals[i].txt));
+      painter->drawText(ix - pw / 2, iy,
+                        QString::fromStdString(points->vals[i].txt));
     } else {
       bx = ix - sz;
       by = iy - sz;
@@ -508,13 +511,13 @@ void pick_param::draw_line(QPainter *painter, std::shared_ptr<pairs_new> points,
   painter->drawPolyline(pointarray);
 }
 void pick_draw::delete_pick_vals(int ival, QString col) {
-  std::shared_ptr<picks_vec> pks = buck->get_pick_type(ival, col);
+  std::shared_ptr<picks_vec> pks = buck->get_pick_type(ival, col.toStdString());
 
   for (int i = 0; i < pks->return_size(); i++) {
     std::shared_ptr<pick_new> pik = pks->return_pick(i);
     del_pick_orients(pik);
     planes->del_pick(pik);
-    buck->del_pick(pik->pos, col);
+    buck->del_pick(pik->pos, col.toStdString());
   }
 }
 void pick_draw::clear_picks(std::shared_ptr<orient_cube> pos, int *iloc,
@@ -526,7 +529,7 @@ void pick_draw::clear_picks(std::shared_ptr<orient_cube> pos, int *iloc,
     serv->convert_back_pick(pos->get_orient_num(), pka->return_pick(i));
   for (int i = 0; i < pk->return_size(); i++) {
     std::shared_ptr<pick_new> pik = pk->return_pick(i);
-    if (pik->col == col) {
+    if (pik->col == col.toStdString()) {
       del_pick_orients(pik);
       planes->del_pick(pik);
       buck->del_pick(pik->pos, pik->col);
@@ -544,7 +547,7 @@ std::shared_ptr<pairs_new> pick_draw::get_pts_sort_le(
   std::shared_ptr<pairs_new> prs(new pairs_new());
   for (int i = 0; i < pks->return_size(); i++) {
     std::shared_ptr<pick_new> p = pks->return_pick(i);
-    if ((p->col == col) && p->type <= ival) {
+    if ((p->col == col.toStdString()) && p->type <= ival) {
       if (iax1 != isort)
         prs->add_point(p->iloc[iax1], p->iloc[iax2]);
       else

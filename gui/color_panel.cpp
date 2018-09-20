@@ -211,7 +211,8 @@ int *color_bar2::return_map(QString col) {
 }
 QString color_bar2::create_maps() {
   int *array = return_map(color);
-  QString temp = util::string_from_int_array(256, array);
+  QString temp =
+      QString::fromStdString(util::string_from_int_array(256, array));
   delete[] array;
   return temp;
 }

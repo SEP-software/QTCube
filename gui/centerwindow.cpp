@@ -123,9 +123,11 @@ MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
     end[i] = datas->return_dat(0)->get_grid_axis(i + 1).n;
     init[i] = end[i] / 2;
   }
+
   modeLabel = new QLabel(mouse_lab, this);
   statusBar()->addWidget(modeLabel);
   create_mouse_funcs();
+
   std::shared_ptr<position> ps(new position(
       std::static_pointer_cast<hypercube>(datas->return_dat(0)->return_grid()),
       init, beg, end, 2));
@@ -135,8 +137,11 @@ MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
   serv = s2;
   ;
   pk->set_server(serv);
+
   pk->set_position(pos);
+
   create_panels();
+
   create_windows();
 
   QWidget *widget = new QWidget;
@@ -196,6 +201,7 @@ MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
     my_wind->return_window(i)->show();
   }
   connect_it();
+
   my_pan->update_all();
   update_status_bar();
   std::vector<QString> coms;
@@ -247,6 +253,7 @@ void MainWindow::actionRespond(std::vector<QString> coms) {
   // for(int i=0; i < coms.size(); i++)  fprintf(stderr,"%s
   // ",coms[i].toLatin1().constData()); fprintf(stderr,"\n");
   // fflush(stderr);
+
   if (coms[1].contains("none")) return;
   if (coms[0].contains("annotate"))
     coms.insert(coms.begin(), QString::number(my_wind->get_active_num()));
@@ -326,7 +333,7 @@ void MainWindow::actionRespond(std::vector<QString> coms) {
   }
   update_status_bar();
   coms[0] = "none";
-  coms[1] == "none";
+  coms[1] = "none";
 }
 void MainWindow::update_status_bar() {
   if (stat_view.contains("mouse") > 0) {

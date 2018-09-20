@@ -1,8 +1,6 @@
 #pragma once
 #ifndef CENTERWINDOW_H
 #define CENTERWINDOW_H
-#include "panels.h"
-
 #include <genericIO.h>
 #include <qmainwindow.h>
 #include <QAction>
@@ -10,6 +8,8 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenuBar>
+#include <QTreeWidget>
+#include "panels.h"
 #include "position.h"
 #include "slice_types.h"
 //#include "pick_groups.h"

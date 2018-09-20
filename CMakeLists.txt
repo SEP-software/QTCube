@@ -51,6 +51,7 @@ install(PROGRAMS ${PROJECT_BINARY_DIR}/Sep_cube DESTINATION bin)
 find_package(Qt5
              COMPONENTS Core
                         Widgets
+                        Multimedia
                         Gui
                         PrintSupport
                         REQUIRED)
@@ -76,12 +77,29 @@ add_subdirectory(gui)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui
                     ${CMAKE_CURRENT_SOURCE_DIR}/base)
 
-set(QtApp_RCCS qt_cube.qrc)
+FIND_PACKAGE( Boost 1.40 COMPONENTS program_options unit_test_framework REQUIRED )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+
+
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+set(RESOURCE
+    ${CMAKE_CURRENT_SOURCE_DIR}/qt_cube.qrc)
 
 # generate rules for building source files from the resources
-# QT_ADD_RESOURCES(QtApp_RCC_SRCS ${QtApp_RCCS})
-
-add_executable(qt_cube main.cpp ${QtApp_RCC_SRCS})
+qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
+add_executable(qt_cube main.cpp ${RESOURCE_ADDED})
 set_property(TARGET qt_cube PROPERTY LINKER_LANGUAGE CXX)
 target_link_libraries(qt_cube gui)
 target_link_libraries(qt_cube base)

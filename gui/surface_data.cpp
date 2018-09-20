@@ -1,10 +1,11 @@
 #include "surface_data.h"
 using namespace SEP;
-surface_data::surface_data(std::shared_ptr<hypercube> g, QString nm,
-                           QString typ, std::shared_ptr<dataset> dt,
-                           std::shared_ptr<paramObj> p,
-                           std::shared_ptr<pick_draw> picks, QString col,
-                           int in) {
+void surface_data::surfaceInit(std::shared_ptr<hypercube> g,
+                               const std::string &nm, const std::string &typ,
+                               std::shared_ptr<Qdataset> dt,
+                               std::shared_ptr<paramObj> p,
+                               std::shared_ptr<pick_draw> picks,
+                               const std::string &col, int in) {
   data_type = "SURFACE";
   title = nm;
   title_short = nm;
@@ -24,7 +25,7 @@ surface_data::surface_data(std::shared_ptr<hypercube> g, QString nm,
   isingle = 0;
   display = typ;
   show_picks = false;
-  values = std::string(display.toLatin1().constData());
+  values = display;
   build_conv();
   update_pick = true;
   nslices = 9;
@@ -55,7 +56,8 @@ void surface_data::create_buffer(std::shared_ptr<orient_cube> pos) {
   update_surface();
 }
 void surface_data::update_surface() {
-  std::shared_ptr<picks_vec> mn = pk->return_all_picks(my_pos, pick_col);
+  std::shared_ptr<picks_vec> mn =
+      pk->return_all_picks(my_pos, QString::fromStdString(pick_col));
 
   for (long long i = 0; i < nbuf; i++) buf[i] = FUNKY_VAL;
 
@@ -76,7 +78,7 @@ void surface_data::update_surface() {
   minv = 1e32;
   maxv = -1e32;
   axis a = h->getAxis(isingle + 1);
-  if (display.contains("single")) {
+  if (display == "single") {
     for (int i = 0; i < mn->return_size(); i++) {
       std::shared_ptr<pick_new> p = mn->picks[i];
       long long o = 0;
@@ -208,20 +210,19 @@ float *surface_data::check_load_slice(std::shared_ptr<orient_cube> pos,
   return slices[slices.size() - 1]->return_slice(pos, f1, e1, f2, e2);
 }
 
-QString surface_data::return_histogram() {
-  QString b;
+std::string surface_data::return_histogram() {
+  std::string b;
 
-  b = QString::number(histo[0]);
+  b = std::to_string(histo[0]);
   for (int i = 1; i < 256; i++) {
-    b = b + ":" + QString::number(histo[i]);
+    b = b + ":" + std::to_string(histo[i]);
   }
   return b;
 }
-void surface_data::set_display(std::shared_ptr<orient_cube> pos, QString d) {
-  display = d;
-  form_histo(pos);
-}
+
 void surface_data::form_histo(std::shared_ptr<orient_cube> lc) {
+  ;
+
   std::map<long long, std::shared_ptr<pick_new>> all = pk->return_all(pick_col);
   std::shared_ptr<orient_cube> pos(new orient_cube(lc));
 
@@ -232,10 +233,10 @@ void surface_data::form_histo(std::shared_ptr<orient_cube> lc) {
   lc->get_ds(d);
   int j = 0;
 
-  if (display.contains("amp")) {
+  if (display == "amp") {
     for (i = all.begin(); i != all.end(); ++i) {
       pos->set_locs(i->second->iloc);
-      vals[j] = dat->get_value(pos);
+      vals[j] = get_value(pos);
 
       j++;
     }
@@ -269,29 +270,38 @@ void surface_data::form_histo(std::shared_ptr<orient_cube> lc) {
     histo[i] = histo[i] / mys;
   }
   delete[] vals;
+  /*
+    std::vector<QString> com2;
+    lices.clear();
+    com2.push_back(QString::number(getInum()));
+    com2.push_back("menu");
+    com2.push_back("Clip");
+    com2.push_back("set_histo");
+    QString b = QString::number(histo[0]);
+    for (int i = 1; i < 256; i++) {
+      b = b + ":" + QString::number(histo[i]);
+    }
 
-  slices.clear();
-  std::vector<QString> com2;
-  com2.push_back(QString::number(inum));
-  com2.push_back("menu");
-  com2.push_back("Clip");
-  com2.push_back("set_histo");
-  QString b = QString::number(histo[0]);
-  for (int i = 1; i < 256; i++) {
-    b = b + ":" + QString::number(histo[i]);
-  }
+    com2.push_back(b);
 
-  com2.push_back(b);
-
-  emit actionDetected(com2);
+    emit actionDetected(com2);
+    */
 }
-void surface_data::set_dataset(std::shared_ptr<orient_cube> pos, QString dt,
-                               std::shared_ptr<dataset> da) {
+void surface_data::set_display(std::shared_ptr<orient_cube> pos,
+                               const std::string &d) {
+  display = d;
+  form_histo(pos);
+}
+
+void surface_data::set_dataset(std::shared_ptr<orient_cube> pos,
+                               const std::string &dt,
+                               std::shared_ptr<Qdataset> da) {
   dat = da;
   data_name = dt;
   form_histo(pos);
 }
-void surface_data::set_color(std::shared_ptr<orient_cube> pos, QString col) {
+void surface_data::set_color(std::shared_ptr<orient_cube> pos,
+                             const std::string &col) {
   pick_col = col;
   form_histo(pos);
 }
@@ -299,12 +309,13 @@ void surface_data::set_single(std::shared_ptr<orient_cube> pos, int is) {
   isingle = is;
   for (int i = 0; i < 8; i++) data_contains[i] = display_axis[i] = true;
   data_contains[isingle] = display_axis[isingle] = false;
-  values = std::string(display.toLatin1().constData());
+  values = display;
   form_histo(pos);
 }
 surface_slice::surface_slice(std::shared_ptr<orient_cube> pos, int i1, int i2,
-                             int ising, QString dis, QString col,
-                             std::shared_ptr<dataset> dat,
+                             int ising, const std::string &dis,
+                             const std::string &col,
+                             std::shared_ptr<Qdataset> dat,
                              std::shared_ptr<pick_draw> pk) {
   iax1 = i1;
   iax2 = i2;
@@ -320,20 +331,21 @@ surface_slice::surface_slice(std::shared_ptr<orient_cube> pos, int i1, int i2,
   iloc[iax2] = -1;
   iloc[isingle] = -1;
 
-  std::shared_ptr<picks_vec> all = pk->return_iloc_based(iloc, color);
+  std::shared_ptr<picks_vec> all =
+      pk->return_iloc_based(iloc, QString::fromStdString(color));
   float o[8], d[8];
   pos->get_os(o);
   pos->get_ds(d);
   n1 = n[iax1];
   n2 = n[iax2];
-  if (display.contains("amp"))
+  if (display == "amp")
     form_amp_slice(pos, all, dat);
   else
     form_depth_slice(pos, all, o[isingle], d[isingle]);
 }
 void surface_slice::form_amp_slice(std::shared_ptr<orient_cube> ori,
                                    std::shared_ptr<picks_vec> all,
-                                   std::shared_ptr<dataset> dat) {
+                                   std::shared_ptr<Qdataset> dat) {
   std::shared_ptr<orient_cube> pos(new orient_cube(ori));
   slice = new float[n1 * n2];
   for (int i = 0; i < n1 * n2; i++) slice[i] = FUNKY_VAL;
@@ -372,9 +384,9 @@ void surface_slice::form_depth_slice(std::shared_ptr<orient_cube> ori,
     }
   }
 }
-bool surface_slice::have_slice(QString dis, QString col, int ising,
-                               std::shared_ptr<orient_cube> pos, int i1,
-                               int i2) {
+bool surface_slice::have_slice(const std::string &dis, const std::string &col,
+                               int ising, std::shared_ptr<orient_cube> pos,
+                               int i1, int i2) {
   if (dis != display) return false;
 
   if (col != color) return false;
