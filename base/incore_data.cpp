@@ -15,7 +15,8 @@ incore_data_float::incore_data_float(const std::string& title,
   datas = io->return_hyper();
 }
 
-buffer* incore_data_float::create_buffer(orient_cube* pos, int iax1, int iax2) {
+std::shared_ptr<buffer> incore_data_float::create_buffer(orient_cube* pos,
+                                                         int iax1, int iax2) {
   std::vector<int> nw(8, 1), fw(8, 1);
   std::vector<axis> axes = grid->getAxes(8);
   for (int i = 0; i < 8; i++) {
@@ -27,7 +28,8 @@ buffer* incore_data_float::create_buffer(orient_cube* pos, int iax1, int iax2) {
     ;
   }
 
-  float_buffer* b = new float_buffer(par, grid, io, inum, nw, fw);
+  std::shared_ptr<float_buffer> b(
+      new float_buffer(par, grid, io, inum, nw, fw));
   return b;
 }
 

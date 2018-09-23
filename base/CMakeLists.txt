@@ -13,11 +13,14 @@ set(SOURCES
     orient_map.cpp
     outcore_data.cpp
     buffer.cpp
+    buffers_data.cpp
     incore_data.cpp
     pick_new.cpp
     position.cpp
     orientation_server.cpp
     float_buffer.cpp
+    float_buffer_buffer.cpp
+    byte_buffer_buffer.cpp
     byte_buffer.cpp
     partial_data.cpp
     io_func.cpp
@@ -42,13 +45,16 @@ set(INCLUDES
     pairs_new.h
     incore_data.h
     fastmarch.h
+    buffers_data.h
     buffer.h
     position.h
     created_data.h
+        float_buffer_buffer.h
     orientation_server.h
     pick_new.h
     outcore_data.h
     orient_cube.h
+    byte_buffer_buffer.h
     orient_map.h
     partial_data.h
     fileIO.h

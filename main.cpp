@@ -10,6 +10,7 @@
 #include "drawwindow.h"
 //#include "pick_groups.h"
 #include <ioModes.h>
+#include "Qbuffers_data.h"
 #include "Qcreated_data.h"
 #include "Qincore_data.h"
 #include "Qoutcore_data.h"
@@ -41,6 +42,7 @@ int main(int argc, char** argv) {
   int ioff_axis = pars->getInt("off_axis", 1);
   int imes_axis = pars->getInt("mes_axis", 5);
   int imov = pars->getInt("moveout_data", 0);
+  std::string fileType;
   std::shared_ptr<hypercube> grid;
   for (int i = 0; i < pars->getInt("ndata"); i++) {
     std::string type =
@@ -54,8 +56,8 @@ int main(int argc, char** argv) {
     if (i == 0 && type != std::string("FILE"))
       pars->error("First type specified must be a file");
     if (type == std::string("FILE")) {
-      std::string fileType = pars->getString(
-          std::string("fileType") + std::to_string(i), defaultType);
+      fileType = pars->getString(std::string("fileType") + std::to_string(i),
+                                 defaultType);
       std::cerr << " before get gile type " << fileType << std::endl;
 
       std::shared_ptr<fileIO> fileI(new fileIO(name, modes, fileType));
@@ -83,6 +85,20 @@ int main(int argc, char** argv) {
       std::shared_ptr<Qincore_data_byte> icb(
           new Qincore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
+
+    } else if (fileType == std::string("BUFFERS_FLOAT")) {
+      int nmem = pars->getInt("memory", 512);
+      std::shared_ptr<Qbuffers_data_float> bufs(
+          new Qbuffers_data_float(title, name, grid, iof, pars, i, nmem));
+      datas->add_dat(bufs);
+
+    } else if (storage == std::string("BUFFERS_BYTE")) {
+      int nmem = pars->getInt("memory", 512);
+
+      std::shared_ptr<Qbuffers_data_byte> bufs(
+          new Qbuffers_data_byte(title, name, grid, iof, pars, i, nmem));
+      datas->add_dat(bufs);
+
     } else if (storage == std::string("PART_FLOAT")) {
       std::shared_ptr<Qpartial_data_float> icb(
           new Qpartial_data_float(title, name, grid, iof, pars, i, 1));
@@ -90,14 +106,6 @@ int main(int argc, char** argv) {
     } else if (storage == std::string("PART_BYTE")) {
       std::shared_ptr<Qpartial_data_byte> icb(
           new Qpartial_data_byte(title, name, grid, iof, pars, i, 1));
-      datas->add_dat(icb);
-    } else if (storage == std::string("OUT_FLOAT")) {
-      std::shared_ptr<Qoutcore_data_float> icb(
-          new Qoutcore_data_float(title, name, grid, iof, pars, i, 1));
-      datas->add_dat(icb);
-    } else if (storage == std::string("OUT_BYTE")) {
-      std::shared_ptr<Qoutcore_data_byte> icb(
-          new Qoutcore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
     } else if (storage == std::string("CREATED_FLOAT")) {
       std::shared_ptr<Qcreated_data_float> icb(

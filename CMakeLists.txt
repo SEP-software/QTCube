@@ -40,7 +40,9 @@ if(NOT TARGET genericCpp)
   include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/external/json
     )
-
+  include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib
+    )
 endif(NOT TARGET genericCpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/Sep_cube.in"

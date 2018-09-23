@@ -58,6 +58,7 @@ set(INCLUDES
     orient_panel.h
     drawwindow.h
     Qsurface_data.h
+    Qbuffers_data.h
     view.h
     panel.h
     surface_data.h
@@ -84,8 +85,6 @@ set(SOURCES
     pick_draw.cpp
     mouse_func.cpp
     pick_plane_new.cpp
- 
-
     mouse_orient.cpp
     autopick.cpp
     mouse_overlay.cpp
