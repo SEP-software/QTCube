@@ -109,9 +109,9 @@ def find_files(args,eqs):
         eqs["data%d"%count]=arg
         eqs["type%d"%count]="FILE"
         print (args,eqs)
-        if args["dataType"]=="FLOAT"
+        if eqs["dataType"]=="FLOAT":
           eqs["fileType%d"%count]="BUFFERS_FLOAT"
-        elif args["dataType"]=="BYTE"
+        elif eqs["dataType"]=="BYTE":
           eqs["fileType%d"%count]="BUFFERS_BYTE"
         count+=1
     else:
@@ -188,7 +188,7 @@ def getJsonParam(file,par):
      return ""
 
 def get_json_params(file,par,o):
- par["dataType"]= getJsonParams(dataType)
+ par["dataType"]= getJsonParam(file,"dataType")
  for i in range(8):
    out1=getJsonParam(file,"n%d"%i)
    out2=getJsonParam(file,"o%d"%i)
