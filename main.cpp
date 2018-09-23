@@ -87,6 +87,7 @@ int main(int argc, char** argv) {
       datas->add_dat(icb);
 
     } else if (fileType == std::string("BUFFERS_FLOAT")) {
+      std::cerr << "in this one " << std::endl;
       int nmem = pars->getInt("memory", 512);
       std::shared_ptr<Qbuffers_data_float> bufs(
           new Qbuffers_data_float(title, name, grid, iof, pars, i, nmem));
