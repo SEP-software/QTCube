@@ -175,6 +175,7 @@ def find_files(args,eqs):
   eqs["ndata"]=str(count)
   return count,eqs      
 def getJsonParam(file,par):
+   print(file)
    stat,out,err=get_status_output("grep %s %s"%(par,file),None)    
    if not stat: 
     return ""
@@ -185,6 +186,7 @@ def getJsonParam(file,par):
        return m.group(1)
      x=re.compile('"\S+"\s*:\s*"(\S+)"') 
      m=x.search(out)
+     print(out)
      if m: 
        return m.group(1)
      return ""
