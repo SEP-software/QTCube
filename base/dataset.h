@@ -54,12 +54,7 @@ class dataset {
   int find_buffer(std::shared_ptr<orient_cube> pos);
   virtual void afterInitialization() { ; }
   virtual std::shared_ptr<buffer> create_buffer(
-      std::shared_ptr<orient_cube> pos, int iax1, int iax2) {
-    if (pos == 0 || iax1 == 0 || iax2 == 0) {
-      ;
-    };
-    return 0;
-  }
+      std::shared_ptr<orient_cube> pos, int iax1, int iax2) = 0;
   SEP::axis get_grid_axis(int iax) { return grid->getAxis(iax); }
   SEP::axis get_io_axis(int iax) { return io->return_hyper()->getAxis(iax); }
   std::string get_bcolor() { return bcolor; }

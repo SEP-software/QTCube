@@ -40,7 +40,8 @@ class surface_data : public dataset {
                    std::shared_ptr<SEP::pick_draw> picks,
                    const std::string &col, int in);
   void set_single(std::shared_ptr<SEP::orient_cube> pos, int is);
-  void create_buffer(std::shared_ptr<SEP::orient_cube> pos);
+  virtual std::shared_ptr<buffer> create_buffer(
+      std::shared_ptr<SEP::orient_cube> pos, int iax1, int iax2) override;
   void update_surface();
 
   virtual unsigned char *get_char_data(std::shared_ptr<SEP::orient_cube> pos,

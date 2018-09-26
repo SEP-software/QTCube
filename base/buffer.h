@@ -26,7 +26,7 @@ class buffer{
     }
     void clean_up();
   
-    bool hold_slice(std::shared_ptr<orient_cube>pos, int iax1, int iax2,bool *data_contains);
+   virtual  bool hold_slice(std::shared_ptr<orient_cube>pos, int iax1, int iax2,bool *data_contains);
     virtual void read_hyper(int *nw, int *fw){
       if(fw==0 || nw==0){;};
       _par->error("Read hyper unimplemented");

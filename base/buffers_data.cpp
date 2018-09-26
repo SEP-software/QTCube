@@ -15,8 +15,9 @@ buffers_data_float::buffers_data_float(const std::string& title,
   // datas = io->return_hyper();
 }
 
-std::shared_ptr<buffer> buffers_data_float::create_buffer(orient_cube* pos,
-                                                          int iax1, int iax2) {
+std::shared_ptr<buffer> buffers_data_float::create_buffer(
+    std::shared_ptr<SEP::orient_cube> pos, int iax1, int iax2) {
+  std::cerr << "in create buffer " << std::endl;
   std::vector<int> nw(8, 1), fw(8, 1);
   std::vector<axis> axes = grid->getAxes(8);
   for (int i = 0; i < 8; i++) {
@@ -27,6 +28,7 @@ std::shared_ptr<buffer> buffers_data_float::create_buffer(orient_cube* pos,
   if (iax1 == 0 && iax2 == 0 && pos == 0) {
     ;
   }
+  std::cerr << "in create buff2er " << std::endl;
 
   std::shared_ptr<float_buffer_buffer> b(
       new float_buffer_buffer(par, grid, io, inum, nw, fw, _mem));

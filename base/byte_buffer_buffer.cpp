@@ -44,8 +44,6 @@ unsigned char *byte_buffer_buffer::get_char_data(int n, long long *index) {
 unsigned char *byte_buffer_buffer::get_char_data(
     std::shared_ptr<orient_cube> pos, int iax1, int f1, int e1, int iax2,
     int f2, int e2) {
-  if (!hold[iax1] || !hold[iax2])
-    _par->error("Internal error don't hold axes requested");
   std::vector<int> jw(_ndim, 1);
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
@@ -53,7 +51,7 @@ unsigned char *byte_buffer_buffer::get_char_data(
 
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
-      if (f1 > e1) {
+      if (f1 < e1) {
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
@@ -62,7 +60,7 @@ unsigned char *byte_buffer_buffer::get_char_data(
       }
 
     } else if (idim == iax2) {
-      if (f2 > e2) {
+      if (f2 < e2) {
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {
@@ -131,8 +129,6 @@ unsigned char *byte_buffer_buffer::get_char_data(
 float *byte_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
                                           int iax1, int f1, int e1, int iax2,
                                           int f2, int e2) {
-  if (!hold[iax1] || !hold[iax2])
-    _par->error("Internal error don't hold axes requested");
   std::vector<int> jw(_ndim, 1);
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
@@ -140,7 +136,7 @@ float *byte_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
 
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
-      if (f1 > e1) {
+      if (f1 < e1) {
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
@@ -149,7 +145,7 @@ float *byte_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
       }
 
     } else if (idim == iax2) {
-      if (f2 > e2) {
+      if (f2 < e2) {
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {

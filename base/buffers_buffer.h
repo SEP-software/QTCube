@@ -20,6 +20,9 @@ class float_buffer: public buffer{
   void read_buffer(std::vector<int>&nwin, std::vector<int>& fwin, std::vector<int>&nwout, std::vector<int>&fwout,int ndim, std::vector<int>&nloop);
   virtual void calc_histo();
   virtual float get_value(std::shared_ptr<SEP::orient_cube>pos);
+   virtual  bool hold_slice(std::shared_ptr<orient_cube>pos, int iax1, int iax2,bool *data_contains){
+  return true;
+}
 
   
 

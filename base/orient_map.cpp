@@ -9,6 +9,7 @@ orient_map::orient_map(bool rot, int i_ax1, int i_ax2, int *rotax,
                        std::vector<axis> axrot, int **rr1, int **rr2, int *begs,
                        int *i_loc, int *ends, int *n_s, bool r1, bool r2,
                        std::vector<int> mp, int sa, int bs, int es) {
+  std::cerr << "in orient map" << std::endl;
   map = 0;
   map_1d = mp;
   shift_ax = sa;
@@ -71,6 +72,7 @@ void pick_holder::del_pick(long long index) {
   hash.erase(i);
 }
 long long *orient_map::get_index_map_ptr() {
+  std::cerr<<"in get index mape ptr "<<std::endl;
   if (map == 0) form_index_map();
   return map;
 }
@@ -617,7 +619,12 @@ void orient_map::orient_data_loc(int *cur, int *ipos) {
   // fprintf(stderr,"IN 2ORIE \n");
 }
 void orient_map::shift_data_image(float *pct) {
+  std::cerr << "in 1 " << pct[0] << " " << pct[1] << std::endl;
+  std::cerr << "in 2" << shift_ax << std::endl;
+  std::cerr << "in shift data image " << shift_ax << " " << iax1 << " " << iax2
+            << std::endl;
   if (shift_ax < 0 || (shift_ax != iax1 && shift_ax != iax2)) return;
+  std::cerr << "in shift2 data image" << std::endl;
 
   // All that matters is what to look up in our
   // map_1d function

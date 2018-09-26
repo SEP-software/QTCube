@@ -5,7 +5,10 @@
 using namespace SEP;
 orient_cube::orient_cube(std::shared_ptr<position> pos, std::vector<int> o,
                          std::shared_ptr<orientation_server> s) {
+
+std::cerr<<"IN ORIENT CUBE1"<<std::endl;
   init = true;
+  _name=std::string("BBB");
   block[0] = 1;
   ax_rot.resize(2);
   for (int i = 0; i < 8; i++) {
@@ -25,6 +28,8 @@ orient_cube::orient_cube(std::shared_ptr<position> pos, std::vector<int> o,
   ax_rot[1] = pos->getAxis(rot_ax[1]);
   orient_num = serv->get_new_num();
   orient_inst = serv->get_new_inst();
+  ang=0;
+ rotate=false;
   set_no_rotate();
 
   this->sync_pos(pos);
@@ -40,6 +45,7 @@ orient_cube::orient_cube(std::shared_ptr<position> pos, std::vector<int> o,
 orient_cube::orient_cube(std::shared_ptr<hypercube> h,
                          std::shared_ptr<orientation_server> s) {
   init = true;
+std::cerr<<"IN ORIENT CUBE2"<<std::endl;
   block[0] = 1;
   serv = s;
   for (int i = 0; i < 8; i++) {
@@ -69,6 +75,7 @@ orient_cube::orient_cube(std::shared_ptr<hypercube> h,
     orient_num = serv->get_new_num(orient_num, rot_ax, ax_rot, ang, rot_cen);
 }
 orient_cube::orient_cube(std::shared_ptr<orient_cube> ori) {
+std::cerr<<"IN ORIENT CUBE3"<<std::endl;
   init = true;
   for (int i = 0; i < 8; i++) {
     this->set_axis(i, ori->getAxis(i));
@@ -151,6 +158,8 @@ void orient_cube::form_index_map(int iax1, int iax2, bool rev1, bool rev2) {
   int i3a = 0, i3v = 0;
   int ibig = form_map_name(iax1, iax2, 0, &i3a, &i3v);
 
+std::cerr<<"in form index map "<<ibig<<std::endl;
+
   if (rot_maps.count(ibig) == 0) {  // need to create map
     int ns[8], bs[8], es[8], iloc[8];
     get_ns(ns);
@@ -158,6 +167,7 @@ void orient_cube::form_index_map(int iax1, int iax2, bool rev1, bool rev2) {
     get_ends(es);
     get_locs(iloc);
     int b_s = 0, e_s = 0;
+ std::cerr<<"IN ROT MAPS SIZE "<<rot_maps.size()<<" MMM "<<_name<<std::endl;
 
     if (shift_ax != -1) {
       b_s = bs[shift_ax];
@@ -170,6 +180,7 @@ void orient_cube::form_index_map(int iax1, int iax2, bool rev1, bool rev2) {
     rot_maps[ibig].reset(new orient_map(
         rotate, iax1, iax2, rot_ax, ax_rot, rot_to_reg_1, rot_to_reg_2, bs,
         iloc, es, ns, rev1, rev2, one_shift, shift_ax, b_s, e_s));
+ std::cerr<<"IN ROT MAPS SIZE "<<rot_maps.size()<<std::endl;
     update_map_order(ibig, true);
   } else
     update_map_order(ibig, false);
@@ -217,10 +228,8 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1,
   }
   if (found) {
     update_map_order(ibig, false);
-    // fprintf(stderr,"in found \n");
     return rot_maps[ibig]->get_index_map_ptr();
   } else {
-    // fprintf(stderr,"in create \n");
     int ns[8], bs[8], es[8], iloc[8];
     get_ns(ns);
     get_begs(bs);
@@ -237,8 +246,6 @@ long long *orient_cube::get_index_map_ptr(int iax1, int iax2, int f1, int e1,
       bs[shift_ax] = begs[b_s];
       e_s = std::min(es[shift_ax], getAxis(shift_ax).n - 1);
       es[shift_ax] = ends[e_s];
-      // fprintf(stderr,"setting up axis range2 as %d %d %d
-      // %d\n",bs[0],es[0],b_s,e_s);
     }
     iloc[i3a] = i3v;
 
@@ -499,6 +506,7 @@ void orient_cube::set_rot_axes(int a1, int a2) {
   set_rotation();
 }
 void orient_cube::set_no_rotate() {
+  if(ang==0) return;
   ang = 0;
   rotate = false;
   delete_maps();

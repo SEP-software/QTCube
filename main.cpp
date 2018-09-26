@@ -14,14 +14,13 @@
 #include "Qcreated_data.h"
 #include "Qincore_data.h"
 #include "Qoutcore_data.h"
-#include "Qsurface_data.h"
+//#include "Qsurface_data.h"
 
 #include "Qpartial_data.h"
 #include "nmo_semblance.h"
 #include "nmoed.h"
 #include "part_semb_data.h"
 #include "pick_draw.h"
-#include "surface_data.h"
 #include "util.h"
 using namespace SEP;
 int main(int argc, char** argv) {
@@ -58,10 +57,9 @@ int main(int argc, char** argv) {
     if (type == std::string("FILE")) {
       fileType = pars->getString(std::string("fileType") + std::to_string(i),
                                  defaultType);
-      std::cerr << " before get gile type " << fileType << std::endl;
-
+      std::cerr << "BEFOER OPE" << std::endl;
       std::shared_ptr<fileIO> fileI(new fileIO(name, modes, fileType));
-
+      std::cerr << "AFTER OPE" << std::endl;
       iof = fileI;
       if (i == 0) grid = iof->return_hyper();
     } else if (type == std::string("SEMBLANCE")) {
@@ -75,18 +73,21 @@ int main(int argc, char** argv) {
                     pk, red.toStdString(), blue.toStdString()));
       iof = nmo;
     } else
-      pars->error(std::string("Unknown storage type :") + type);
+      pars->error(std::string("Unknown  type :") + type);
 
     if (storage == std::string("IN_FLOAT")) {
+      std::cerr << "IN FLOAT " << std::endl;
       std::shared_ptr<Qincore_data_float> icf(
           new Qincore_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icf);
     } else if (storage == std::string("IN_BYTE")) {
+      std::cerr << "IN BYTE " << std::endl;
+
       std::shared_ptr<Qincore_data_byte> icb(
           new Qincore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
 
-    } else if (fileType == std::string("BUFFERS_FLOAT")) {
+    } else if (storage == std::string("BUFFERS_FLOAT")) {
       std::cerr << "in this one " << std::endl;
       int nmem = pars->getInt("memory", 512);
       std::shared_ptr<Qbuffers_data_float> bufs(
@@ -119,12 +120,14 @@ int main(int argc, char** argv) {
     } else
       pars->error("unknown storage type");
   }
+  /*
   int surf = pars->getInt("do_surface", 0);
   if (surf == 1) {
     std::shared_ptr<Qsurface_data> sd(
         new Qsurface_data(grid, "Surface", "single", datas->return_dat(0), pars,
                           pk, "red", pars->getInt("ndata")));
   }
+  */
   std::shared_ptr<slice_types> ct(new slice_types());
 
   MainWindow* window = new MainWindow(defaultIO, datas, pk, ct);

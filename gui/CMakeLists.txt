@@ -57,11 +57,11 @@ set(INCLUDES
     draw_other.h
     orient_panel.h
     drawwindow.h
-    Qsurface_data.h
+    #Qsurface_data.h
     Qbuffers_data.h
     view.h
     panel.h
-    surface_data.h
+   # surface_data.h
     view_panel.h
     panel_panel.h
     view_types.h
@@ -78,7 +78,7 @@ set(INCLUDES
 set(SOURCES
     anno.cpp
     mode.cpp
-    surface_data.cpp
+   # surface_data.cpp
     ano_panel.cpp
     mouse_anno.cpp
     pick_panel.cpp

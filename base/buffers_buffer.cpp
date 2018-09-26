@@ -9,6 +9,7 @@ float_buffer::float_buffer(std::shared_ptr<paramObj>p, std::shared_ptr<hypercube
 
      window_to_local(nwbuf,fwbuf);
     fbuf=new float [n123_buf];
+   for9int i=0; i < 8; i++) hold[i]=true;
 
     int ndim;
     std::vector<int> nwio(8,1),fwio(8,0),nloop(8,1);

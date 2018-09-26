@@ -18,8 +18,8 @@ class incore_data_float : public incore_data {
                     std::shared_ptr<io_func> i, std::shared_ptr<paramObj> p,
                     int in, int mmap, int im = 1);
   ~incore_data_float() { clean_bufs(); }
-  std::shared_ptr<buffer> create_buffer(SEP::orient_cube *pos, int iax1,
-                                        int iax2);
+  virtual std::shared_ptr<buffer> create_buffer(
+      std::shared_ptr<SEP::orient_cube> pos, int iax1, int iax2) override;
 };
 
 class incore_data_byte : public incore_data {
@@ -30,7 +30,7 @@ class incore_data_byte : public incore_data {
                    std::shared_ptr<io_func> i, std::shared_ptr<paramObj> p,
                    int in, int im = 1);
   ~incore_data_byte() { clean_bufs(); }
-  std::shared_ptr<buffer> create_buffer(std::shared_ptr<SEP::orient_cube> pos,
-                                        int iax1, int iax2);
+  virtual std::shared_ptr<buffer> create_buffer(
+      std::shared_ptr<SEP::orient_cube> pos, int iax1, int iax2) override;
 };
 }  // namespace SEP

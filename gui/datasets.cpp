@@ -46,7 +46,7 @@ void datasets::update_data(std::vector<QString> command) {
   } else if (command[2].contains("beg_clip") > 0) {
     dats[idat]->set_bcolor(command[3].toStdString());
 
-  } else if (command[2].contains("surface") > 0) {
+  } /*else if (command[2].contains("surface") > 0) {
     if (command[3].contains("update") > 0) {
       std::shared_ptr<Qdataset> r = dats[idat];
       std::shared_ptr<surface_data> x =
@@ -54,7 +54,8 @@ void datasets::update_data(std::vector<QString> command) {
       x->update_surface();
       // ( (std::shared_ptr<surface_data>) dats[idat])->update_surface();
     }
-  } else if (command[2].contains("end_clip") > 0) {
+}*/
+  else if (command[2].contains("end_clip") > 0) {
     dats[idat]->set_ecolor(command[3].toStdString());
   } else if (command[2].contains("new") > 0) {
     par->error("Error no longer supported ");

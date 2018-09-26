@@ -108,11 +108,11 @@ def find_files(args,eqs):
         get_json_params(arg+"/des.dat",eqs,count)
         eqs["data%d"%count]=arg
         eqs["type%d"%count]="FILE"
-        print (args,eqs)
+        eqs["fileType%d"%count]="BUFFERS"
         if eqs["dataType"]=="FLOAT":
-          eqs["dataType%d"%count]="BUFFERS_FLOAT"
+          eqs["storage%d"%count]="BUFFERS_FLOAT"
         elif eqs["dataType"]=="BYTE":
-          eqs["dataType%d"%count]="BUFFERS_BYTE"
+          eqs["storage%d"%count]="BUFFERS_BYTE"
         else:
           err("Only can handle float and byte")
         count+=1
@@ -175,18 +175,17 @@ def find_files(args,eqs):
   eqs["ndata"]=str(count)
   return count,eqs      
 def getJsonParam(file,par):
-   print(file)
    stat,out,err=get_status_output("grep %s %s"%(par,file),None)    
-   if not stat: 
+   if  stat!=0: 
     return ""
    else:
      x=re.compile('"\S+"\s*:\s*(\d+)') 
      m=x.search(out)
      if m: 
        return m.group(1)
+      
      x=re.compile('"\S+"\s*:\s*"(\S+)"') 
      m=x.search(out)
-     print(out)
      if m: 
        return m.group(1)
      return ""

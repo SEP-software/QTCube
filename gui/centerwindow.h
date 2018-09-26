@@ -1,6 +1,6 @@
 #pragma once
-#ifndef CENTERWINDOW_H
-#define CENTERWINDOW_H
+#include "float2DReg.h"
+
 #include <genericIO.h>
 #include <qmainwindow.h>
 #include <QAction>
@@ -145,4 +145,3 @@ class MainWindow : public QMainWindow {
   QString mouse_lab;
 };
 }  // namespace SEP
-#endif

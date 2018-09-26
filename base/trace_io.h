@@ -1,5 +1,6 @@
-#ifndef TRACE_IO_H
-#define TRACE_IO_H 1
+#pragma once
+
+#include <string.h>
 #include "hypercube.h"
 #include "io_func.h"
 #include "util.h"
@@ -30,4 +31,3 @@ class trace_io : public io_func {
   bool loaded;
 };
 }  // namespace SEP
-#endif

@@ -618,7 +618,12 @@ long long buffer::point_to_local(std::shared_ptr<position> pos) {
   return iloc;
 }
 bool buffer::hold_point(float *pos_loc, bool *use_axis) {
+  return true;
   for (int i = 0; i < 8; i++) {
+std::cerr<<"wher is eeror ro 1 "<<hold[i]<<std::endl;
+std::cerr<<"wher is eeror ro 2 "<<use_axis[i]<<std::endl;
+std::cerr<<"wher is eeror ro 3 "<<loc[i]<<std::endl;
+std::cerr<<"wher is eeror ro 3 "<<pos_loc[i]<<std::endl;
     if (!hold[i] && pos_loc[i] != loc[i] && use_axis[i] &&
         hyper_buf->getAxis(i + 1).n > 1) {
       //       std::cout << "FAILING "<<i<<" hold="<<hold[i]<<"

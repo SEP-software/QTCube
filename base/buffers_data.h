@@ -1,5 +1,4 @@
-#ifndef INCORE_DATA_H
-#define INCORE_DATA_H 1
+#pragma once
 #include "dataset.h"
 namespace SEP {
 class buffers_data : public dataset {
@@ -17,8 +16,8 @@ class buffers_data_float : public buffers_data {
                      std::shared_ptr<SEP::io_func> i,
                      std::shared_ptr<SEP::paramObj> p, const int inum,
                      const int mem);
-  std::shared_ptr<buffer> create_buffer(SEP::orient_cube* pos, int iax1,
-                                        int iax2);
+  std::shared_ptr<buffer> create_buffer(std::shared_ptr<SEP::orient_cube> pos,
+                                        int iax1, int iax2);
 };
 
 class buffers_data_byte : public buffers_data {
@@ -30,7 +29,6 @@ class buffers_data_byte : public buffers_data {
                     std::shared_ptr<SEP::paramObj> p, const int inum,
                     const int mem);
   std::shared_ptr<buffer> create_buffer(std::shared_ptr<SEP::orient_cube> pos,
-                                        int iax1, int iax2);
+                                        int iax1, int iax2) override;
 };
 }  // namespace SEP
-#endif

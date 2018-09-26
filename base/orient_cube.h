@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <cassert>
 #include "orient_map.h"
 #include "orientation_server.h"
 #include "position.h"
@@ -65,6 +66,9 @@ class orient_cube : public position {
   void form_index_map(int iax1, int iax2, bool r1, bool r2);
   void shift_data_image(int iax1, int iax2, float *locs) {
     int i3a = 0, i3b = 0;
+   int imap=form_map_name(iax1, iax2, 0, &i3a, &i3b);
+  std::cerr<<imap<<"=imap size="<<rot_maps.size()<<" "<<_name<<std::endl;
+    assert(rot_maps.count(imap) ==1);
     rot_maps[form_map_name(iax1, iax2, 0, &i3a, &i3b)]->shift_data_image(locs);
   }
   long long *get_index_map_ptr(int iax1, int iax2, int delta, int *n) {
@@ -184,6 +188,7 @@ class orient_cube : public position {
           rot_cen[1];
   }
   void rotation_change() {
+   std::cerr<<"in rotataion change  reset"<<std::endl;
     rot_maps.clear();
     map_order.clear();
 
@@ -209,6 +214,8 @@ class orient_cube : public position {
   std::vector<SEP::axis> ax_rot;
   int **rot_to_reg_1;
   int **rot_to_reg_2;
+  std::string _name=std::string("none");
+  std::map<int, std::shared_ptr<orient_map>> rot_maps;
 
  private:
   std::list<int> map_order;
@@ -226,7 +233,6 @@ class orient_cube : public position {
   int *begs, *ends;
   //  int  **map_1d;
   float rot_cen[2];
-  std::map<int, std::shared_ptr<orient_map>> rot_maps;
   bool rev1, rev2, init;
   std::shared_ptr<orientation_server> serv;
   int orient_num;

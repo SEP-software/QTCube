@@ -1,5 +1,4 @@
-#ifndef BYTE_BUFFER_H
-#define BYTE_BUFFER_H 1
+#pragma once
 #include "buffer.h"
 namespace SEP{
 class byte_buffer: public buffer{
@@ -32,4 +31,3 @@ class byte_buffer: public buffer{
 
 };
 }
-#endif

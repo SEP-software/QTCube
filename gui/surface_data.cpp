@@ -49,7 +49,8 @@ void surface_data::surfaceInit(std::shared_ptr<hypercube> g,
   buf = new float[nbuf];
   my_orient = -1;
 }
-void surface_data::create_buffer(std::shared_ptr<orient_cube> pos) {
+void surface_data::create_buffer(std::shared_ptr<orient_cube> pos, int iax1,
+                                 int iax2) {
   if (pos->get_orient_num() == my_orient) return;
   my_orient = pos->get_orient_num();
   my_pos = pos;

@@ -675,8 +675,8 @@ bool slice::get_shifted_image_pos_from_sample(int iax2, int iax1, int *id1,
 void slice::get_shifted_image_pos_from_sam_fract(float iax2, float iax1,
                                                  int *id1, int *id2) {
   int i, j;
-
   assert(this->get_image_pos_sample(iax2, iax1, &i, &j));
+
   *id1 = (int)(i + j * sy + bx);
   *id2 = (int)(j + i * sx + by);
 }
@@ -724,6 +724,9 @@ bool slice::get_image_pos_sample(float ix, float iy, int *id1, int *id2) {
   }
   pct[0] = std::max(0.f, std::min(.99999f, pct[0]));
   pct[1] = std::max(0.f, std::min(.99999f, pct[1]));
+  
+ std::cerr<<"WHAT IS THE PROBLEM "<<my_pos->rot_maps.size()<<"=SIZE OF MAPS"<<std::endl;
+
   ps->shift_data_image(iax1, iax2, pct);
 
   // fprintf(stderr,"pct out %f %f \n",pct[0],pct[1]);

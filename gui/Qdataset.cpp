@@ -4,7 +4,7 @@
 #include "math.h"
 using namespace SEP;
 
-Qdataset::Qdataset() { _data.reset(new dataset()); }
+Qdataset::Qdataset() {}
 
 int Qdataset::check_load_buffer(std::shared_ptr<orient_cube> pos,
                                 const int iax1, const int iax2) {

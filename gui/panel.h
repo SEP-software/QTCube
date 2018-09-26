@@ -218,7 +218,7 @@ class panel : public QWidget {
   bool overlay;         // Whether or not we are overlaying a dataset
   std::shared_ptr<datasets> datas;     // The collections of datasets that exist
   std::shared_ptr<draw_other> draw_o;  // What do draw in a given view
-  std::shared_ptr<orient_cube> pos;    // Returns info on what to display
+  std::shared_ptr<orient_cube> pos=nullptr;    // Returns info on what to display
   std::shared_ptr<SEP::paramObj> pars;  // Grab parameters from the command line
   std::vector<float> proportions;  // The ratios of the various axes we will use
   int jplane, grid1, grid2;        // When displaying multiple slices

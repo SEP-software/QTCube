@@ -13,6 +13,7 @@ float_buffer_buffer::float_buffer_buffer(std::shared_ptr<paramObj> p,
                                          std::vector<int> &nwbuf,
                                          std::vector<int> &fwbuf,
                                          const int mem) {
+  std::cerr << "in create float buf " << std::endl;
   set_basics(p, h, i, in);
 
   std::shared_ptr<fileIO> fIO = std::dynamic_pointer_cast<fileIO>(i);
@@ -21,6 +22,9 @@ float_buffer_buffer::float_buffer_buffer(std::shared_ptr<paramObj> p,
               << std::endl;
     assert(fIO);
   }
+
+  std::cerr << "in 2create float buf " << std::endl;
+
   std::shared_ptr<genericRegFile> f = fIO->getFile();
   _file = std::dynamic_pointer_cast<buffersRegFile>(f);
   if (!_file) {
@@ -28,6 +32,9 @@ float_buffer_buffer::float_buffer_buffer(std::shared_ptr<paramObj> p,
               << std::endl;
     assert(_file);
   }
+
+  std::cerr << "in 32create float buf " << std::endl;
+
   std::shared_ptr<IO::simpleMemoryLimit> memS(
       new IO::simpleMemoryLimit(mem * 1024));
   _file->setMemoryUsage(memS);
@@ -41,8 +48,6 @@ unsigned char *float_buffer_buffer::get_char_data(int n, long long *index) {
 unsigned char *float_buffer_buffer::get_char_data(
     std::shared_ptr<orient_cube> pos, int iax1, int f1, int e1, int iax2,
     int f2, int e2) {
-  if (!hold[iax1] || !hold[iax2])
-    _par->error("Internal error don't hold axes requested");
   std::vector<int> jw(_ndim, 1);
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
@@ -53,7 +58,7 @@ unsigned char *float_buffer_buffer::get_char_data(
             << std::endl;
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
-      if (f1 > e1) {
+      if (f1 < e1) {
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
@@ -62,7 +67,7 @@ unsigned char *float_buffer_buffer::get_char_data(
       }
 
     } else if (idim == iax2) {
-      if (f2 > e2) {
+      if (f2 < e2) {
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {
@@ -140,8 +145,6 @@ unsigned char *float_buffer_buffer::get_char_data(
 float *float_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
                                            int iax1, int f1, int e1, int iax2,
                                            int f2, int e2) {
-  if (!hold[iax1] || !hold[iax2])
-    _par->error("Internal error don't hold axes requested");
   std::vector<int> jw(_ndim, 1);
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
@@ -149,7 +152,7 @@ float *float_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
 
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
-      if (f1 > e1) {
+      if (f1 < e1) {
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
@@ -158,7 +161,7 @@ float *float_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
       }
 
     } else if (idim == iax2) {
-      if (f2 > e2) {
+      if (f2 < e2) {
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {

@@ -63,7 +63,7 @@ class orient_map {
   int nsz;
   int n1, n2;
   std::vector<int> map_1d;
-  int shift_ax;
+  int shift_ax = -1;
   int b_s, e_s;
   long long skip[8];
   bool rotate;
