@@ -6,18 +6,15 @@ using namespace SEP;
 
 int dataset::check_load_buffer(std::shared_ptr<orient_cube> pos, const int iax1,
                                const int iax2) {
-  std::cerr << "in check_local 1" << std::endl;
   for (int i = 0; i < (int)buf.size(); i++) {
     if (buf[i]->hold_slice(pos, iax1, iax2, data_contains)) {
-      std::cerr<<"hold true "<<i<<std::endl;
       return i;
     }
   }
   if ((int)buf.size() == nmax_buf) delete_dataset(pos, iax1, iax2);
-  std::cerr << "in check_local 2" << std::endl;
 
   buf.push_back(create_buffer(pos, iax1, iax2));
-  return (int)buf.size()-1;
+  return (int)buf.size() - 1;
 }
 void dataset::build_conv() {  // Handle
   float bpct = 0., bclip = 1, epct, eclip, f;
@@ -168,16 +165,12 @@ unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube> pos,
 unsigned char *dataset::get_char_data(std::shared_ptr<orient_cube> pos,
                                       int iax1, int f1, int e1, int iax2,
                                       int f2, int e2) {
-  std::cerr << "where i die 1" << std::endl;
   int ibuf = check_load_buffer(pos, iax1, iax2);
-  std::cerr << "whRESULT  die 1 ibuf=" <<ibuf<< std::endl;
 
   unsigned char *cbuf =
       buf[ibuf]->get_char_data(pos, iax1, f1, e1, iax2, f2, e2);
-  std::cerr << "where 3i die 1" << std::endl;
 
   for (int i = 0; i < abs((e1 - f1) * (e2 - f2)); i++) cbuf[i] = conv[cbuf[i]];
-  std::cerr << "where 4i die 1" << std::endl;
 
   return cbuf;
 }
@@ -209,10 +202,7 @@ long long dataset::get_trace_num(std::shared_ptr<orient_cube> pos) {
 void dataset::snap_location(float *floc, int single, const std::string &stype) {
   if ((int)buf.size() == 0) return;
   if (stype == "no") return;
-  std::cerr<<"In snap location NEW ORIENT CUBE"<<std::endl;
   std::shared_ptr<orient_cube> pos(new orient_cube(grid));
-pos->_name="EFFF";
-std::cerr<<"XXXXX "<<pos->_name<<std::endl;
   for (int i = 0; i < 8; i++) pos->set_pos(i, floc[i]);
 
   int ibuf = find_buffer(pos);
@@ -255,12 +245,10 @@ int dataset::find_buffer(std::shared_ptr<orient_cube> pos) {
   float loc[8];
   pos->get_poss(loc);
 
-std::cerr<<"SIZE="<<buf.size()<<std::endl;
   for (int i = 0; i < (int)buf.size(); i++) {
-    if (buf[i]->hold_point(loc, data_contains)){
-std::cerr<<" FOUND IN "<<i<<std::endl;
- return i;
-}
+    if (buf[i]->hold_point(loc, data_contains)) {
+      return i;
+    }
   }
   par->error("Internal error finding point in buffer\n");
   return 0;

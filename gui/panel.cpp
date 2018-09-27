@@ -39,9 +39,7 @@ panel::panel(int inum, std::shared_ptr<paramObj> pr,
       pars->getInts(std::string("order") + std::to_string(iview), ord);
 
   // Setup the orientation cube class
-  std::cerr<<"NEW ORIENT IN PANEL "<<std::endl;
   std::shared_ptr<orient_cube> op(new orient_cube(p, order, server));
-op->_name="ORIENT IS PANEL";
   pos = op;
   my_or->add_orient(pos);
 
@@ -162,7 +160,6 @@ void panel::set_o_data(int id) {
   fact_o->set_ecolor(QString::fromStdString(dat_o->get_ecolor()));
 }
 void panel::set_draw_bar(bool db) {
-  std::cerr << db << std::endl;
   drawit->draw_bar = db;
   if (myv_o != 0) {
     myv_o = view_by_name(view_name);
@@ -499,10 +496,6 @@ void panel::draw_base_pixmap(QPainter *painter) {
   painter->eraseRect(begx, begy, endx, endy);
 
   painter->setFont(*myf);
-
-
-if(pos==nullptr) std::cerr<<"SEE NULL PTR"<<std::endl;
-else std::cerr<<"DON NOT SEE NULL PTR"<<std::endl;
 
   if (overlay) {
     myv->viewit(painter, &pen, fact, dat->_data, pos, begx, endx, begy, endy,

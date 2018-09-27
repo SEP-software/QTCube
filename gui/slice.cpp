@@ -724,8 +724,6 @@ bool slice::get_image_pos_sample(float ix, float iy, int *id1, int *id2) {
   }
   pct[0] = std::max(0.f, std::min(.99999f, pct[0]));
   pct[1] = std::max(0.f, std::min(.99999f, pct[1]));
-  
- std::cerr<<"WHAT IS THE PROBLEM "<<my_pos->rot_maps.size()<<"=SIZE OF MAPS"<<std::endl;
 
   ps->shift_data_image(iax1, iax2, pct);
 

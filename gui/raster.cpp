@@ -47,7 +47,6 @@ QImage *raster::makeImage(unsigned char *uc, const int nx, const int ny,
     } else
       memcpy(ucuse, tmp, nxuse * nyuse);
   }
-
   QImage *image = new QImage(nxuse, nyuse, QImage::Format_Indexed8);
 
   int iy, ix;
@@ -62,6 +61,7 @@ QImage *raster::makeImage(unsigned char *uc, const int nx, const int ny,
     }
     memcpy((void *)image->scanLine(iy), (const void *)uc_tmp, nxuse);
   }
+
   delete[] uc_tmp;
   if (resized) delete[] ucuse;
 
@@ -181,10 +181,7 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
   // unsigned char *buf=
   //  dat->get_char_data(pos,iax1,iax2,abs((ee1-bb1)*(ee2-bb2)),slice_to_grid_map);
 
-  std::cerr << "in draw slice 1 image" << std::endl;
-
   unsigned char *buf = dat->get_char_data(pos, iax1, bb1, ee1, iax2, bb2, ee2);
-  std::cerr << "in draw 2 1 image" << std::endl;
 
   b_1 = f1;
   b_2 = f2;
@@ -197,13 +194,10 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
 
   QImage *temp = makeImage(buf, n2, n1, xe - xb, ye - yb);
 
-  std::cerr << "in draw slice 1 image" << std::endl;
-
   //   temp->setAlphaBuffer(true);
 
   QImage newt = temp->scaled(xe - xb, ye - yb);
   QPixmap t2 = QPixmap::fromImage(newt, Qt::OrderedAlphaDither);
-  std::cerr << "in draw slicfe 1 image" << std::endl;
 
   // QPixmap m_pixmap ;
   // m_pixmap.convertFromImage(newt);
@@ -212,7 +206,6 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
 
   painter->translate(bx, by);
   painter->shear(sy, sx);
-  std::cerr << "in draw slicae 1 image" << std::endl;
 
   // painter->drawImage(xb,yb,temp->scaled(xe-xb,ye-yb));
   // QImage newt=temp->scale(xe-xb,ye-yb);
@@ -224,17 +217,11 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
   painter->restore();
   // painter->translate(bx,by);
 
-  std::cerr << "in draw sliece 1 image" << std::endl;
-
   painter->setPen(*pen);
   if (!is_overlay) {
-    std::cerr << "in drdaw sliece 1 image" << std::endl;
-
     this->draw_axes(painter, pos, draw_grid);
-    std::cerr << "in deraw sliece 1 image" << std::endl;
 
     this->draw_pos(painter, pos);
-    std::cerr << "in drawh sliece 1 image" << std::endl;
   }
 
   delete temp;

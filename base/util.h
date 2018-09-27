@@ -4,6 +4,20 @@
 #include <vector>
 #include "paramObj.h"
 namespace SEP {
+
+class clips {
+ public:
+  clips() { ; }
+  clips(std::shared_ptr<SEP::paramObj> pars, const int inum);
+  void updateClips(const float minv, const float maxv);
+  float _clipMin, _clipMax;
+
+ private:
+  float _pctMin, _pctMax;
+  float _minV, _maxV;
+  bool _hardClip = false;
+};
+
 class util {
  public:
   util(std::shared_ptr<SEP::paramObj> pars) { par = pars; }
@@ -26,7 +40,6 @@ class util {
                         long long coff, long long nelem, float bclip,
                         float eclip);
 
- private:
   std::shared_ptr<SEP::paramObj> par;
 };
 }  // namespace SEP

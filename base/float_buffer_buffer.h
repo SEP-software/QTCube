@@ -1,8 +1,11 @@
 #pragma once
+
 #include "float2DReg.h"
+
 #include "buffer.h"
 #include "buffers.h"
 #include "buffersRegFile.h"
+
 #include "simpleMemoryLimit.h"
 namespace SEP {
 class float_buffer_buffer : public buffer {
@@ -26,7 +29,7 @@ class float_buffer_buffer : public buffer {
 
  private:
   std::shared_ptr<buffersRegFile> _file;
+  clips _clip;
   int _ndim;
-  float _minV = 1e31, _maxV = -1e31;
 };
 }  // namespace SEP

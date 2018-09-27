@@ -13,17 +13,14 @@ float_buffer_buffer::float_buffer_buffer(std::shared_ptr<paramObj> p,
                                          std::vector<int> &nwbuf,
                                          std::vector<int> &fwbuf,
                                          const int mem) {
-  std::cerr << "in create float buf " << std::endl;
   set_basics(p, h, i, in);
-
+  for (int i = 0; i < 8; i++) hold[i] = true;
   std::shared_ptr<fileIO> fIO = std::dynamic_pointer_cast<fileIO>(i);
   if (!fIO) {
     std::cerr << "Can only specify buffered IO with a buffered file"
               << std::endl;
     assert(fIO);
   }
-
-  std::cerr << "in 2create float buf " << std::endl;
 
   std::shared_ptr<genericRegFile> f = fIO->getFile();
   _file = std::dynamic_pointer_cast<buffersRegFile>(f);
@@ -33,12 +30,11 @@ float_buffer_buffer::float_buffer_buffer(std::shared_ptr<paramObj> p,
     assert(_file);
   }
 
-  std::cerr << "in 32create float buf " << std::endl;
-
   std::shared_ptr<IO::simpleMemoryLimit> memS(
       new IO::simpleMemoryLimit(mem * 1024));
   _file->setMemoryUsage(memS);
   _ndim = _file->getHyper()->getNdim();
+  _clip = clips(_util->par, in);
 }
 
 unsigned char *float_buffer_buffer::get_char_data(int n, long long *index) {
@@ -52,25 +48,32 @@ unsigned char *float_buffer_buffer::get_char_data(
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
   pos->set_no_rotate();
+  int beg2, beg1, delta1, delta2, j1, j2;
+  int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
 
-  std::cerr << "GET CHAR DATA" << f1 << " " << e1 << " " << f2 << " -2- " << e2
-            << " ===" << pos->loc[0] << " " << pos->loc[1] << " " << pos->loc[2]
-            << std::endl;
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
       if (f1 < e1) {
+        delta1 = 1;
+        beg1 = 0;
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
+        beg1 = n1 - 1;
+        delta1 = -1;
         fw[idim] = e1;
         nw[idim] = f1 - e1;
       }
 
     } else if (idim == iax2) {
       if (f2 < e2) {
+        delta2 = 1;
+        beg2 = 0;
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {
+        delta2 = -1;
+        beg2 = n2 - 1;
         fw[idim] = e2;
         nw[idim] = f2 - e2;
       }
@@ -78,67 +81,33 @@ unsigned char *float_buffer_buffer::get_char_data(
       fw[idim] = pos->loc[idim];
     }
   }
-  int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
+  if (iax1 > iax2) {
+    j1 = n2;
+    j2 = 1;
+  } else {
+    j1 = 1;
+    j2 = n1;
+  }
   std::shared_ptr<float2DReg> flt(new float2DReg(n1, n2));
   _file->readFloatWindow(nw, fw, jw, (float *)flt->getVoidPtr());
-  _minV = std::min((float)flt->min(), _minV);
-  _maxV = std::max((float)flt->max(), _maxV);
-  float j = (_maxV - _minV) / 255.;
-  unsigned char *out = new unsigned char[n1 * n1];
-  int i = 0;
+  _clip.updateClips((float)flt->min(), (float)flt->max());
+  float *vals = flt->getVals();
+  float j = (_clip._clipMax - _clip._clipMin) / 255.;
+  unsigned char *out = new unsigned char[n1 * n2];
 
-  if (e2 > f2) {
-    if (e1 > f1) {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = std::max(
-              0, std::min(255, (int)(((*flt->_mat)[i2][i1] - _minV) / j)));
-        }
-      }
-    } else {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = std::max(
-              0, std::min(255,
-                          (int)(((*flt->_mat)[i2][n1 - 1 - i1] - _minV) / j)));
-        }
-      }
+  int i = 0;
+  int l2 = beg2;
+  for (int i2 = 0; i2 < n2; i2++) {
+    int l1 = beg1;
+    for (int i1 = 0; i1 < n1; i1++, i++) {
+      out[i] = std::max(
+          0,
+          std::min(255, (int)((vals[l1 * j1 + l2 * j2] - _clip._clipMin) / j)));
+      l1 += delta1;
     }
-  } else {
-    if (e1 > f1) {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = std::max(
-              0, std::min(255,
-                          (int)(((*flt->_mat)[n2 - 1 - i2][i1] - _minV) / j)));
-          ;
-        }
-      }
-    } else {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = std::max(
-              0,
-              std::min(
-                  255,
-                  (int)(((*flt->_mat)[n1 - 1 - i2][n1 - 1 - i1] - _minV) / j)));
-        }
-      }
-    }
+    l2 += delta2;
   }
 
-  /*
-    int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
-    if (pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]])) {
-      fprintf(stderr, "Must hold rotated axes. Defaulting to no rotation.\n");
-      pos->set_no_rotate();
-    }
-
-    long long *index = form_index_map(pos, iax1, iax2, f1, e1, f2, e2);
-
-    unsigned char *out = get_char_data(n1 * n2, index);
-    delete[] index;
-    */
   return out;
 }
 
@@ -149,22 +118,32 @@ float *float_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
   std::vector<int> nw(_ndim, 1);
   std::vector<int> fw(_ndim, 1);
   pos->set_no_rotate();
+  int beg2, beg1, delta1, delta2, j1, j2;
+  int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
 
   for (int idim = 0; idim < _ndim; idim++) {
     if (idim == iax1) {
       if (f1 < e1) {
+        delta1 = 1;
+        beg1 = 0;
         fw[idim] = f1;
         nw[idim] = e1 - f1;
       } else {
+        beg1 = n1 - 1;
+        delta1 = -1;
         fw[idim] = e1;
         nw[idim] = f1 - e1;
       }
 
     } else if (idim == iax2) {
       if (f2 < e2) {
+        delta2 = 1;
+        beg2 = 0;
         fw[idim] = f2;
         nw[idim] = e2 - f2;
       } else {
+        delta2 = -1;
+        beg2 = n2 - 1;
         fw[idim] = e2;
         nw[idim] = f2 - e2;
       }
@@ -172,57 +151,32 @@ float *float_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
       fw[idim] = pos->loc[idim];
     }
   }
-  int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
+  if (iax1 > iax2) {
+    j1 = n2;
+    j2 = 1;
+  } else {
+    j1 = 1;
+    j2 = n1;
+  }
   std::shared_ptr<float2DReg> flt(new float2DReg(n1, n2));
   _file->readFloatWindow(nw, fw, jw, (float *)flt->getVoidPtr());
-  _minV = std::min((float)flt->min(), _minV);
-  _maxV = std::max((float)flt->max(), _maxV);
-  float *out = new float[n1 * n1];
-  int i = 0;
+  _clip.updateClips((float)flt->min(), (float)flt->max());
+  float *vals = flt->getVals();
+  float j = (_clip._clipMax - _clip._clipMin) / 255.;
+  float *out = new float[n1 * n2];
 
-  if (e2 > f2) {
-    if (e1 > f1) {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = (*flt->_mat)[i2][i1];
-        }
-      }
-    } else {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = (*flt->_mat)[i2][n1 - 1 - i1];
-        }
-      }
+  int i = 0;
+  int l2 = beg2;
+  for (int i2 = 0; i2 < n2; i2++) {
+    int l1 = beg1;
+    for (int i1 = 0; i1 < n1; i1++, i++) {
+      out[i] = std::max(_clip._clipMax,
+                        (std::min(_clip._clipMin, vals[l1 * j1 + l2 * j2])));
+      l1 += delta1;
     }
-  } else {
-    if (e1 > f1) {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = (*flt->_mat)[n2 - 1 - i2][i1];
-          ;
-        }
-      }
-    } else {
-      for (int i2 = 0; i2 < n2; i2++) {
-        for (int i1 = 0; i1 < n1; i1++, i++) {
-          out[i] = (*flt->_mat)[n1 - 1 - i2][n1 - 1 - i1];
-        }
-      }
-    }
+    l2 += delta2;
   }
 
-  /*
-    int n1 = abs(e1 - f1), n2 = abs(e2 - f2);
-    if (pos->get_rotate() && (!hold[pos->rot_ax[0]] || !hold[pos->rot_ax[1]]))
-    { fprintf(stderr, "Must hold rotated axes. Defaulting to no rotation.\n");
-      pos->set_no_rotate();
-    }
-
-    long long *index = form_index_map(pos, iax1, iax2, f1, e1, f2, e2);
-
-    unsigned char *out = get_char_data(n1 * n2, index);
-    delete[] index;
-    */
   return out;
 }
 

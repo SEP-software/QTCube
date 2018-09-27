@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h> /* atoi */
 #include <util.h>
@@ -6,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
 #include "percentile.h"
 
 using namespace SEP;
@@ -141,4 +143,53 @@ std::vector<std::string> util::split(const std::string &s, const char delim) {
     if (pos == std::string::npos) v.push_back(s.substr(i, s.length()));
   }
   return v;
+}
+
+clips::clips(std::shared_ptr<SEP::paramObj> pars, const int inum) {
+  float bclip =
+      pars->getFloat(std::string("bclip") + std::to_string(inum), -98765.);
+  float eclip =
+      pars->getFloat(std::string("eclip") + std::to_string(inum), -98765.);
+  float clip =
+      pars->getFloat(std::string("clip") + std::to_string(inum), -98765.);
+  float bpclip =
+      pars->getFloat(std::string("bpclip") + std::to_string(inum), -1.);
+  float epclip =
+      pars->getFloat(std::string("epclip") + std::to_string(inum), -1.);
+  float pclip =
+      pars->getFloat(std::string("pclip") + std::to_string(inum), -1.);
+
+  if (bclip != -98765) {
+    if (eclip == -98765)
+      pars->error("If you provide bclip you must also provide eclip");
+    _clipMin = bclip;
+    _clipMax = eclip;
+    _hardClip = true;
+  } else if (clip != -98765) {
+    _clipMin = -clip;
+    _clipMax = clip;
+    _hardClip = true;
+  }
+  _pctMin = _pctMax = 100;
+
+  bool set = false;
+  if (fabsf(epclip + 1) > .1) {
+    _pctMax = epclip;
+    set = true;
+  }
+  if (fabsf(bpclip + 1) > .1) {
+    _pctMin = 100 - _pctMin;
+    set = true;
+  }
+  if (fabsf(pclip - 1.) < .1) pclip = 99.;
+  _pctMin = _pctMax = pclip;
+}
+void clips::updateClips(const float minv, const float maxv) {
+  _minV = std::min(minv, _minV);
+  _maxV = std::max(maxv, _maxV);
+  if (!_hardClip) {
+    float delta = _maxV - _minV;
+    _clipMin = _minV + delta * _pctMin / 100.;
+    _clipMax = _maxV - delta * _pctMin / 100.;
+  }
 }
