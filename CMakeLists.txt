@@ -26,6 +26,9 @@ find_package(TBB REQUIRED)
 find_library(LIBTBB tbb REQUIRED)
 
 if(NOT TARGET genericCpp)
+  set(BUILD_PYTHON OFF)
+  set(BUILD_EXECUTABLES OFF)
+
   execute_process(COMMAND git submodule update --init --recursive --
                           external/genericIO
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
@@ -41,8 +44,7 @@ if(NOT TARGET genericCpp)
     ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/external/json
     )
   include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib
-    )
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib)
 endif(NOT TARGET genericCpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/Sep_cube.in"
@@ -79,25 +81,23 @@ add_subdirectory(gui)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui
                     ${CMAKE_CURRENT_SOURCE_DIR}/base)
 
-FIND_PACKAGE( Boost 1.40 COMPONENTS program_options unit_test_framework REQUIRED )
-INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
-
+find_package(Boost 1.40 COMPONENTS program_options unit_test_framework REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
 
 # use, i.e. don't skip the full RPATH for the build tree
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
 
-# when building, don't use the install RPATH already
-# (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+# when building, don't use the install RPATH already (but later on when
+# installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
-# add the automatically determined parts of the RPATH
-# which point to directories outside the build tree to the install RPATH
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# add the automatically determined parts of the RPATH which point to directories
+# outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(RESOURCE
-    ${CMAKE_CURRENT_SOURCE_DIR}/qt_cube.qrc)
+set(RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/qt_cube.qrc)
 
 # generate rules for building source files from the resources
 qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
