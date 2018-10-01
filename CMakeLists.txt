@@ -10,9 +10,10 @@ set(qtcube_MAJOR_VERSION 1)
 set(qtcube_MINOR_VERSION 2)
 set(qtcube_VERSION_STRING ${qtcuber_MAJOR_VERSION}.${qtcube_MINOR_VERSION})
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 
-enable_language(CXX)
 find_package(TBB REQUIRED)
 find_library(LIBTBB tbb REQUIRED)
 
