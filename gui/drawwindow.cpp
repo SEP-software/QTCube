@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QNativeGestureEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QtPrintSupport/QPrinter>
@@ -63,9 +64,25 @@ DrawWindow::DrawWindow(int ng1, int ng2,
   update_panel_map();
   this->wind_bg = "white";
   active_panel = 0;
-
+  setAttribute(Qt::WA_AcceptTouchEvents);
+  // grabGesture(Qt::PinchGesture);
+  // setAttribute(Qt::WA_InputMethodEnabled);
+  // setFocusPolicy(Qt::WheelFocus);
+  setAttribute(Qt::WA_StaticContents);
   set_active_panel(0);
 }
+bool DrawWindow::event(QEvent *event) {
+  if (event->type() == QEvent::NativeGesture) {
+    return panels[active_panel]->nativeGestureEvent(
+        static_cast<QNativeGestureEvent *>(event));
+  }
+  return QWidget::event(event);
+}
+void DrawWindow::grabGestures(const QList<Qt::GestureType> &gestures) {
+  foreach (Qt::GestureType gesture, gestures)
+    grabGesture(gesture);
+}
+
 void DrawWindow::add_panel(std::shared_ptr<panel> p) { panels.push_back(p); }
 void DrawWindow::pdf_save(QString sm, QString file) {
   QPrinter *printer;
@@ -346,6 +363,7 @@ void DrawWindow::keyReleaseEvent(QKeyEvent *e) {
       panels[active_panel]->keyReleaseEvent(e);
   }
 }
+
 int DrawWindow::get_panel(int ix, int iy) {
   mouse_boundx = mouse_boundy = -1;
   // First the x directions

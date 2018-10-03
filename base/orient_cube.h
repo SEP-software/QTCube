@@ -214,16 +214,16 @@ class orient_cube : public position {
   int **rot_to_reg_2;
   std::string _name = std::string("none");
   std::map<int, std::shared_ptr<orient_map>> rot_maps;
+  bool reverse[8];
+  int order[8];
 
  private:
   std::list<int> map_order;
   std::vector<int> one_shift;
   long long n123;
   int shift_ax;
-  int order[8];
   int blocks[8];
   int b_rot[2], e_rot[2];
-  bool reverse[8];
   bool rotate;
   float ang;
   float oversamp;

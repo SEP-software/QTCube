@@ -11,8 +11,11 @@
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qwidget.h>
+#include <QGestureEvent>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QNativeGestureEvent>
+
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPixmap>
@@ -31,6 +34,12 @@
 #include "slice_types.h"
 #include "view.h"
 namespace SEP {
+
+class QGestureEvent;
+class QPanGesture;
+class QPinchGesture;
+class QSwipeGesture;
+
 class panel : public QWidget {
   Q_OBJECT
 
@@ -41,6 +50,8 @@ class panel : public QWidget {
         std::shared_ptr<mouse_func> f, std::shared_ptr<orientation_server> s,
         std::shared_ptr<orients> oo, std::shared_ptr<maps> mp);
   std::shared_ptr<panel> clone(int inum);
+  void grabGestures(const QList<Qt::GestureType> &gestures);
+
  signals:
   void actionDetected(std::vector<QString> text);
 
@@ -200,6 +211,7 @@ class panel : public QWidget {
   bool get_update_it() { return update_it; }
   void set_update_it(bool x) { update_it = x; }
   std::shared_ptr<view> get_view() { return myv; }
+  bool nativeGestureEvent(::QNativeGestureEvent *event);
 
  protected:
  private slots:
@@ -208,7 +220,8 @@ class panel : public QWidget {
   // Private variables
   bool update_it;
   QPainter *paint;
-
+  int touchCount = 0;
+  double touchVal;
   std::shared_ptr<mouse_func> func;  // what the mouse does
   std::shared_ptr<annotate> ano;     // Annotations on this window
   std::shared_ptr<Qdataset>
@@ -218,7 +231,8 @@ class panel : public QWidget {
   bool overlay;         // Whether or not we are overlaying a dataset
   std::shared_ptr<datasets> datas;     // The collections of datasets that exist
   std::shared_ptr<draw_other> draw_o;  // What do draw in a given view
-  std::shared_ptr<orient_cube> pos=nullptr;    // Returns info on what to display
+  std::shared_ptr<orient_cube> pos =
+      nullptr;                          // Returns info on what to display
   std::shared_ptr<SEP::paramObj> pars;  // Grab parameters from the command line
   std::vector<float> proportions;  // The ratios of the various axes we will use
   int jplane, grid1, grid2;        // When displaying multiple slices

@@ -59,7 +59,11 @@ panel::panel(int inum, std::shared_ptr<paramObj> pr,
   jplane = 1;
   grid1 = 1;
   grid2 = 1;
-
+  setAttribute(Qt::WA_AcceptTouchEvents);
+  // grabGesture(Qt::PinchGesture);
+  // setAttribute(Qt::WA_InputMethodEnabled);
+  // setFocusPolicy(Qt::WheelFocus);
+  setAttribute(Qt::WA_StaticContents);
   first = true;  // Whether or not this is the initial creation
 
   // Sets the initial view to THREE and create it
@@ -515,6 +519,7 @@ void panel::keyPressEvent(QKeyEvent *e) {
       emit actionDetected(this->myv->keyPressEvent(e, pos));
   }
 }
+
 void panel::keyReleaseEvent(QKeyEvent *e) {
   std::vector<QString> com;
   com.push_back(iview_s);
@@ -616,6 +621,91 @@ void panel::pdf_save(QPainter *painter) {
 
   myv->set_new_font(fm);
 }
+bool panel::nativeGestureEvent(::QNativeGestureEvent *event) {
+  std::vector<QString> coms;
+  coms.push_back(iview_s);
+  float pctx, pcty;
+  /*
+         BeginNativeGesture,  0
+        EndNativeGesture,    1
+        PanNativeGesture,   2
+        ZoomNativeGesture,   3
+        SmartZoomNativeGesture,  4
+        RotateNativeGesture, 5
+        SwipeNativeGesture. 6
+        */
+  switch (event->gestureType()) {
+    case Qt::BeginNativeGesture: {
+      touchCount = 0;
+      touchVal = 0;
+      timeit.restart();
+      break;
+    }
+    case Qt::EndNativeGesture: {
+      if (touchCount > 0) {
+        float pctx =
+            ((float)(event->pos().x() - begx)) / ((float)(endx - begx));
+        float pcty =
+            ((float)(event->pos().y() - begy)) / ((float)(endy - begy));
+        actionDetected(myv->gestureZoom(pctx, pcty, touchVal, pos));
+
+      } else if (touchCount < 0) {
+        float pctx =
+            ((float)(event->pos().x() - begx)) / ((float)(endx - begx));
+        float pcty =
+            ((float)(event->pos().y() - begy)) / ((float)(endy - begy));
+        actionDetected(myv->gestureRotate(pctx, pcty, touchVal, pos));
+      }
+      break;
+    }
+    case Qt::SwipeNativeGesture: {
+      //  QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
+      //  g->setSwipeAngle(ev->value());
+      //  g->setHotSpot(ev->screenPos());
+      // return QGestureRecognizer::FinishGesture |
+      //       QGestureRecognizer::ConsumeEventHint;
+      // break;
+      break;
+    }
+    case Qt::ZoomNativeGesture: {
+      //  QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
+      //  g->setSwipeAngle(ev->value());
+      //  g->setHotSpot(ev->screenPos());
+      // return QGestureRecognizer::FinishGesture |
+      //       QGestureRecognizer::ConsumeEventHint;
+      // break;
+      touchCount++;
+      touchVal += event->value();
+      if (timeit.elapsed() > 200 && touchCount > 0) {
+        float pctx =
+            ((float)(event->pos().x() - begx)) / ((float)(endx - begx));
+        float pcty =
+            ((float)(event->pos().y() - begy)) / ((float)(endy - begy));
+        actionDetected(myv->gestureZoom(pctx, pcty, touchVal, pos));
+        timeit.restart();
+        touchVal = 0;
+      }
+      break;
+    }
+    case Qt::RotateNativeGesture: {
+      //  QSwipeGesture *g = static_cast<QSwipeGesture *>(gesture);
+      //  g->setSwipeAngle(ev->value());
+      //  g->setHotSpot(ev->screenPos());
+      // return QGestureRecognizer::FinishGesture |
+      //       QGestureRecognizer::ConsumeEventHint;
+      // break;
+      touchVal += event->value();
+
+      touchCount--;
+
+      break;
+    }
+    default:
+      break;
+  }
+  return true;
+}
+
 void panel::mousePressEvent(QMouseEvent *e) {
   down_x = e->x();
   down_y = e->y();

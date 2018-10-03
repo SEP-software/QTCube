@@ -274,6 +274,55 @@ std::vector<QString> view::l_mouse_d_view(float x, float y,
     return l_mouse_d_e(ix, iy, pos, mode, draw_o);
   return com;
 }
+
+std::vector<QString> view::gestureRotate(const float x, const float y,
+                                         const float val,
+                                         std::shared_ptr<orient_cube> pos) {
+  int ix, iy;
+  bool found = false;
+  this->convert_to_local_loc(x, y, &ix, &iy);
+  std::vector<QString> coms;
+  coms.push_back(iview);
+  coms.push_back("redraw");
+  coms.push_back("all");
+
+  for (int islice = 0; islice < (int)slices.size(); islice++) {
+    if (slices[islice]->in_slice(ix, iy) == true) {
+      slices[islice]->rotate(val);
+
+      found = true;
+    }
+  }
+  return coms;
+}
+std::vector<QString> view::gestureZoom(const float x, const float y,
+                                       const float val,
+                                       std::shared_ptr<orient_cube> pos) {
+  int ix, iy;
+  bool found = false;
+  std::vector<QString> coms;
+  this->convert_to_local_loc(x, y, &ix, &iy);
+
+  coms.push_back(iview);
+  coms.push_back("navigate");
+  coms.push_back("zoom");
+  int loc[8];
+  this->convert_to_local_loc(x, y, &ix, &iy);
+  for (int islice = 0; islice < (int)slices.size(); islice++) {
+    if (slices[islice]->in_slice(ix, iy) == true) {
+      found = true;
+      coms.push_back(QString::number(slices[islice]->iax1));
+      coms.push_back(QString::number(slices[islice]->iax2));
+      coms.push_back(QString::number(val));
+      slices[islice]->get_data_loc(ix, iy, loc);
+      coms.push_back(
+          QString::fromStdString(util::string_from_int_array(8, loc)));
+    }
+  }
+  if (!found) coms[1] = "pass";
+  return coms;
+}
+
 std::vector<QString> view::l_mouse_m_view(float x, float y,
                                           std::shared_ptr<orient_cube> pos,
                                           std::shared_ptr<mouse_func> mode) {

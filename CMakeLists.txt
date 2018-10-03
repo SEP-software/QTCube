@@ -104,7 +104,7 @@ target_link_libraries(qt_cube
                       hypercube
                       ${LIBTBB})
 
-target_link_libraries(qt_cube Qt5::Widgets Qt5::PrintSupport)
+target_link_libraries(qt_cube Qt5::Widgets  Qt5::PrintSupport)
 target_link_libraries(qt_cube ${LIBTBB})
 
 install(TARGETS qt_cube DESTINATION bin)

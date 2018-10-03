@@ -92,6 +92,69 @@ void slice::set_draw_params(std::shared_ptr<QFontMetrics> f_m,
       (iax2 == order[2] && iax1 == order[1]))
     i3_axis = order[0];
 }
+
+void slice::rotate(const float dir) {
+  int ip1 = -1, ip2 = -1;
+  for (int i = 0; i < 8; i++) {
+    if (my_pos->order[i] == iax1) ip1 = i;
+    if (my_pos->order[i] == iax2) ip2 = i;
+  }
+
+  if (dir < 0) {
+    if (!my_pos->reverse[iax1] && !my_pos->reverse[iax2]) {
+      my_pos->reverse[iax2] = true;
+    }
+
+    else if (!my_pos->reverse[iax2] && my_pos->reverse[iax1]) {
+      my_pos->reverse[iax2] = true;
+
+    } else if (my_pos->reverse[iax1] && my_pos->reverse[iax2]) {
+      my_pos->reverse[iax2] = false;
+
+    } else {
+      my_pos->reverse[iax2] = false;
+    }
+
+  } else {
+    if (!my_pos->reverse[iax1] && !my_pos->reverse[iax2]) {
+      my_pos->reverse[iax1] = true;
+    }
+
+    else if (my_pos->reverse[iax2] && !my_pos->reverse[iax1]) {
+      my_pos->reverse[iax1] = true;
+
+    } else if (my_pos->reverse[iax1] && my_pos->reverse[iax2]) {
+      my_pos->reverse[iax1] = false;
+
+    } else {
+      my_pos->reverse[iax1] = false;
+    }
+  }
+  my_pos->order[ip1] = iax2;
+  my_pos->order[ip2] = iax1;
+  /*
+if (dir > 0) {
+if (my_pos->reverse[ip1])
+my_pos->reverse[ip1] = true;
+else
+my_pos->reverse[ip1] = false;
+if (my_pos->reverse[ip2])
+my_pos->reverse[ip2] = false;
+else
+my_pos->reverse[ip2] = true;
+} else {
+std::cerr << "negative direction" << std::endl;
+if (my_pos->reverse[ip1])
+my_pos->reverse[ip1] = true;
+else
+my_pos->reverse[ip1] = false;
+if (my_pos->reverse[ip2])
+my_pos->reverse[ip2] = true;
+else
+my_pos->reverse[ip2] = false;
+}
+*/
+}
 void slice::form_pixel_slice_map() {
   /*
 

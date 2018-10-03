@@ -57,9 +57,7 @@ int main(int argc, char** argv) {
     if (type == std::string("FILE")) {
       fileType = pars->getString(std::string("fileType") + std::to_string(i),
                                  defaultType);
-      std::cerr << "BEFOER OPE" << std::endl;
       std::shared_ptr<fileIO> fileI(new fileIO(name, modes, fileType));
-      std::cerr << "AFTER OPE" << std::endl;
       iof = fileI;
       if (i == 0) grid = iof->return_hyper();
     } else if (type == std::string("SEMBLANCE")) {
@@ -76,13 +74,10 @@ int main(int argc, char** argv) {
       pars->error(std::string("Unknown  type :") + type);
 
     if (storage == std::string("IN_FLOAT")) {
-      std::cerr << "IN FLOAT " << std::endl;
       std::shared_ptr<Qincore_data_float> icf(
           new Qincore_data_float(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icf);
     } else if (storage == std::string("IN_BYTE")) {
-      std::cerr << "IN BYTE " << std::endl;
-
       std::shared_ptr<Qincore_data_byte> icb(
           new Qincore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);

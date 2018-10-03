@@ -346,6 +346,49 @@ void panels::perform_navigate(std::vector<QString> command) {
     delete[] poz;
     sync_panel(active);
     update_all();
+  } else if (command[2].contains("zoom") > 0) {
+    int iax1 = command[3].toInt();
+    int iax2 = command[4].toInt();
+    float fact = command[5].toFloat();
+    int locIn[8];
+    pos->get_locs(locIn);
+    int *loc = util::int_array_from_string(command[6].toStdString());
+    pos->set_locs(loc);
+
+    delete[] loc;
+    int b1 = pos->get_beg(iax1);
+    int b2 = pos->get_beg(iax2);
+    int e1 = pos->get_end(iax1);
+    int e2 = pos->get_end(iax2);
+    int c1 = (e1 + b1) / 2, c2 = (e2 + b2) / 2;
+    int n1 = pos->axes[iax1].n;
+    int n2 = pos->axes[iax2].n;
+
+    float z1 = ((float)(e1 - b1)) / (float)n1 + fact;
+    float z2 = ((float)(e2 - b2)) / (float)n2 + fact;
+
+    int dist = z1 * n1 / 2.;
+    b1 = std::min(n1 - 1, std::max(0, c1 - dist));
+    e1 = std::max(1, std::min(n1, c1 + dist));
+    dist = z2 * n2 / 2.;
+    b2 = std::min(n1 - 1, std::max(0, c2 - dist));
+    e2 = std::max(1, std::min(n2, c2 + dist));
+
+    pos->set_beg(iax1, b1);
+    pos->set_beg(iax2, b2);
+    pos->set_end(iax1, e1);
+    pos->set_end(iax2, e2);
+
+    int iloc[8];
+    float *poz = util::float_array_from_string(command[3].toStdString());
+    for (int i = 0; i < 8; i++) {
+      axis a = pos->getAxis(i);
+      iloc[i] =
+          std::min(a.n - 1, std::max(0, (int)((poz[i] - a.o) / a.d + .5)));
+    }
+
+    sync_panel(active);
+    update_all();
   } else if (command[2].contains("step") > 0) {
     int delta = command[3].toInt();
 

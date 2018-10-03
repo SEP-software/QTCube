@@ -78,7 +78,7 @@ void MainWindow::create_mouse_funcs() {
   funcs["overlay"] = mo;
   funcs["annotate"] = ma;
 
-  cur_func = funcs["zoom"];
+  cur_func = funcs["navigate"];
 }
 MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
                        std::shared_ptr<datasets> d,

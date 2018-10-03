@@ -153,7 +153,6 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
   n1 = e1 - f1;
   pos->getAxis_range(iax2, &f2, &e2);
   n2 = e2 - f2;
-
   ox = axes[1].o;
   oy = axes[0].o;
   dx = axes[1].d;
