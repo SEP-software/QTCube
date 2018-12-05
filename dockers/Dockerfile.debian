@@ -4,11 +4,11 @@ RUN apt-get -y update &&\
     apt-get -y  install g++ git make cmake gcc &&\
   apt-get -y clean
 RUN apt-get -y update
-RUN apt-get -y install libtbb-dev qt4-default &&\
+RUN apt-get -y install libtbb-dev qtbase5-dev &&\
    apt-get -y clean
 RUN apt-get -y update &&\
     apt-get -y  install g++  git make gcc libboost-all-dev  libboost-dev &&\
-    apt-get -y install  cmake python3  && \
+    apt-get -y install  cmake python3  libqt5multimediawidgets5 libqt5multimedia5&& \
   apt-get -y clean
 
 RUN mkdir -p /opt/qtcube/build
