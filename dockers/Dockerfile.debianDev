@@ -1,0 +1,19 @@
+From debian:latest
+MAINTAINER Bob Clapp <bob@sep.stanford.edu>
+RUN apt-get -y update &&\
+    apt-get -y  install g++ git make cmake gcc &&\
+  apt-get -y clean
+RUN apt-get -y update
+RUN apt-get -y install libtbb-dev qtbase5-dev &&\
+   apt-get -y clean
+RUN apt-get -y update &&\
+    apt-get -y  install g++  git make gcc libboost-all-dev  libboost-dev &&\
+    apt-get -y install  cmake python3  libqt5multimediawidgets5 libqt5multimedia5 qtmultimedia5-dev && \
+  apt-get -y clean
+
+#RUN mkdir -p /opt/qtcube/build
+#RUN git clone http://bob@zapad.Stanford.EDU/bob/QTCube.git /opt/qtcube/src &&\
+#   cd /opt/qtcube/build &&\
+#   cmake  -DCMAKE_INSTALL_PREFIX=/opt/qtcube -DBUILD_PYTHON=NO    ../src  && \
+#   make install &&\
+#   rm -rf /opt/qtcube/build

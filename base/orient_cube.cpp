@@ -1,6 +1,7 @@
 #include "orient_cube.h"
 #include <assert.h>
 #include <math.h>
+#include <iostream>
 #include <utility>
 using namespace SEP;
 orient_cube::orient_cube(std::shared_ptr<position> pos, std::vector<int> o,

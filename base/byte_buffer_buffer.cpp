@@ -89,7 +89,7 @@ unsigned char *byte_buffer_buffer::get_char_data(
     j2 = n1;
   }
   std::shared_ptr<byte2DReg> flt(new byte2DReg(n1, n2));
-  _file->readUCharWindow(nw, fw, jw, (unsigned char *)flt->getVoidPtr());
+  _file->readByteWindow(nw, fw, jw, (unsigned char *)flt->getVoidPtr());
   unsigned char *vals = flt->getVals();
   unsigned char *out = new unsigned char[n1 * n2];
 
@@ -155,7 +155,7 @@ float *byte_buffer_buffer::get_float_data(std::shared_ptr<orient_cube> pos,
     j2 = n1;
   }
   std::shared_ptr<byte2DReg> flt(new byte2DReg(n1, n2));
-  _file->readUCharWindow(nw, fw, jw, (unsigned char *)flt->getVoidPtr());
+  _file->readByteWindow(nw, fw, jw, (unsigned char *)flt->getVoidPtr());
   unsigned char *vals = flt->getVals();
   float *out = new float[n1 * n2];
   float bclip, eclip;

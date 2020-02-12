@@ -33,7 +33,7 @@ void fileIO::read_block_float(std::vector<int> &nw, std::vector<int> &fw,
   } else if (_dataType == DATA_BYTE) {
     for (auto i = nw.begin(); i != nw.end(); ++i) n123 *= (long long)*i;
     unsigned char *buf2 = new unsigned char[n123];
-    _file->readUCharWindow(nw, fw, jw, buf2);
+    _file->readByteWindow(nw, fw, jw, buf2);
 
     par->convert_to_float(buf, 0, buf2, 0, n123, bclip, eclip);
 
@@ -47,7 +47,7 @@ void fileIO::read_block_byte(std::vector<int> &nw, std::vector<int> &fw,
   std::vector<int> jw(8, 1);
   long long n123 = 1;
   if (_dataType == DATA_BYTE) {
-    _file->readUCharWindow(nw, fw, jw, buf);
+    _file->readByteWindow(nw, fw, jw, buf);
 
   } else if (_dataType == DATA_FLOAT) {
     for (auto i = nw.begin(); i != nw.end(); ++i) n123 *= (long long)*i;

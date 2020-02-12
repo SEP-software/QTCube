@@ -29,9 +29,12 @@ if(NOT TARGET genericCpp)
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   add_subdirectory(external/genericIO)
   include_directories(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/cpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/lib)
   include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/lib)
+
+    include_directories(
+      ${CMAKE_CURRENT_BINARY_DIR}/external/genericIO/external/sepVector)
   include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/external/hypercube/lib
     )
