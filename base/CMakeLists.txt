@@ -73,3 +73,11 @@ set(INCLUDES
     trace_io.h)
 
 add_library(base ${SOURCES} ${INCLUDES})
+target_link_libraries(base
+                      genericCpp
+                      buffers
+                      ${GENERIC_EXPORT_LIBS}
+                      hypercube
+                      ${LIBTBB})
+
+target_link_libraries(base Qt5::Widgets  Qt5::PrintSupport)

@@ -143,3 +143,11 @@ set(SOURCES
     maps.cpp)
 # INCLUDE(${QT_USE_FILE})
 add_library(gui ${SOURCES} ${INCLUDES})
+target_link_libraries(gui base
+                      genericCpp
+                      buffers
+                      ${GENERIC_EXPORT_LIBS}
+                      hypercube
+                      ${LIBTBB})
+
+target_link_libraries(gui Qt5::Widgets  Qt5::PrintSupport)
