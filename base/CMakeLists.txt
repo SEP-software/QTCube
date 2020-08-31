@@ -4,6 +4,9 @@ project(qtcube-base)
 include_directories(${GENERICIOINCDIR})
 include_directories(${TBB_INCLUDE_DIRS})
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+set(CMAKE_MACOSX_RPATH 1)
+endif()
 # include_directories(/sep/bob/genericIO/include)
 set(SOURCES dynamic.cpp pqueue.cpp)
 set(SOURCES

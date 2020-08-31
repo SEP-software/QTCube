@@ -5,6 +5,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 include_directories(${TBB_INCLUDE_DIRS})
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+set(CMAKE_MACOSX_RPATH 1)
+endif()
 
 set(INCLUDES
     anno.h
