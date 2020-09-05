@@ -151,3 +151,4 @@ target_link_libraries(gui base
                       ${LIBTBB})
 
 target_link_libraries(gui Qt5::Widgets  Qt5::PrintSupport)
+install(TARGETS gui DESTINATION lib)
