@@ -3,7 +3,7 @@ using namespace SEP;
 fileIO::fileIO(std::string tag, std::shared_ptr<ioModes> modes,
                std::string fileType) {
   _io = modes->getIO(fileType);
-  _file = _io->getRegFile(tag, usageIn);
+  _file = _io->getReg(tag, usageIn);
   _dataType = _file->getDataType();
   _par = _io->getParamObj();
   hyper = _file->getHyper();

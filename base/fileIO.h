@@ -12,10 +12,10 @@ class fileIO : public io_func {
                                 float *buf);
   virtual void read_block_byte(std::vector<int> &nw, std::vector<int> &fw,
                                unsigned char *buf);
-  std::shared_ptr<genericRegFile> getFile() { return _file; }
+  std::shared_ptr<genericReg> getFile() { return _file; }
 
  private:
-  std::shared_ptr<genericRegFile> _file;
+  std::shared_ptr<genericReg> _file;
   std::shared_ptr<genericIO> _io;
   std::shared_ptr<paramObj> _par;
   std::vector<int> _ns;

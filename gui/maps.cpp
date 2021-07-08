@@ -14,7 +14,7 @@ map_1::map_1(std::shared_ptr<genericIO> io, QString nm,
     name = name.remove(0, name.length() - 20);
   }
   std::string nmS = std::string(nm.toLatin1().constData());
-  std::shared_ptr<genericRegFile> rfile = io->getRegFile(nmS, usageIn);
+  std::shared_ptr<genericReg> rfile = io->getReg(nmS, usageIn);
 
   int ns[8];
   long long sz = 1;
