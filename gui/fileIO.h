@@ -13,7 +13,7 @@ class fileIO: public io_func{
     virtual void read_block_float(std::vector<int>&nw, std::vector<int>&fw, float *buf);
     virtual void read_block_byte(std::vector<int>&nw, std::vector<int>&fw, unsigned char *buf);
   private:
-    std::shared_ptr<genericRegFile> _file;
+    std::shared_ptr<genericReg> _file;
     std::shared_ptr<genericIO> _io;
     std::shared_ptr<paramObj> _par;
     std::vector<int> _ns;    

@@ -20,7 +20,7 @@ byte_buffer_buffer::byte_buffer_buffer(std::shared_ptr<paramObj> p,
               << std::endl;
     assert(fIO);
   }
-  std::shared_ptr<genericRegFile> f = fIO->getFile();
+  std::shared_ptr<genericReg> f = fIO->getFile();
   _file = std::dynamic_pointer_cast<buffersRegFile>(f);
   if (!_file) {
     std::cerr << "Can only specify buffered IO with a buffered file"
