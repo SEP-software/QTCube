@@ -339,7 +339,8 @@ void MainWindow::update_status_bar() {
   if (stat_view.contains("mouse") > 0) {
     modeLabel->setText(mouse_lab);
   } else if (stat_view.contains("position") > 0) {
-    modeLabel->setText(my_pan->get_panel(0)->get_orient()->return_pos_label());
+    modeLabel->setText(QString::fromStdString(
+      my_pan->get_panel(0)->get_orient()->return_pos_label()));
 
   } else if (stat_view.contains("overlay") > 0) {
     std::shared_ptr<mouse_overlay> x =

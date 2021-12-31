@@ -1,0 +1,3 @@
+[submodule "external/displayslice"]
+	path = external/displayslice
+	url = http://cees-gitlab.Stanford.EDU/SEP-external/displayslice.git

@@ -14,6 +14,7 @@ class anno {
     if (px == py) {
       ;
     };
+    return 0.;
   }
   virtual ~anno() { ; }
   virtual void shift_anno(float bx, float by, float ex, float ey, float dx,

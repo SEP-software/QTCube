@@ -20,30 +20,30 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 find_package(TBB REQUIRED)
 find_library(LIBTBB tbb REQUIRED)
 
-if(NOT TARGET genericCpp)
+if(NOT TARGET displaySlice)
   set(BUILD_PYTHON OFF)
   set(BUILD_EXECUTABLES OFF)
 
   execute_process(COMMAND git submodule update --init --recursive --
-                          external/genericIO
+                          external/displayslice
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  add_subdirectory(external/genericIO)
-  include_directories(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/lib)
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/lib)
-
-    include_directories(
-      ${CMAKE_CURRENT_BINARY_DIR}/external/genericIO/external/sepVector)
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/external/hypercube/lib
-    )
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/external/json
-    )
-  include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib)
-endif(NOT TARGET genericCpp)
+  add_subdirectory(external/displayslice)
+  #  include_directories(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
+  #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/lib)
+  #include_directories(
+  #  ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/lib)
+  #
+  #  include_directories(
+  #    ${CMAKE_CURRENT_BINARY_DIR}/external/genericIO/external/sepVector)
+  #include_directories(
+  #  ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/external/hypercube/lib
+  #  )
+  #include_directories(
+  # ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/external/json
+    #  )
+    #  include_directories(
+    #${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib)
+endif(NOT TARGET displaySlice)
 
 configure_file("${PROJECT_SOURCE_DIR}/Sep_cube.in"
                "${PROJECT_BINARY_DIR}/Sep_cube")
@@ -72,12 +72,9 @@ add_definitions(${Qt5Widgets_DEFINITIONS} ${Qt5Gui_DEFINITIONS})
 # -fPIE. We add that here.
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} ${CMAKE_CXX_FLAGS}")
 
-add_subdirectory(base)
 add_subdirectory(gui)
 
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/base)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui
-                    ${CMAKE_CURRENT_SOURCE_DIR}/base)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/gui)
 
 find_package(Boost 1.40 COMPONENTS program_options unit_test_framework REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
@@ -102,16 +99,8 @@ qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
 add_executable(qt_cube main.cpp ${RESOURCE_ADDED})
 set_property(TARGET qt_cube PROPERTY LINKER_LANGUAGE CXX)
 target_link_libraries(qt_cube gui)
-target_link_libraries(qt_cube base)
-target_link_libraries(qt_cube
-                      genericCpp
-                      buffers
-                      ${GENERIC_EXPORT_LIBS}
-                      hypercube
-                      ${LIBTBB})
 
 target_link_libraries(qt_cube Qt5::Widgets  Qt5::PrintSupport)
-target_link_libraries(qt_cube ${LIBTBB})
 
 install(TARGETS qt_cube DESTINATION bin)
 

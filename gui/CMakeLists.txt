@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.8)
 project(qtcube-gui)
 set(CMAKE_AUTOMOC TRUE)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../base)
 include_directories(${TBB_INCLUDE_DIRS})
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 set(CMAKE_MACOSX_RPATH 1)
@@ -143,11 +143,7 @@ set(SOURCES
     maps.cpp)
 # INCLUDE(${QT_USE_FILE})
 add_library(gui ${SOURCES} ${INCLUDES})
-target_link_libraries(gui base
-                      genericCpp
-                      buffers
-                      ${GENERIC_EXPORT_LIBS}
-                      hypercube
+target_link_libraries(gui displaySlice
                       ${LIBTBB})
 
 target_link_libraries(gui Qt5::Widgets  Qt5::PrintSupport)
