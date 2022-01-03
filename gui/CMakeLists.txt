@@ -61,7 +61,7 @@ set(INCLUDES
     orient_panel.h
     drawwindow.h
     #Qsurface_data.h
-    Qbuffers_data.h
+    #Qbuffers_data.h
     view.h
     panel.h
    # surface_data.h

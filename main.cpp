@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
           new Qincore_data_byte(title, name, grid, iof, pars, i, 1));
       datas->add_dat(icb);
 
+      /*
     } else if (storage == std::string("BUFFERS_FLOAT")) {
       std::cerr << "in this one " << std::endl;
       int nmem = pars->getInt("memory", 512);
@@ -95,7 +96,7 @@ int main(int argc, char** argv) {
       std::shared_ptr<Qbuffers_data_byte> bufs(
           new Qbuffers_data_byte(title, name, grid, iof, pars, i, nmem));
       datas->add_dat(bufs);
-
+*/
     } else if (storage == std::string("PART_FLOAT")) {
       std::shared_ptr<Qpartial_data_float> icb(
           new Qpartial_data_float(title, name, grid, iof, pars, i, 1));

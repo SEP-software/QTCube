@@ -45,8 +45,8 @@ void wiggle::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
   }
 
   std::shared_ptr<byteTensor2D> buf = dat->getCharData(
-      pos, iax1, iax2, abs((ee1 - bb1) * (ee2 - bb2)), slice_to_grid_map);
-  char *bufA = buf->getVals();
+      pos, iax1,bb1,ee1, iax2,bb2,ee2);
+  unsigned char *bufA = buf->getVals();
 
   b_1 = f1;
   b_2 = f2;
@@ -113,7 +113,7 @@ void wiggle::PaintWiggles(int n2, int n1, QPainter *painter,
       // int y = yb + n1Counter * yRange;
 
       float y = n1Counter * yRange;
-      float x = bufA[n1Counter + n2Counter * n1] * dxr + xBeg;
+      float x = buf[n1Counter + n2Counter * n1] * dxr + xBeg;
       get_image_pos_pct(x, y, &ix, &iy);
 
       if (n1Counter == 0) {
