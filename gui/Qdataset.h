@@ -1,21 +1,21 @@
 #ifndef Qdataset_H
 #define Qdataset_H 1
+#include "dataset.h"
+#include <QTreeWidgetItem>
 #include <assert.h>
 #include <qobject.h>
-#include <QTreeWidgetItem>
-#include "dataset.h"
 
 namespace SEP {
 class Qdataset : public QObject {
   Q_OBJECT
- public:
+public:
   int check_load_buffer(std::shared_ptr<orient_cube> pos, const int iax1,
                         const int iax2);
   void build_conv();
- signals:
+signals:
   void actionDetected(std::vector<QString> text);
 
- public:
+public:
   Qdataset();
 
   inline void clean_bufs() { _data->clean_bufs(); }
@@ -23,19 +23,20 @@ class Qdataset : public QObject {
   virtual std::shared_ptr<SEP::hypercube> return_io_hyper() {
     return _data->return_io_hyper();
   }
-  virtual unsigned char *get_char_data(std::shared_ptr<orient_cube> pos,
-                                       int iax1, int f1, int e1, int iax2,
-                                       int f2, int e2) {
-    return _data->get_char_data(pos, iax1, f1, e1, iax2, f2, e2);
+  virtual std::shared_ptr<byteTensor2D>
+  getCharData(std::shared_ptr<orient_cube> pos, int iax1, int f1, int e1,
+              int iax2, int f2, int e2) {
+    return _data->getCharData(pos, iax1, f1, e1, iax2, f2, e2);
   }
-  virtual unsigned char *get_char_data(std::shared_ptr<orient_cube> pos,
-                                       int iax1, int iax2, int n,
-                                       long long *index) {
-    return _data->get_char_data(pos, iax1, iax2, n, index);
+  virtual std::shared_ptr<byteTensor2D>
+  getCharData(std::shared_ptr<orient_cube> pos, int iax1, int iax2, int n,
+              long long *index) {
+    return _data->getCharData(pos, iax1, iax2, n, index);
   }
-  virtual float *get_float_data(std::shared_ptr<orient_cube> pos, int iax1,
-                                int f1, int e1, int iax2, int f2, int e2) {
-    return _data->get_float_data(pos, iax1, f1, e1, iax2, f2, e2);
+  virtual std::shared_ptr<floatTensor2D>
+  getFloatData(std::shared_ptr<orient_cube> pos, int iax1, int f1, int e1,
+               int iax2, int f2, int e2) {
+    return _data->getFloatData(pos, iax1, f1, e1, iax2, f2, e2);
   }
   virtual float get_value(std::shared_ptr<orient_cube> pos) {
     return _data->get_value(pos);
@@ -59,8 +60,8 @@ class Qdataset : public QObject {
     return _data->find_buffer(pos);
   }
   virtual void afterInitialization() { _data->afterInitialization(); }
-  virtual std::shared_ptr<buffer> create_buffer(
-      std::shared_ptr<orient_cube> pos, int iax1, int iax2) {
+  virtual std::shared_ptr<buffer>
+  create_buffer(std::shared_ptr<orient_cube> pos, int iax1, int iax2) {
     return _data->create_buffer(pos, iax1, iax2);
   }
   std::string validate_view(const std::string &name,
@@ -117,8 +118,8 @@ class Qdataset : public QObject {
 
   std::shared_ptr<dataset> _data;
   virtual ~Qdataset() { clean_bufs(); }
-};  // namespace SEP
+}; // namespace SEP
 
-}  // namespace SEP
+} // namespace SEP
 
 #endif

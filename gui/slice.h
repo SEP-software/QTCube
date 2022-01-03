@@ -1,16 +1,16 @@
 #ifndef SLICE_H
 #define SLICE_H 1
+#include "pairs_new.h"
+#include "pick_new.h"
 #include <dataset.h>
 #include <float.h>
 #include <orient_cube.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <vector>
-#include "pairs_new.h"
-#include "pick_new.h"
 namespace SEP {
 class slice {
- public:
+public:
   slice() { zero_slice(); }
 
   void set_draw_params(std::shared_ptr<QFontMetrics> fm,
@@ -105,9 +105,9 @@ class slice {
   void zero_slice();
   void rotate(const float dir);
   //  std::vector<QString> *return_hash(){return &hash_map;}
-  int *get_pixel_to_slice_map(int *n1, int *n2);
-  long long *get_index_map_ptr(int idelta);
-  long long *get_slice_to_grid_map();
+  std::vector<int> getPixelToSliceMap(int &n1, int &n2);
+  std::shared_ptr<longTensor2D> getIndexMapPtr(int idelta);
+  std::shared_ptr<longTensor2D> getSliceToGridMap();
   std::shared_ptr<orient_cube> get_orient() { return ps; }
   virtual void set_bcolor(QString c) { bcolor = c; }
   virtual void set_ecolor(QString c) { ecolor = c; }
@@ -117,11 +117,11 @@ class slice {
   bool is_overlay;
   QString bcolor, ecolor;
   std::shared_ptr<orient_cube> ps;
-  long long *slice_to_grid_map;
-  int *pixel_to_slice_map;
+  std::shared_ptr<longTensor2D> sliceToGridMap;
+  std::vector<int> pixelToSliceMap,pixelToSliceMap1,pixelToSliceMap2;
   int n1_pixel, n1_slice, n2_slice;
   int offset;
 };
-}  // namespace SEP
+} // namespace SEP
 
 #endif

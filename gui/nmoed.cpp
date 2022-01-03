@@ -1,6 +1,8 @@
 #include "nmoed.h"
-#include <math.h>
 #include "interval_pick.h"
+#include <math.h>
+#include <xtensor/xview.hpp>
+
 using namespace SEP;
 nmoed::nmoed(std::shared_ptr<hypercube> grid, std::shared_ptr<Qdataset> dat,
              const int it, const int ioff, const int imes,
@@ -28,7 +30,6 @@ void nmoed::move_it(std::vector<int> &f, float *nmo) {
   float offset, offovs, tnmute;
   float tn, ti;
 
-  fprintf(stderr, "IN MOVE IT\n");
   axis taxis = grid->getAxis(i_t + 1);
   axis oaxis = grid->getAxis(i_off + 1);
   axis maxis = grid->getAxis(i_mes + 1);
@@ -36,13 +37,17 @@ void nmoed::move_it(std::vector<int> &f, float *nmo) {
   float dt = taxis.d, dh = oaxis.d, dv = maxis.d;
   float ot = taxis.o, oh = oaxis.o, ov = maxis.o;
 
-  for (int i = 0; i < 8; i++) dumb->set_loc(i, f[i]);
+  for (int i = 0; i < 8; i++)
+    dumb->set_loc(i, f[i]);
 
-  float *dat = data->get_float_data(dumb, i_t, 0, nt, i_off, 0, nh);
+  std::shared_ptr<floatTensor2D> dat =
+      data->getFloatData(dumb, i_t, 0, nt, i_off, 0, nh);
+  auto dataA = xt::view(dat->mat, xt::all(), xt::all());
 
   // CHANGE
   int iloc[8];
-  for (int i = 0; i < 8; i++) iloc[i] = f[i];
+  for (int i = 0; i < 8; i++)
+    iloc[i] = f[i];
   iloc[i_off] = -1;
   iloc[i_t] = -1;
   iloc[1] = -1;
@@ -50,11 +55,13 @@ void nmoed::move_it(std::vector<int> &f, float *nmo) {
   std::shared_ptr<pairs_new> myp =
       pks->get_pts_sort(dumb, iloc, i_t, i_mes, QString::fromStdString(col1));
 
-  if (myp->size() == 0) myp->add_point(maxis.n / 2, 1);
-  float *vel = new float[nt];
-  myp->build_int_line(0, nt, vel);
+  if (myp->size() == 0)
+    myp->add_point(maxis.n / 2, 1);
+  std::vector<float> vel(nt);
+  myp->build_int_line(0, nt, vel.data());
 
-  for (int i = 0; i < nt; i++) vel[i] = ov + dv * vel[i];
+  for (int i = 0; i < nt; i++)
+    vel[i] = ov + dv * vel[i];
   int iti;
   float frac;
   for (i2 = 0; i2 < nh; i2++) {
@@ -67,14 +74,10 @@ void nmoed::move_it(std::vector<int> &f, float *nmo) {
       if (iti < nt - 1 && tnmute < tn) {
         frac = ti - iti;
         nmo[it + i2 * nt] =
-            dat[iti + i2 * nt] * (1. - frac) + dat[iti + 1 + i2 * nt] * frac;
+            dataA(i2, iti) * (1. - frac) + dataA(i2, iti + 1) * frac;
       } else
         nmo[it + i2 * nt] = 0;
     }
   }
-  //	interval_pick::form_interval_vel(dumb,grid,ds,pm1,pm2,i_mes,i_t,i_off);
   changed = false;
-  delete[] dat;
-  delete[] vel;
-  // srite("tmp.H",nmo,nt*nh*4);
 }

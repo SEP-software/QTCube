@@ -283,7 +283,8 @@ std::shared_ptr<float2DReg> autopick::extract_dat(
   };
   // b1=pos->get_beg(isingle); b2=pos->get_beg(isort);
   // e1=pos->get_end(isingle); e2=pos->get_end(isort);
-  buf = cur_dat->get_char_data(pos, isingle, 0, n1, isort, 0, n2);
+  std::shared_ptr<byteTensor2D> bufA= cur_dat->getCharData(pos, isingle, 0, n1, isort, 0, n2);
+  buf=bufA->getVals();
   axis axes[2];
   axes[0] = axis(ns * 2 + 1);
   axes[1] = axis(line->getHyper()->getAxis(1).n);
@@ -308,6 +309,5 @@ std::shared_ptr<float2DReg> autopick::extract_dat(
     }
   }
 
-  delete[] buf;
   return dat;
 }

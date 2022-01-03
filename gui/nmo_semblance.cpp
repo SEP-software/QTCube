@@ -2,6 +2,7 @@
 #include <nmo_semblance.h>
 #include "interval_pick.h"
 using namespace SEP;
+#include <xtensor/xview.hpp>
 
 nmo_semblance::nmo_semblance(std::shared_ptr<hypercube> grid,
                              std::shared_ptr<Qdataset> dat, int it, int ioff,
@@ -29,7 +30,8 @@ void nmo_semblance::semblance_it(int *f, float *semb) {
   float dt = taxis.d, dv = maxis.d, dh = oaxis.d;
   float ot = taxis.o, ov = maxis.o, oh = oaxis.o;
   for (int i = 0; i < 8; i++) dumb->set_loc(i, f[i]);
-  float *dat = data->get_float_data(dumb, i_t, 0, nt, i_off, 0, nh);
+  std::shared_ptr<floatTensor2D> dat = data->getFloatData(dumb, i_t, 0, nt, i_off, 0, nh);
+  auto datA = xt::view(dat->mat, xt::all(), xt::all());
 
   if (no_sem == 1) {
     for (iv = 0; iv < nv; iv++) {
@@ -70,7 +72,7 @@ void nmo_semblance::semblance_it(int *f, float *semb) {
         if (iti < nt - 1) {
           frac = ti - iti;
           temp =
-              (1.0 - frac) * dat[iti + nt * i2] + frac * dat[iti + 1 + nt * i2];
+              (1.0 - frac) * datA(i2,iti) + frac * datA(i2,iti+1);
           // \(stderr,"in if conditional %d %d %d %f
           // \n",it,iv,i2,dat[iti+nt*i2]);
           if (temp != 0.0) {
@@ -104,7 +106,6 @@ void nmo_semblance::semblance_it(int *f, float *semb) {
     }
   }
 
-  delete[] dat;
 }
 void nmo_semblance::update_vel(int *iloc) {
   for (int i = 0; i < 8; i++) dumb->set_loc(i, iloc[i]);

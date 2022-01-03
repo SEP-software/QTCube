@@ -2,7 +2,6 @@
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 #include <tbb/parallel_reduce.h>
-#include <tbb/tbb.h>
 using namespace SEP;
 QImage *raster::makeImage(unsigned char *uc, const int nx, const int ny,
                           const int xsize, const int ysize) {
@@ -177,10 +176,10 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
     ee2 = f2 + n2;
   }
 
-  // unsigned char *buf=
-  //  dat->get_char_data(pos,iax1,iax2,abs((ee1-bb1)*(ee2-bb2)),slice_to_grid_map);
+ 
 
-  unsigned char *buf = dat->get_char_data(pos, iax1, bb1, ee1, iax2, bb2, ee2);
+  std::shared_ptr<byteTensor2D> bTmp=dat->getCharData(pos, iax1, bb1, ee1, iax2, bb2, ee2);
+  unsigned char *buf=bTmp->getVals();
 
   b_1 = f1;
   b_2 = f2;
@@ -224,7 +223,6 @@ void raster::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
   }
 
   delete temp;
-  delete[] buf;
 }
 std::shared_ptr<slice> raster::clone_alpha(int alpha) {
   std::shared_ptr<raster> x(new raster());

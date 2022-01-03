@@ -87,7 +87,7 @@ void view::draw_bar(int xshift, QPainter *painter, QPen *pen,
   delete img;
   // Make the histogram
 
-  float *histo = cur_dat->buf[0]->return_histo();
+  std::vector<float> histo = cur_dat->buf[0]->returnHisto();
 
   QPolygon histarray;
   int ix, iy;
@@ -128,7 +128,7 @@ void view::draw_bar(int xshift, QPainter *painter, QPen *pen,
 
   painter->drawText((bx + ex - pw) / 2, ey - ph / 2 - yshift, title);
 
-  delete[] histo;
+ 
 }
 void view::draw_title(int xshift, QPainter *painter, QPen *pen, QString title) {
   if (xshift == 0) {

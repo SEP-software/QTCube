@@ -44,7 +44,9 @@ void contour::draw_slice(QPainter *painter, std::shared_ptr<dataset> dat,
     ee2 = f2 + n2;
   }
   int b1u = f1, b2u = f2, e1u = f1 + n1, e2u = f2 + n2;
-  float *buf = dat->get_float_data(pos, iax1, b1u, e1u, iax2, b2u, e2u);
+  std::shared_ptr<floatTensor2D>  bTmp=dat->getFloatData(pos, iax1, b1u, e1u, iax2, b2u, e2u);
+
+  float *buf=bTmp->getVals();
 
   b_1 = f1;
   b_2 = f2;
