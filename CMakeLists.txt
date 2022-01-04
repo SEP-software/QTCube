@@ -28,21 +28,7 @@ if(NOT TARGET displaySlice)
                           external/displayslice
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   add_subdirectory(external/displayslice)
-  #  include_directories(${CMAKE_CURRENT_BINARY_DIR}/external/genericIO)
-  #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/lib)
-  #include_directories(
-  #  ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/lib)
-  #
-  #  include_directories(
-  #    ${CMAKE_CURRENT_BINARY_DIR}/external/genericIO/external/sepVector)
-  #include_directories(
-  #  ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/sepVector/external/hypercube/lib
-  #  )
-  #include_directories(
-  # ${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/external/json
-    #  )
-    #  include_directories(
-    #${CMAKE_CURRENT_SOURCE_DIR}/external/genericIO/external/buffers/lib)
+ 
 endif(NOT TARGET displaySlice)
 
 configure_file("${PROJECT_SOURCE_DIR}/Sep_cube.in"
