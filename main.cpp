@@ -24,7 +24,6 @@
 #include "util.h"
 using namespace SEP;
 int main(int argc, char** argv) {
-      std::cerr << "iXXX this one " << std::endl;
   std::shared_ptr<ioModes> modes(new ioModes(argc, argv));
 
   std::shared_ptr<genericIO> defaultIO = modes->getDefaultIO();
@@ -44,7 +43,6 @@ int main(int argc, char** argv) {
   int imov = pars->getInt("moveout_data", 0);
   std::string fileType;
   std::shared_ptr<hypercube> grid;
-      std::cerr << "in this one " << std::endl;
   for (int i = 0; i < pars->getInt("ndata"); i++) {
     std::string type =
         pars->getString(std::string("type") + std::to_string(i), "FILE");
@@ -125,12 +123,19 @@ int main(int argc, char** argv) {
                           pk, "red", pars->getInt("ndata")));
   }
   */
+  std::cerr<<"die 1"<<std::endl;
   std::shared_ptr<slice_types> ct(new slice_types());
 
+  std::cerr<<"die 2"<<std::endl;
+
   MainWindow* window = new MainWindow(defaultIO, datas, pk, ct);
+  std::cerr<<"die 3"<<std::endl;
   window->show();
+  std::cerr<<"die 4"<<std::endl;
   QString name = pars->getString("run_history", "NONE").c_str();
   if (name != "NONE") window->my_hist->load_history(name);
+  std::cerr<<"die 5"<<std::endl;
   app.setWindowIcon(QIcon(QPixmap(":/images/qt_cube.icns")));
+  std::cerr<<"die 6"<<std::endl;
   return app.exec();
 }
