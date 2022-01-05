@@ -24,6 +24,7 @@
 #include "util.h"
 using namespace SEP;
 int main(int argc, char** argv) {
+      std::cerr << "iXXX this one " << std::endl;
   std::shared_ptr<ioModes> modes(new ioModes(argc, argv));
 
   std::shared_ptr<genericIO> defaultIO = modes->getDefaultIO();
@@ -43,6 +44,7 @@ int main(int argc, char** argv) {
   int imov = pars->getInt("moveout_data", 0);
   std::string fileType;
   std::shared_ptr<hypercube> grid;
+      std::cerr << "in this one " << std::endl;
   for (int i = 0; i < pars->getInt("ndata"); i++) {
     std::string type =
         pars->getString(std::string("type") + std::to_string(i), "FILE");
@@ -84,7 +86,6 @@ int main(int argc, char** argv) {
 
       /*
     } else if (storage == std::string("BUFFERS_FLOAT")) {
-      std::cerr << "in this one " << std::endl;
       int nmem = pars->getInt("memory", 512);
       std::shared_ptr<Qbuffers_data_float> bufs(
           new Qbuffers_data_float(title, name, grid, iof, pars, i, nmem));
