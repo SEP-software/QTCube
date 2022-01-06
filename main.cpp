@@ -123,19 +123,13 @@ int main(int argc, char** argv) {
                           pk, "red", pars->getInt("ndata")));
   }
   */
-  std::cerr<<"die 1"<<std::endl;
   std::shared_ptr<slice_types> ct(new slice_types());
 
-  std::cerr<<"die 2"<<std::endl;
 
   MainWindow* window = new MainWindow(defaultIO, datas, pk, ct);
-  std::cerr<<"die 3"<<std::endl;
   window->show();
-  std::cerr<<"die 4"<<std::endl;
   QString name = pars->getString("run_history", "NONE").c_str();
   if (name != "NONE") window->my_hist->load_history(name);
-  std::cerr<<"die 5"<<std::endl;
   app.setWindowIcon(QIcon(QPixmap(":/images/qt_cube.icns")));
-  std::cerr<<"die 6"<<std::endl;
   return app.exec();
 }
