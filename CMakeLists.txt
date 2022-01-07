@@ -39,7 +39,7 @@ install(PROGRAMS ${PROJECT_BINARY_DIR}/Sep_cube DESTINATION bin)
 find_package(Qt5
              COMPONENTS Core
                         Widgets
-                        Multimedia
+			#                        Multimedia
                         Gui
                         PrintSupport
                         REQUIRED)
