@@ -25,7 +25,7 @@ if(NOT TARGET displaySlice)
   set(BUILD_EXECUTABLES OFF)
 
   execute_process(COMMAND git submodule update --init --recursive --
-                          external/displayslice
+                          external/displaySlice
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   execute_process(COMMAND git submodule update --init --recursive --
                           external/sep-python
