@@ -1,7 +1,7 @@
-#include <raster.h>
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_for.h>
 #include <tbb/parallel_reduce.h>
+#include <raster.h>
 using namespace SEP;
 QImage *raster::makeImage(unsigned char *uc, const int nx, const int ny,
                           const int xsize, const int ysize) {

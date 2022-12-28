@@ -1,7 +1,13 @@
 [submodule "external/displayslice"]
 	path = external/displayslice
-	url = http://cees-gitlab.Stanford.EDU/SEP-external/displayslice.git
+	url = git@zapad.stanford.edu:SEP-external/displayslice.git
 	ignore = dirty
 [submodule "scripts"]
 	path = scripts
 	url = https://premonition.stanford.edu/bob/sep-software.git
+[submodule "external/sep-python"]
+	path = external/sep-python
+	url = http://zapad.stanford.edu/bob/sep-python.git
+[submodule "external/displaySlice"]
+	path = external/displaySlice
+	url = http://zapad.stanford.edu/SEP-external/displayslice.git

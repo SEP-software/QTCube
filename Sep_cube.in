@@ -1,8 +1,12 @@
-#!/usr/bin/env @PYTHON_EXECUTABLE@
+#!@PYTHON_EXECUTABLE@
 import sys,re,os,string
 import array
 import os
 import subprocess
+
+sys.path.insert(0,'@CMAKE_SOURCE_DIR@/external/sep-python/sep-python')
+import modes
+ioM=modes.defaultIO
 
 #link suffixes to file type
 sufixes={"H" : "SEP", "T" :"SEP", "json":"JSON","h": "SEP", "t": "SEP", "RSF": "SEP", "HH": "SEP",
@@ -207,21 +211,12 @@ def get_json_params(file,par,o):
    if not "label%s_%d"%(o,i+1) in par: par["label%s_%d"%(o,i+1)]=out4
  return par
 def get_sep_params(file,par,o):
- for i in range(8):
-   stat1,out1,err1=get_status_output("Get parform=no  n%d"%(i+1),file)
-   stat2,out2,err2=get_status_output("Get parform=no  o%d"%(i+1),file)
-   stat3,out3,err3=get_status_output("Get parform=no  d%d"%(i+1),file)
-   stat4,out4,err4=get_status_output("Get parform=no  label%d"%(i+1),file)
-   if stat1:
-     err("Trouble reading parameters from %s"%file)
-   if len(out1)==0:out1="1"
-   if len(out2)==0:out2="0"
-   if len(out3)==0:out3="1"
-   if len(out4)==0:out4=" "
-   if not "n%s_%d"%(o,i+1) in par: par["n%s_%d"%(o,i+1)]=out1
-   if not "o%s_%d"%(o,i+1) in par: par["o%s_%d"%(o,i+1)]=out2
-   if not "d%s_%d"%(o,i+1) in par: par["d%s_%d"%(o,i+1)]=out3
-   if not "label%s_%d"%(o,i+1) in par: par["label%s_%d"%(o,i+1)]=out4
+ fle=ioM.getRegStorage(path=file)
+ for i in range(1,9):
+  par[f"n{i}"]=fle.getInt(f"n{i}",1)
+  par[f"o{i}"]=fle.getFloat(f"o{i}",1)
+  par[f"d{i}"]=fle.getFloat(f"d{i}",1)
+  par[f"label{i}"]=fle.getString(f"label{i}",1)
  return par
 def get_seispak_params(file,par,o):
   f=open(file,"rb");

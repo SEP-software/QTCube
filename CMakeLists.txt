@@ -21,13 +21,16 @@ find_package(TBB REQUIRED)
 find_library(LIBTBB tbb REQUIRED)
 
 if(NOT TARGET displaySlice)
-  set(BUILD_PYTHON OFF)
+  set(BUILD OFF)
   set(BUILD_EXECUTABLES OFF)
 
   execute_process(COMMAND git submodule update --init --recursive --
                           external/displayslice
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  add_subdirectory(external/displayslice)
+  execute_process(COMMAND git submodule update --init --recursive --
+                          external/sep-python
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+  add_subdirectory(external/displaySlice)
  
 endif(NOT TARGET displaySlice)
 
