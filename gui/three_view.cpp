@@ -9,10 +9,11 @@ using namespace SEP;
 void three_view::resize_view_beg(int ix,int iy){
   int cx,cy;
   this->get_corner_loc(&cx,&cy);
+  std::cerr<<"in resize view beg "<<cx<<" "<<cy<<std::endl;
 
    corner_sel=0;
   int dist=(ix-cx)*(ix-cx) +(iy-cy)*(iy-cy);
-   if(dist < 900 && ix >=cx && iy <= cy) {
+   if(dist < 2900 && ix >=cx && iy <= cy) {
      corner_sel=1;
    }
  
@@ -59,6 +60,7 @@ std::vector<QString> three_view::left_mouse_release(float x,float y, std::shared
  
  
  if(corner_sel==1){
+  std::cerr<<"se corner selected "<<std::endl;
     int ix,iy;
     this->convert_to_local_loc(x,y,&ix,&iy);
     com[1]="orient";
@@ -83,8 +85,11 @@ std::vector<QString> three_view::left_mouse_down(float x, float y, std::shared_p
 
    corner_sel=0;
 
+  std::cerr<<"in left mouse down three view "<<std::endl;
   int dist=(ix-cx)*(ix-cx) +(iy-cy)*(iy-cy);
-   if(dist < 900 && ix >cx && iy < cy) {
+std::cerr<<"center "<<cx<<" "<<cy<<" "<<dist<<std::endl;
+   if(dist < 2900 && ix >cx && iy < cy) {
+  std::cerr<<"in lefouind corfner mouse down three view "<<std::endl;
      corner_sel=1;
       TIME.start();
 

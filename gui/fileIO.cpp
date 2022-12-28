@@ -31,6 +31,7 @@ void fileIO::read_block_float(std::vector<int> &nw, std::vector<int> &fw,
     _file->readFloatWindow(nw, fw, jw, buf);
 
   } else if (_dataType == DATA_BYTE) {
+  std::cerr<<"what am i doing "<<std::endl;
     for (auto i = nw.begin(); i != nw.end(); ++i) n123 *= (long long)*i;
     unsigned char *buf2 = new unsigned char[n123];
     _file->readUCharWindow(nw, fw, jw, buf2);

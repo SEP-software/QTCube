@@ -90,7 +90,8 @@ class panel : public QWidget {
 
   // Mouse
   void set_mouse_func(std::shared_ptr<mouse_func> f) {
-    func = f;
+//   std::cerr<<"in panel mouse func "<<this->func->status.toStdString()<<std::endl;
+    this->func = f;
   }  // Set the mouse function for the panel
 
   // Color

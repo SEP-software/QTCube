@@ -217,6 +217,9 @@ void data_panel::actionRespond(std::vector<QString> coms) {
   emit actionDetected(coms);
 }
 void data_panel::update_menu(std::vector<QString> coms) {
+
+
+
   int idat = coms[0].toInt();
   if (coms[1].contains("data")) {
     if (coms[2].contains("new")) {
@@ -248,11 +251,13 @@ void data_panel::update_menu(std::vector<QString> coms) {
   }
 }
 void data_sub_panel::update_menu(std::vector<QString> coms) {
-  if (coms[1].contains("clip")) {
-    if (coms[2].contains("set_histo")) {
-      clip->set_histo(coms[3]);
-    } else if (coms[2].contains("set_pts")) {
-      clip->set_pts(coms[3]);
+
+
+  if (coms[2].contains("Clip")) {
+    if (coms[3].contains("set_histo")) {
+      clip->set_histo(coms[4]);
+    } else if (coms[3].contains("set_pts")) {
+      clip->set_pts(coms[4]);
     }
   }
 

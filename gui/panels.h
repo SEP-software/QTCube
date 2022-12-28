@@ -33,6 +33,7 @@ class panels : public QObject {
 
     my_pan.erase(it);
   }
+  void initial_view();
   void set_active(int iact);
   void sync_panel(std::shared_ptr<panel> x);
   std::shared_ptr<panel> get_panel(int ipan) { return my_pan[ipan]; }

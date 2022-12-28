@@ -272,7 +272,7 @@ void panel::set_data(int id) {
 }
 void panel::initial_view() {
   set_data(idat);
-  update_display();
+//  update_display();
 }
 void panel::build_overlay_fact() {
   fact_o = colort->return_overlay_color_table(over_c, alpha);
@@ -723,6 +723,7 @@ void panel::mousePressEvent(QMouseEvent *e) {
     actionDetected(myv->right_mouse_down(pctx, pcty, pos, func));
     mouse_down = 3;
   }
+  timeit.start();
 }
 void panel::mouseDoubleClickEvent(QMouseEvent *e) {
   int x = e->x();

@@ -79,6 +79,7 @@ void MainWindow::create_mouse_funcs() {
   funcs["annotate"] = ma;
 
   cur_func = funcs["navigate"];
+  cur_func = funcs["zoom"];
 }
 MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
                        std::shared_ptr<datasets> d,
@@ -140,7 +141,9 @@ MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
 
   pk->set_position(pos);
 
+  
   create_panels();
+  mouseZoom();
 
   create_windows();
 
@@ -224,6 +227,7 @@ MainWindow::MainWindow(std::shared_ptr<genericIO> ios,
   coms[1] = "redraw";
   coms[2] = "all";
   datas->afterInitialization();
+  my_pan->initial_view();
   actionRespond(coms);
 }
 void MainWindow::connect_it() {
@@ -250,9 +254,8 @@ void MainWindow::connect_it() {
 }
 void MainWindow::secondaryRespond(std::vector<QString> coms) {}
 void MainWindow::actionRespond(std::vector<QString> coms) {
-  // for(int i=0; i < coms.size(); i++)  fprintf(stderr,"%s
-  // ",coms[i].toLatin1().constData()); fprintf(stderr,"\n");
-  // fflush(stderr);
+//   for(int i=0; i < coms.size(); i++)  fprintf(stderr,"%s",coms[i].toLatin1().constData()); fprintf(stderr,"\n");
+ //  fflush(stderr);
 
   if (coms[1].contains("none")) return;
   if (coms[0].contains("annotate"))

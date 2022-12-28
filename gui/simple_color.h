@@ -20,10 +20,10 @@ grey(int alpha)
 {
 name="grey";
   int red[4],green[4],blue[4];
-  red[0]=green[0]=blue[0]=0;
-  red[1]=green[1]=blue[1]=127;
-  red[2]=green[2]=blue[2]=128;
-  red[3]=green[3]=blue[3]=255;
+  red[0]=green[0]=blue[0]=255;
+  red[1]=green[1]=blue[1]=128;
+  red[2]=green[2]=blue[2]=127;
+  red[3]=green[3]=blue[3]=0;
   this->fill_it(red,green,blue,alpha);
 }
 };

@@ -33,6 +33,12 @@ void panels::sync_panel(std::shared_ptr<panel> um) {
     i->second->sync_pos(pos);
   }
 }
+void panels::initial_view(){
+  for (std::map<int, std::shared_ptr<panel>>::iterator i = my_pan.begin();
+       i != my_pan.end(); i++) {
+    i->second->initial_view();
+  }
+}
 void panels::update_mouse(std::shared_ptr<mouse_func> f) {
   for (std::map<int, std::shared_ptr<panel>>::iterator i = my_pan.begin();
        i != my_pan.end(); i++) {
@@ -52,6 +58,10 @@ void panels::set_range(int iv, int *ibeg, int *iend) {
   }
 }
 void panels::perform_orient(std::vector<QString> command) {
+
+//  for(int i=0; i < command.size(); i++){
+//    std::cerr<<command[i].toStdString()<<std::endl;
+//  }
   std::shared_ptr<panel> active = my_pan[command[0].toInt()];
   set_active(command[0].toInt());
   std::shared_ptr<orient_cube> pos = active->return_orient();

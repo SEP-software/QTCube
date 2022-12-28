@@ -280,6 +280,12 @@ void clip_bar::set_pcts(float *ps) {
   com.push_back("set");
   com.push_back(QString::fromStdString(util::string_from_float_array(256, ps)));
   emit actionDetected(com);
+  pts.clear();
+  float ft=1./256.;
+  for(int i=0;i < 256; i++){
+    pts.push_back(bar_pt(i*ft,ps[i])); 
+  }
+  draw_bar();
 }
 void clip_bar::mousePressEvent(QMouseEvent *e) {
   W = width();
