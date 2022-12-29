@@ -30,6 +30,9 @@ if(NOT TARGET displaySlice)
   execute_process(COMMAND git submodule update --init --recursive --
                           external/sep-python
                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+  execute_process(COMMAND git submodule update --init --recursive --
+                          external/python-solver
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
   add_subdirectory(external/displaySlice)
  
 endif(NOT TARGET displaySlice)
