@@ -5,7 +5,7 @@ import os
 import subprocess
 
 sys.path.insert(0,'@CMAKE_SOURCE_DIR@/external/sep-python/sep-python')
-sys.path.insert(0,'@CMAKE_SOURCE_DIR@/python-solver/GenericSolver/python')
+sys.path.insert(0,'@CMAKE_SOURCE_DIR@/external/python-solver/GenericSolver/python')
 
 import modes
 ioM=modes.defaultIO
