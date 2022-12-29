@@ -7,6 +7,3 @@
 [submodule "external/displaySlice"]
 	path = external/displaySlice
 	url = http://zapad.stanford.edu/SEP-external/displayslice.git
-[submodule "external/python-solver"]
-	path = external/python-solver
-	url = http://zapad.stanford.edu/bob/python-solver.git
