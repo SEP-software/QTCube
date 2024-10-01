@@ -1,9 +1,9 @@
-[submodule "scripts"]
-	path = scripts
-	url = https://premonition.stanford.edu/bob/sep-software.git
+#[submodule "scripts"]
+#	path = scripts
+#   url = https://premonition.stanford.edu/bob/sep-software.git
 [submodule "external/sep-python"]
 	path = external/sep-python
-	url = http://zapad.stanford.edu/bob/sep-python.git
+	url = https://github.com/SEP-software/sep-python.git
 [submodule "external/displaySlice"]
 	path = external/displaySlice
-	url = http://zapad.stanford.edu/SEP-external/displayslice.git
+	url = https://github.com/SEP-software/displaySlice.git
